@@ -21,7 +21,6 @@ using System.IO;
 using System.Text;
 using Amazon.Lambda.Core;
 using LambdaSharp.Serialization;
-using Newtonsoft.Json;
 
 namespace LambdaSharp {
 
@@ -52,7 +51,7 @@ namespace LambdaSharp {
         /// <param name="json">The <c>string</c> to deserialize.</param>
         /// <typeparam name="T">The deserialization target type.</typeparam>
         /// <returns>Deserialized instance.</returns>
-        public static T Deserialize<T>(this ILambdaSerializer serializer, string json) => serializer.Deserialize<T>(new MemoryStream(Encoding.UTF8.GetBytes(json)));
+        public static T Deserialize<T>(this ILambdaSerializer serializer, string json) => serializer.Deserialize<T>(json.ToStream());
 
         /// <summary>
         /// The <see cref="Deserialize(ILambdaSerializer, string, Type)"/> method deserializes the JSON object from a <c>string</c>.
@@ -65,7 +64,9 @@ namespace LambdaSharp {
             if(serializer is LambdaJsonSerializer lambdaJsonSerializer) {
                 return lambdaJsonSerializer.Deserialize(new MemoryStream(Encoding.UTF8.GetBytes(json)), type);
             } else {
-                return JsonConvert.DeserializeObject(json, type);
+
+                // use default JSON serializer and hope for the best!
+                return LambdaJsonSerializer.Default.Deserialize(json, type);
             }
         }
     }

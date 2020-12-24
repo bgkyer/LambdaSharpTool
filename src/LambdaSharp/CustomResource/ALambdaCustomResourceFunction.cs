@@ -22,13 +22,13 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Amazon.Lambda.SNSEvents;
 using LambdaSharp.CustomResource.Internal;
 using LambdaSharp.Exceptions;
 using LambdaSharp.Logging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using LambdaSharp.Serialization;
 
 namespace LambdaSharp.CustomResource {
 
@@ -259,29 +259,29 @@ namespace LambdaSharp.CustomResource {
 
             // deserialize stream into a generic JSON object
             LogInfo("deserializing request");
-            var json = JsonConvert.DeserializeObject<JObject>(body);
+            bool hasRecords;
+            using(var json = JsonDocument.Parse(body)) {
+                hasRecords = json.RootElement.TryGetProperty("Records", out _);
+            }
 
             // determine if the custom resource request is wrapped in an SNS message
             // or if it is a direct invocation by the CloudFormation service
-            if(json.TryGetValue("Records", out _)) {
+            if(hasRecords) {
 
                 // deserialize SNS event
                 LogInfo("deserializing SNS event");
-                var snsEvent = json.ToObject<SNSEvent>();
+                var snsEvent = LambdaJsonSerializer.Default.Deserialize<SNSEvent>(body);
 
                 // extract message from SNS event
                 LogInfo("deserializing message");
                 var messageBody = snsEvent.Records.First().Sns.Message;
 
                 // deserialize message into a cloudformation request
-
-                // TODO (2020-12-23, bjorg): use LambdaSharp-specific deserializer since it should not be affected by a customized serializer;
-                //  however, the nested properties MUST also be defined using the same LambdaSharp-specific deserializer since they are serialized by the same structure!
                 return LambdaSerializer.Deserialize<CloudFormationResourceRequest<TProperties>>(messageBody);
             } else {
 
                 // deserialize generic JSON into a cloudformation request
-                return json.ToObject<CloudFormationResourceRequest<TProperties>>();
+                return LambdaSerializer.Deserialize<CloudFormationResourceRequest<TProperties>>(body);
             }
         }
 

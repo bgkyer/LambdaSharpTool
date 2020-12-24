@@ -26,6 +26,7 @@ using LambdaSharp.ApiGateway.Internal;
 using LambdaSharp.Exceptions;
 using LambdaSharp.Logging;
 using LambdaSharp.Logging.Metrics;
+using LambdaSharp.Serialization;
 
 namespace LambdaSharp.ApiGateway {
 
@@ -38,9 +39,7 @@ namespace LambdaSharp.ApiGateway {
     /// a derived class can override <see cref="ALambdaApiGatewayFunction.ProcessProxyRequestAsync(APIGatewayProxyRequest)"/>
     /// to process requests.
     /// </remarks>
-
-    // TODO (2020-12-23, bjorg): have to use the non-generic base class so we can use LambdaSharp-specific deserializer since it should not be affected by a customized serializer
-    public abstract class ALambdaApiGatewayFunction : ALambdaFunction<APIGatewayProxyRequest, APIGatewayProxyResponse> {
+    public abstract class ALambdaApiGatewayFunction : ALambdaFunction {
 
         //--- Types ---
         private class ApiGatewayInvocationMappings {
@@ -101,9 +100,7 @@ namespace LambdaSharp.ApiGateway {
             // read optional api-gateway-mappings file
             _directory = new ApiGatewayInvocationTargetDirectory(CreateInvocationTargetInstance, LambdaSerializer);
             if(File.Exists("api-mappings.json")) {
-
-                // TODO (2020-12-23, bjorg): use LambdaSharp-specific deserializer since it should not be affected by a customized serializer
-                var mappings = LambdaSerializer.Deserialize<ApiGatewayInvocationMappings>(File.ReadAllText("api-mappings.json"));
+                var mappings = LambdaJsonSerializer.Default.Deserialize<ApiGatewayInvocationMappings>(File.ReadAllText("api-mappings.json"));
                 if(mappings.Mappings == null) {
                     throw new InvalidDataException("missing 'Mappings' property in 'api-mappings.json' file");
                 }
@@ -125,12 +122,30 @@ namespace LambdaSharp.ApiGateway {
         }
 
         /// <summary>
-        /// The <see cref="ProcessMessageAsync(APIGatewayProxyRequest)"/> method is overridden to
-        /// provide specific behavior for this base class.
+        /// The <see cref="ProcessMessageStreamAsync(Stream)"/> deserializes the request stream into
+        /// a <see cref="APIGatewayProxyRequest"/> instance and invokes the <see cref="ProcessMessageAsync(APIGatewayProxyRequest)"/> method.
+        /// </summary>
+        /// <remarks>
+        /// This method is <c>sealed</c> and cannot be overridden.
+        /// </remarks>
+        /// <param name="stream">The stream with the request payload.</param>
+        /// <returns>The task object representing the asynchronous operation.</returns>
+        public override sealed async Task<Stream> ProcessMessageStreamAsync(Stream stream) {
+            var request = LambdaJsonSerializer.Default.Deserialize<APIGatewayProxyRequest>(stream);
+            var response = await ProcessMessageAsync(request);
+            var responseStream = new MemoryStream();
+            LambdaJsonSerializer.Default.Serialize(response, responseStream);
+            responseStream.Position = 0;
+            return responseStream;
+        }
+
+        /// <summary>
+        /// The <see cref="ProcessMessageAsync(APIGatewayProxyRequest)"/> method
+        /// provides specific behavior for this base class.
         /// </summary>
         /// <param name="request">The <see cref="APIGatewayProxyRequest"/> instance.</param>
         /// <returns>The task object representing the asynchronous operation.</returns>
-        public override sealed async Task<APIGatewayProxyResponse> ProcessMessageAsync(APIGatewayProxyRequest request) {
+        public async Task<APIGatewayProxyResponse> ProcessMessageAsync(APIGatewayProxyRequest request) {
             if(_directory == null) {
                 throw new ShouldNeverHappenException();
             }

@@ -82,6 +82,6 @@ namespace LambdaSharp {
             LambdaSerializer.Serialize(response, responseStream);
             responseStream.Position = 0;
             return responseStream;
-       }
+        }
     }
 }

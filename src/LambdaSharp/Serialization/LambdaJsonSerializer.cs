@@ -18,19 +18,34 @@
 
 using System;
 using System.IO;
-using Amazon.Lambda.Serialization.Json;
-using Newtonsoft.Json;
+using System.Text.Json;
+using Amazon.Lambda.Core;
+using Amazon.Lambda.Serialization.SystemTextJson;
 
 namespace LambdaSharp.Serialization {
 
+    public interface ILambdaJsonSerializer : ILambdaSerializer {
+
+        //--- Methods ---
+
+        /// <summary>
+        /// The <see cref="Deserialize(Stream, Type)"/> method deserializes the JSON object from a <c>string</c>.
+        /// </summary>
+        /// <param name="stream">Stream to serialize.</param>
+        /// <param name="type">The type to instantiate.</param>
+        /// <returns>Deserialized instance.</returns>
+        object Deserialize(Stream stream, Type type);
+    }
+
     /// <summary>
-    /// Custom ILambdaSerializer implementation which uses Newtonsoft.Json.JsonSerializer
+    /// Custom ILambdaSerializer implementation which uses System.Text.Json.JsonSerializer
     /// for serialization.
     /// </summary>
-    public class LambdaJsonSerializer : Amazon.Lambda.Serialization.Json.JsonSerializer {
+    public class LambdaJsonSerializer : DefaultLambdaJsonSerializer, ILambdaJsonSerializer {
 
         //--- Class Fields ---
-        private static JsonSerializerSettings _staticSettings;
+        public static LambdaJsonSerializer Default = new LambdaJsonSerializer();
+        private static JsonSerializerOptions  _staticSettings;
 
         //--- Constructors ---
 
@@ -38,7 +53,7 @@ namespace LambdaSharp.Serialization {
         /// Constructs instance of serializer.
         /// </summary>
         public LambdaJsonSerializer() : base(settings => {
-            settings.NullValueHandling = NullValueHandling.Ignore;
+            settings.IgnoreNullValues = true;
             _staticSettings = settings;
         }) { }
 
@@ -50,9 +65,11 @@ namespace LambdaSharp.Serialization {
         /// <returns>Deserialized instance.</returns>
         public object Deserialize(Stream stream, Type type) {
             try {
-                using(var reader = new StreamReader(stream)) {
-                    return JsonConvert.DeserializeObject(reader.ReadToEnd(), type, _staticSettings);
+                if(!(stream is MemoryStream memoryStream)) {
+                    memoryStream = new MemoryStream();
+                    stream.CopyTo(memoryStream);
                 }
+                return JsonSerializer.Deserialize(memoryStream.ToArray(), type, SerializerOptions);
             } catch(Exception e) {
                 string message;
                 if(type == typeof(string)) {

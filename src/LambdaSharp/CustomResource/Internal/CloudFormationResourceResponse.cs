@@ -16,12 +16,11 @@
  * limitations under the License.
  */
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
 
 namespace LambdaSharp.CustomResource.Internal {
 
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     internal enum CloudFormationResourceResponseStatus {
         SUCCESS,
         FAILED

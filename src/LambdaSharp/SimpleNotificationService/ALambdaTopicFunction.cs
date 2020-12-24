@@ -25,6 +25,7 @@ using System.Threading.Tasks;
 using Amazon.Lambda.SNSEvents;
 using LambdaSharp.Logging;
 using LambdaSharp.Logging.Metrics;
+using LambdaSharp.Serialization;
 using LambdaSharp.SimpleNotificationService.Extensions;
 
 namespace LambdaSharp.SimpleNotificationService {
@@ -113,9 +114,7 @@ namespace LambdaSharp.SimpleNotificationService {
                 // sns event deserialization
                 LogInfo("deserializing SNS event");
                 try {
-
-                    // TODO (2020-12-23, bjorg): use LambdaSharp-specific deserializer since it should not be affected by a customized serializer
-                    var snsEvent = LambdaSerializer.Deserialize<SNSEvent>(snsEventBody);
+                    var snsEvent = LambdaJsonSerializer.Default.Deserialize<SNSEvent>(snsEventBody);
                     _currentRecord = snsEvent.Records.First().Sns;
 
                     // message deserialization

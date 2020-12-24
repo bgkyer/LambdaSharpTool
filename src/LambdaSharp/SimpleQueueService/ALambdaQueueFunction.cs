@@ -26,6 +26,7 @@ using Amazon.Lambda.SQSEvents;
 using LambdaSharp.Exceptions;
 using LambdaSharp.Logging;
 using LambdaSharp.Logging.Metrics;
+using LambdaSharp.Serialization;
 using LambdaSharp.SimpleQueueService.Extensions;
 
 namespace LambdaSharp.SimpleQueueService {
@@ -114,9 +115,7 @@ namespace LambdaSharp.SimpleQueueService {
 
             // deserialize stream to sqs event
             LogInfo("deserializing stream to SQS event");
-
-            // TODO (2020-12-23, bjorg): use LambdaSharp-specific deserializer since it should not be affected by a customized serializer
-            var sqsEvent = LambdaSerializer.Deserialize<SQSEvent>(stream);
+            var sqsEvent = LambdaJsonSerializer.Default.Deserialize<SQSEvent>(stream);
             if(!sqsEvent.Records.Any()) {
                 return $"empty batch".ToStream();
             }

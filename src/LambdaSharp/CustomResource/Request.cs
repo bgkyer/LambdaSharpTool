@@ -16,8 +16,7 @@
  * limitations under the License.
  */
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
 
 namespace LambdaSharp.CustomResource {
 
@@ -25,7 +24,7 @@ namespace LambdaSharp.CustomResource {
     /// The <see cref="RequestType"/> enumeration describes the CloudFormation
     /// operation on the custom resource.
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum RequestType {
 
         /// <summary>
