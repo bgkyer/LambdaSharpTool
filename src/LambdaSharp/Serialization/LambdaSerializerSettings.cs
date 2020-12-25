@@ -45,7 +45,7 @@ namespace LambdaSharp.Serialization {
                 AssemblySerializer = (serializerAttribute != null)
                     ? (ILambdaJsonSerializer)(Activator.CreateInstance(serializerAttribute.SerializerType) ?? throw new ShouldNeverHappenException())
 
-                    // TODO (2020-12-25, bjorg): default to NativeSerializer when Newtonsoft.Json references have been removed
+                    // TODO (2020-12-25, bjorg): default to LambdaSharpSerializer when Newtonsoft.Json references have been removed
                     : new LambdaJsonSerializer();
             }
         }
