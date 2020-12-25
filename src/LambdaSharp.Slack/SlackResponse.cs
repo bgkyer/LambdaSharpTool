@@ -18,13 +18,11 @@
 
 using System;
 using System.Text;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace LambdaSharp.Slack {
 
     public class SlackResponse {
-
-        //--- Types ---
 
         //--- Class Methods ---
         public static SlackResponse InChannel(string text, params SlackResponseAttachment[] attachments) {
@@ -36,17 +34,17 @@ namespace LambdaSharp.Slack {
         }
 
         //--- Fields ---
-        [JsonProperty("response_type")]
-        public readonly string ResponseType;
+        [JsonPropertyName("response_type")]
+        public string ResponseType { get; set; }
 
-        [JsonProperty("text")]
-        public readonly string Text;
+        [JsonPropertyName("text")]
+        public string Text { get; set; }
 
-        [JsonProperty("attachments")]
-        public readonly SlackResponseAttachment[] Attachments;
+        [JsonPropertyName("attachments")]
+        public SlackResponseAttachment[] Attachments { get; set; }
 
-        [JsonProperty("channel", NullValueHandling = NullValueHandling.Ignore)]
-        public string Channel;
+        [JsonPropertyName("channel", NullValueHandling = NullValueHandling.Ignore)]
+        public string Channel { get; set; }
 
         //--- Constructors ---
         private SlackResponse(string responseType, string text, SlackResponseAttachment[] attachments) {

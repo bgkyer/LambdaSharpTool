@@ -775,23 +775,37 @@ namespace LambdaSharp.Tool.Cli {
                     .FirstOrDefault();
                 if(lambdaSerializationAssemblyAttribute != null) {
                     switch(lambdaSerializationAssemblyAttribute.SerializerType.FullName) {
-                    case "LambdaSharp.Serialization.LambdaJsonSerializer":
-                    case "Amazon.Lambda.Serialization.SystemTextJson.LambdaJsonSerializer":
-                    case "Amazon.Lambda.Serialization.Json.JsonSerializer":
-                        throw new ProcessTargetInvocationException($"remove Lambda serializer attribute: [assembly: LambdaSerializer(typeof(...))]");
-                    default:
-                        var current = lambdaSerializationAssemblyAttribute.SerializerType;
-                        while(current.BaseType != null) {
-                            current = current.BaseType;
-                            var name = current.FullName;
-                            if(name == "LambdaSharp.Serialization.LambdaJsonSerializer") {
+                    case "LambdaSharp.Serialization.LambdaNewtonsoftJsonSerializer":
+                    case "LambdaSharp.Serialization.LambdaSystemTextJsonSerializer":
 
-                                // custom serializer derives from LambdaSharp serializer, which is okay
-                                output?.WriteLine("=> Custom Lambda serializer is derived from LambdaSharp.Serialization.LambdaJsonSerializer");
+                        // standard serializer used; nothing to report
+                        break;
+                    case "Amazon.Lambda.Serialization.SystemTextJson.LambdaJsonSerializer":
+                    case "Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer ":
+
+                        // original Amazon.Lambda.Core serializers using System.Text.Json are not supported since they they don't implement ILambdaJsonSerializer
+                        throw new ProcessTargetInvocationException($"replace Lambda serializer attribute with [assembly: LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]");
+                    case "Amazon.Lambda.Serialization.Json.JsonSerializer":
+
+                        // original Amazon.Lambda.Core serializers using Newtonsoft.Json are not supported since they they don't implement ILambdaJsonSerializer
+                        throw new ProcessTargetInvocationException($"replace Lambda serializer attribute with [assembly: LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaNewtonsoftJsonSerializer))]");
+                    default:
+
+                        // check if the custom serializer implements ILambdaJsonSerializer
+                        var current = lambdaSerializationAssemblyAttribute.SerializerType;
+                        do {
+                            if(current.GetInterfaces().Any(@interface => @interface.FullName == "LambdaSharp.Serialization.ILambdaJsonSerializer")) {
+                                output?.WriteLine("=> Custom Lambda serializer implements LambdaSharp.Serialization.ILambdaJsonSerializer interface");
                                 break;
-                            } else if((name == "Amazon.Lambda.Serialization.SystemTextJson.LambdaJsonSerializer") || (name == "Amazon.Lambda.Serialization.Json.JsonSerializer")) {
-                                throw new ProcessTargetInvocationException($"custom Lambda serializer must derive from LambdaSharp.Serialization.LambdaJsonSerializer");
                             }
+
+                            // check base class
+                            current = current.BaseType;
+                        } while(!(current is null));
+
+                        // check if the required interface was found
+                        if(current is null) {
+                            throw new ProcessTargetInvocationException($"custom Lambda serializer must implement LambdaSharp.Serialization.ILambdaJsonSerializer interface");
                         }
                         break;
                     }

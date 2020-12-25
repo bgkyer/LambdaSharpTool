@@ -399,7 +399,7 @@ namespace Tests.LambdaSharp.ApiGateway {
         private void Test(string methodName, APIGatewayProxyRequest request, APIGatewayProxyResponse expectedResponse) {
 
             // Arrange
-            var invocationTargetDirectory = new ApiGatewayInvocationTargetDirectory(type => (type == GetType()) ? this : Activator.CreateInstance(type, new[] { this }), new LambdaJsonSerializer());
+            var invocationTargetDirectory = new ApiGatewayInvocationTargetDirectory(type => (type == GetType()) ? this : Activator.CreateInstance(type, new[] { this }), new LambdaSystemTextJsonSerializer());
             invocationTargetDirectory.Add("test", $"{GetType().Assembly.FullName}::{GetType().FullName}::{methodName}");
 
             // Act

@@ -24,10 +24,23 @@ using LambdaSharp.Exceptions;
 
 namespace LambdaSharp.Serialization {
 
+    /// <summary>
+    /// The <see cref="LambdaSerializerSettings"/> static class has properties to access the JSON serializer
+    /// used by the LambdaSharp base classes, as well as the JSON serializer defined by the executing assembly.
+    /// </summary>
     public static class LambdaSerializerSettings {
 
         //--- Class Properties ---
+
+        /// <summary>
+        /// The JSON serializer used by the LambdaSharp base classes.
+        /// </summary>
         public static ILambdaJsonSerializer LambdaSharpSerializer { get; set; } = new LambdaSystemTextJsonSerializer();
+
+        /// <summary>
+        /// The JSON serializer defined by the executing assembly. This property is <c>null</c> until initialized by
+        /// the <see cref="ALambdaFunction"/> constructor.
+        /// </summary>
         public static ILambdaJsonSerializer AssemblySerializer { get; set; }
 
         //--- Methods ---
@@ -37,7 +50,7 @@ namespace LambdaSharp.Serialization {
             }
             if(AssemblySerializer is null) {
 
-                // instantiate the assembly serializer or default LambdaJsonSerializer
+                // instantiate the assembly serializer or default to LambdaNewtonsoftJsonSerializer
                 var serializerAttribute = assembly
                     .GetCustomAttributes(typeof(LambdaSerializerAttribute), false)
                     .OfType<LambdaSerializerAttribute>()
@@ -46,7 +59,7 @@ namespace LambdaSharp.Serialization {
                     ? (ILambdaJsonSerializer)(Activator.CreateInstance(serializerAttribute.SerializerType) ?? throw new ShouldNeverHappenException())
 
                     // TODO (2020-12-25, bjorg): default to LambdaSharpSerializer when Newtonsoft.Json references have been removed
-                    : new LambdaJsonSerializer();
+                    : new LambdaNewtonsoftJsonSerializer();
             }
         }
     }

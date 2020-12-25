@@ -27,7 +27,7 @@ namespace LambdaSharp.Serialization {
     /// Custom <see cref="ILambdaJsonSerializer"/> implementation which uses Newtonsoft.Json.JsonSerializer
     /// for serialization.
     /// </summary>
-    public class LambdaJsonSerializer : Amazon.Lambda.Serialization.Json.JsonSerializer, ILambdaJsonSerializer {
+    public class LambdaNewtonsoftJsonSerializer : Amazon.Lambda.Serialization.Json.JsonSerializer, ILambdaJsonSerializer {
 
         //--- Class Fields ---
         private static JsonSerializerSettings _staticSettings;
@@ -37,7 +37,7 @@ namespace LambdaSharp.Serialization {
         /// <summary>
         /// Constructs instance of serializer.
         /// </summary>
-        public LambdaJsonSerializer() : base(settings => {
+        public LambdaNewtonsoftJsonSerializer() : base(settings => {
             settings.NullValueHandling = NullValueHandling.Ignore;
             _staticSettings = settings;
         }) { }

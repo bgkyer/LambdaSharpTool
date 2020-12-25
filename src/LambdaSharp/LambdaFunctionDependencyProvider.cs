@@ -78,7 +78,7 @@ namespace LambdaSharp {
             _nowCallback = utcNowCallback ?? (() => DateTime.UtcNow);
             _logCallback = logCallback ?? LambdaLogger.Log;
             ConfigSource = configSource ?? new LambdaSystemEnvironmentSource();
-            JsonSerializer = jsonSerializer ?? new LambdaJsonSerializer();
+            JsonSerializer = jsonSerializer ?? new LambdaNewtonsoftJsonSerializer();
             KmsClient = kmsClient ?? new AmazonKeyManagementServiceClient();
             SqsClient = sqsClient ?? new AmazonSQSClient();
             EventsClient = eventsClient ?? new AmazonCloudWatchEventsClient();

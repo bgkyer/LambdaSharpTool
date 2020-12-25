@@ -54,7 +54,7 @@ namespace LambdaSharp.Slack {
             LogInfo("reading message stream");
             SlackRequest request;
             try {
-                request = LambdaJsonSerializer.Default.Deserialize<SlackRequest>(stream);
+                request = LambdaSerializerSettings.LambdaSerializerSettings.Deserialize<SlackRequest>(stream);
             } catch(Exception e) {
                 LogError(e, "failed during Slack request deserialization");
                 return $"ERROR: {e.Message}".ToStream();
