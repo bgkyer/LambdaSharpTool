@@ -37,6 +37,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace LambdaSharp.Tool {
+    using ModuleInfo = LambdaSharp.Modules.ModuleInfo;
 
     public class LambdaSharpException : Exception { }
 

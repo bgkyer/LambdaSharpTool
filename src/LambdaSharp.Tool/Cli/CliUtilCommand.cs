@@ -48,6 +48,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace LambdaSharp.Tool.Cli {
+    using ModuleInfo = LambdaSharp.Modules.ModuleInfo;
 
     public class CliUtilCommand : ACliCommand {
 
