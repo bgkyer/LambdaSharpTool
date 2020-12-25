@@ -100,7 +100,7 @@ namespace LambdaSharp.ApiGateway {
             // read optional api-gateway-mappings file
             _directory = new ApiGatewayInvocationTargetDirectory(CreateInvocationTargetInstance, LambdaSerializer);
             if(File.Exists("api-mappings.json")) {
-                var mappings = LambdaJsonSerializer.Default.Deserialize<ApiGatewayInvocationMappings>(File.ReadAllText("api-mappings.json"));
+                var mappings = LambdaSerializerSettings.LambdaSharpSerializer.Deserialize<ApiGatewayInvocationMappings>(File.ReadAllText("api-mappings.json"));
                 if(mappings.Mappings == null) {
                     throw new InvalidDataException("missing 'Mappings' property in 'api-mappings.json' file");
                 }
@@ -131,10 +131,10 @@ namespace LambdaSharp.ApiGateway {
         /// <param name="stream">The stream with the request payload.</param>
         /// <returns>The task object representing the asynchronous operation.</returns>
         public override sealed async Task<Stream> ProcessMessageStreamAsync(Stream stream) {
-            var request = LambdaJsonSerializer.Default.Deserialize<APIGatewayProxyRequest>(stream);
+            var request = LambdaSerializerSettings.LambdaSharpSerializer.Deserialize<APIGatewayProxyRequest>(stream);
             var response = await ProcessMessageAsync(request);
             var responseStream = new MemoryStream();
-            LambdaJsonSerializer.Default.Serialize(response, responseStream);
+            LambdaSerializerSettings.LambdaSharpSerializer.Serialize(response, responseStream);
             responseStream.Position = 0;
             return responseStream;
         }

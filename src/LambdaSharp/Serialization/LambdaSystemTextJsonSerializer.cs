@@ -1,4 +1,4 @@
-﻿/*
+/*
  * LambdaSharp (λ#)
  * Copyright (C) 2018-2020
  * lambdasharp.net
@@ -18,28 +18,24 @@
 
 using System;
 using System.IO;
+using System.Text.Json;
 using Amazon.Lambda.Serialization.SystemTextJson;
-using Newtonsoft.Json;
 
 namespace LambdaSharp.Serialization {
 
     /// <summary>
-    /// Custom <see cref="ILambdaJsonSerializer"/> implementation which uses Newtonsoft.Json.JsonSerializer
+    /// Custom <see cref="ILambdaJsonSerializer"/> implementation which uses System.Text.Json.JsonSerializer
     /// for serialization.
     /// </summary>
-    public class LambdaJsonSerializer : Amazon.Lambda.Serialization.Json.JsonSerializer, ILambdaJsonSerializer {
-
-        //--- Class Fields ---
-        private static JsonSerializerSettings _staticSettings;
+    public class LambdaSystemTextJsonSerializer : DefaultLambdaJsonSerializer, ILambdaJsonSerializer {
 
         //--- Constructors ---
 
         /// <summary>
         /// Constructs instance of serializer.
         /// </summary>
-        public LambdaJsonSerializer() : base(settings => {
-            settings.NullValueHandling = NullValueHandling.Ignore;
-            _staticSettings = settings;
+        public LambdaSystemTextJsonSerializer() : base(settings => {
+            settings.IgnoreNullValues = true;
         }) { }
 
         /// <summary>
@@ -50,9 +46,11 @@ namespace LambdaSharp.Serialization {
         /// <returns>Deserialized instance.</returns>
         public object Deserialize(Stream stream, Type type) {
             try {
-                using(var reader = new StreamReader(stream)) {
-                    return JsonConvert.DeserializeObject(reader.ReadToEnd(), type, _staticSettings);
+                if(!(stream is MemoryStream memoryStream)) {
+                    memoryStream = new MemoryStream();
+                    stream.CopyTo(memoryStream);
                 }
+                return JsonSerializer.Deserialize(memoryStream.ToArray(), type, SerializerOptions);
             } catch(Exception e) {
                 string message;
                 if(type == typeof(string)) {

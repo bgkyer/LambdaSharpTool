@@ -254,16 +254,12 @@ namespace LambdaSharp {
             ErrorReportGenerator = new LogErrorReportGenerator(Provider);
 
             // TODO (2020-12-24, bjorg): consider moving this to ALambdaFunction<T1,T2> since this class doesn't actually require
-            //  a serializer to work.
-
-            // instantiate the assembly serializer or default LambdaJsonSerializer
-            var serializerAttribute = GetType().Assembly
-                .GetCustomAttributes(typeof(LambdaSerializerAttribute), false)
-                .OfType<LambdaSerializerAttribute>()
-                .FirstOrDefault();
-            LambdaSerializer = (serializerAttribute != null)
-                ? (ILambdaSerializer)(Activator.CreateInstance(serializerAttribute.SerializerType) ?? throw new ShouldNeverHappenException())
-                : new LambdaJsonSerializer();
+            //  a serializer to work. Also, consider passing in the ILambdaJsonSerializer via constructor instead of relyong on
+            //  assembly attribute.
+            if(LambdaSerializerSettings.AssemblySerializer is null) {
+                LambdaSerializerSettings.InitializeAssemblySerializer(GetType().Assembly);
+            }
+            LambdaSerializer = LambdaSerializerSettings.AssemblySerializer;
 
             // initialize function fields from configuration
             _started = UtcNow;
@@ -292,11 +288,11 @@ namespace LambdaSharp {
         protected ILambdaSerializer JsonSerializer => Provider.JsonSerializer;
 
         /// <summary>
-        /// An instance of <see cref="ILambdaSerializer"/>, as specified by the <see cref="LambdaSerializerAttribute"/> attribute on the assembly,
+        /// An instance of <see cref="ILambdaJsonSerializer"/>, as specified by the <see cref="LambdaSerializerAttribute"/> attribute on the assembly,
         /// used for serializing/deserializing JSON data.
         /// </summary>
-        /// <value>The <see cref="ILambdaSerializer"/> instance.</value>
-        protected ILambdaSerializer LambdaSerializer { get; set; }
+        /// <value>The <see cref="ILambdaJsonSerializer"/> instance.</value>
+        protected ILambdaJsonSerializer LambdaSerializer { get; set; }
 
         /// <summary>
         /// Retrieve the Lambda function initialization settings.
@@ -376,7 +372,7 @@ namespace LambdaSharp {
         /// <see cref="CurrentContext"/> property.
         /// </param>
         /// <returns>The task object representing the asynchronous operation.</returns>
-        [LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaJsonSerializer))]
+        [LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
         public async Task<Stream> FunctionHandlerAsync(Stream stream, ILambdaContext context) {
             _currentContext = context;
             Exception foregroundException = null;
@@ -580,14 +576,14 @@ namespace LambdaSharp {
 
             // read optional git-info file
             if(File.Exists("git-info.json")) {
-                var git = LambdaJsonSerializer.Default.Deserialize<GitInfo>(File.ReadAllText("git-info.json"));
+                var git = LambdaSerializerSettings.LambdaSharpSerializer.Deserialize<GitInfo>(File.ReadAllText("git-info.json"));
                 _gitSha = git.SHA;
                 _gitBranch = git.Branch;
                 info["GIT-SHA"] = _gitSha;
                 info["GIT-BRANCH"] = _gitBranch;
             }
             if(info.Any()) {
-                LogInfo("function startup information\n{0}", LambdaJsonSerializer.Default.Serialize(info));
+                LogInfo("function startup information\n{0}", LambdaSerializerSettings.LambdaSharpSerializer.Serialize(info));
             }
 
             // initialize error/warning reporter
@@ -798,7 +794,7 @@ namespace LambdaSharp {
         /// The <see cref="RecordErrorReport(LambdaErrorReport)"/> method is invoked record errors for later reporting.
         /// </summary>
         /// <param name="report">The <see cref="LambdaErrorReport"/> to record.</param>
-        protected virtual void RecordErrorReport(LambdaErrorReport report) => Provider.Log(LambdaJsonSerializer.Default.Serialize(report) + "\n");
+        protected virtual void RecordErrorReport(LambdaErrorReport report) => Provider.Log(LambdaSerializerSettings.LambdaSharpSerializer.Serialize(report) + "\n");
 
         /// <summary>
         /// The <see cref="RecordException(Exception)"/> method is only invoked when Lambda function <see cref="ErrorReportGenerator"/> instance
@@ -1025,7 +1021,7 @@ namespace LambdaSharp {
         }
 
         void ILambdaSharpLogger.LogRecord(ALambdaLogRecord record) {
-            Provider.Log(LambdaJsonSerializer.Default.Serialize<object>(record ?? throw new ArgumentNullException(nameof(record))) + "\n");
+            Provider.Log(LambdaSerializerSettings.LambdaSharpSerializer.Serialize<object>(record ?? throw new ArgumentNullException(nameof(record))) + "\n");
 
             // emit events
             if(record is LambdaEventRecord eventRecord) {

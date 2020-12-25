@@ -52,22 +52,5 @@ namespace LambdaSharp {
         /// <typeparam name="T">The deserialization target type.</typeparam>
         /// <returns>Deserialized instance.</returns>
         public static T Deserialize<T>(this ILambdaSerializer serializer, string json) => serializer.Deserialize<T>(json.ToStream());
-
-        /// <summary>
-        /// The <see cref="Deserialize(ILambdaSerializer, string, Type)"/> method deserializes the JSON object from a <c>string</c>.
-        /// </summary>
-        /// <param name="serializer">The Lambda serializer.</param>
-        /// <param name="json">The <c>string</c> to deserialize.</param>
-        /// <param name="type">The type to instantiate.</param>
-        /// <returns>Deserialized instance.</returns>
-        public static object Deserialize(this ILambdaSerializer serializer, string json, Type type) {
-            if(serializer is LambdaJsonSerializer lambdaJsonSerializer) {
-                return lambdaJsonSerializer.Deserialize(new MemoryStream(Encoding.UTF8.GetBytes(json)), type);
-            } else {
-
-                // use default JSON serializer and hope for the best!
-                return LambdaJsonSerializer.Default.Deserialize(json, type);
-            }
-        }
     }
 }

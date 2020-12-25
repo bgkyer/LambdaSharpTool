@@ -114,7 +114,7 @@ namespace LambdaSharp.SimpleNotificationService {
                 // sns event deserialization
                 LogInfo("deserializing SNS event");
                 try {
-                    var snsEvent = LambdaJsonSerializer.Default.Deserialize<SNSEvent>(snsEventBody);
+                    var snsEvent = LambdaSerializerSettings.LambdaSharpSerializer.Deserialize<SNSEvent>(snsEventBody);
                     _currentRecord = snsEvent.Records.First().Sns;
 
                     // message deserialization

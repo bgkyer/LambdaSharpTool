@@ -270,7 +270,7 @@ namespace LambdaSharp.CustomResource {
 
                 // deserialize SNS event
                 LogInfo("deserializing SNS event");
-                var snsEvent = LambdaJsonSerializer.Default.Deserialize<SNSEvent>(body);
+                var snsEvent = LambdaSerializerSettings.LambdaSharpSerializer.Deserialize<SNSEvent>(body);
 
                 // extract message from SNS event
                 LogInfo("deserializing message");

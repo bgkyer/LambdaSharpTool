@@ -23,8 +23,8 @@ using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using Amazon.Lambda.APIGatewayEvents;
-using Amazon.Lambda.Core;
 using LambdaSharp.Exceptions;
+using LambdaSharp.Serialization;
 
 namespace LambdaSharp.ApiGateway.Internal {
 
@@ -41,7 +41,7 @@ namespace LambdaSharp.ApiGateway.Internal {
             public string PathQueryParametersJson { get; set; }
         }
 
-        private static Func<APIGatewayProxyRequest, InvocationTargetState, object> CreateParameterResolver(ILambdaSerializer serializer, MethodInfo method, ParameterInfo parameter) {
+        private static Func<APIGatewayProxyRequest, InvocationTargetState, object> CreateParameterResolver(ILambdaJsonSerializer serializer, MethodInfo method, ParameterInfo parameter) {
 
             // check if [FromUri] or [FromBody] attributes are present
             var hasFromUriAttribute = parameter.GetCustomAttribute<FromUriAttribute>() != null;
@@ -134,10 +134,10 @@ namespace LambdaSharp.ApiGateway.Internal {
         private readonly CreateTargetInstanceDelegate _createInstance;
         private readonly Dictionary<string, (InvocationTargetDelegate Delegate, bool IsAsync)> _mappings = new Dictionary<string, (InvocationTargetDelegate, bool)>();
         private readonly Dictionary<Type, object> _targets = new Dictionary<Type, object>();
-        private readonly ILambdaSerializer _serializer;
+        private readonly ILambdaJsonSerializer _serializer;
 
         //--- Constructors ---
-        public ApiGatewayInvocationTargetDirectory(CreateTargetInstanceDelegate createInstance, ILambdaSerializer serializer) {
+        public ApiGatewayInvocationTargetDirectory(CreateTargetInstanceDelegate createInstance, ILambdaJsonSerializer serializer) {
             _createInstance = createInstance ?? throw new ArgumentNullException(nameof(createInstance));
             _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
         }

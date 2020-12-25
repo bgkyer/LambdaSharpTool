@@ -112,6 +112,9 @@ namespace LambdaSharp {
         /// Retrieves the <see cref="ILambdaSerializer"/> instance used for serializing/deserializing JSON data.
         /// </summary>
         /// <value>The <see cref="ILambdaSerializer"/> instance.</value>
+        ///
+
+        // TODO (2020-12-25, bjorg): remove this obsolete property
         public ILambdaSerializer JsonSerializer { get; }
 
         /// <summary>

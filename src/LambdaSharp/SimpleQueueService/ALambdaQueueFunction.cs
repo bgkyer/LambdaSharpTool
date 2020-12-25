@@ -115,7 +115,7 @@ namespace LambdaSharp.SimpleQueueService {
 
             // deserialize stream to sqs event
             LogInfo("deserializing stream to SQS event");
-            var sqsEvent = LambdaJsonSerializer.Default.Deserialize<SQSEvent>(stream);
+            var sqsEvent = LambdaSerializerSettings.LambdaSharpSerializer.Deserialize<SQSEvent>(stream);
             if(!sqsEvent.Records.Any()) {
                 return $"empty batch".ToStream();
             }
