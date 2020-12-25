@@ -27,7 +27,7 @@
     <Compile Include="..\..\src\LambdaSharp\ApiGateway\Internal\ApiGatewayInvocationTargetReturnException.cs" Link="ApiGatewayInvocationTargetReturnException.cs" />
     <Compile Include="..\..\src\LambdaSharp\Exceptions\ShouldNeverHappenException.cs" Link="ShouldNeverHappenException.cs" />
     <Compile Include="..\..\src\LambdaSharp\Serialization\ILambdaJsonSerializer.cs" Link="ILambdaJsonSerializer.cs" />
-    <Compile Include="..\..\src\LambdaSharp\Serialization\LambdaJsonSerializer.cs" Link="LambdaJsonSerializer.cs" />
+    <Compile Include="..\..\src\LambdaSharp\Serialization\LambdaNewtonsoftJsonSerializer.cs" Link="LambdaNewtonsoftJsonSerializer.cs" />
     <Compile Include="..\..\src\LambdaSharp\Serialization\LambdaSystemTextJsonSerializer.cs" Link="LambdaSystemTextJsonSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
