@@ -34,8 +34,15 @@ namespace LambdaSharp.Serialization {
         /// <summary>
         /// Constructs instance of serializer.
         /// </summary>
-        public LambdaSystemTextJsonSerializer() : base(settings => {
+        public LambdaSystemTextJsonSerializer() : this(customizer: null) { }
+
+        /// <summary>
+        /// Constructs instance of serializer.
+        /// </summary>
+        /// <param name="customizer">A callback to customize the serializer settings.</param>
+        public LambdaSystemTextJsonSerializer(Action<JsonSerializerOptions> customizer) : base(settings => {
             settings.IgnoreNullValues = true;
+            customizer?.Invoke(settings);
         }) { }
 
         /// <summary>
