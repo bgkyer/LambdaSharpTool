@@ -19,6 +19,7 @@
 using System;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace LambdaSharp.Slack {
 
@@ -43,7 +44,7 @@ namespace LambdaSharp.Slack {
         [JsonPropertyName("attachments")]
         public SlackResponseAttachment[] Attachments { get; set; }
 
-        [JsonPropertyName("channel", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("channel")]
         public string Channel { get; set; }
 
         //--- Constructors ---

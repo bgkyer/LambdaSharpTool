@@ -15,6 +15,7 @@
   * Renamed `LambdaJsonSerializer` to `LambdaNewtonsoftJsonSerializer` to make it clear this JSON serializer is based on `Newtonsoft.Json`.
   * Changed `ALambdaFunction.LambdaSerializer` property type to `ILambdaJsonSerializer`.
   * Changed target framework for `LambdaSharp` project to `netcoreapp3.1` which is required by the `Amazon.Lambda.Serialization.SystemTextJson` assembly.
+  * Changed target framework for `LambdaSharp.Slack` project to `netcoreapp3.1` which is required by the `LambdaSharp` assembly.
 
 #### Features
 

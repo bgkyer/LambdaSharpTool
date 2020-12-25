@@ -21,6 +21,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using LambdaSharp.Serialization;
 
 namespace LambdaSharp.Slack {
 
@@ -54,7 +55,7 @@ namespace LambdaSharp.Slack {
             LogInfo("reading message stream");
             SlackRequest request;
             try {
-                request = LambdaSerializerSettings.LambdaSerializerSettings.Deserialize<SlackRequest>(stream);
+                request = LambdaSerializerSettings.LambdaSharpSerializer.Deserialize<SlackRequest>(stream);
             } catch(Exception e) {
                 LogError(e, "failed during Slack request deserialization");
                 return $"ERROR: {e.Message}".ToStream();
