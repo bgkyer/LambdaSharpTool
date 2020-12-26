@@ -21,6 +21,7 @@
 
 * CLI
   * Lambda projects can now explicitly specify one of the standard LambdaSharp serializers without causing an error or warning during compilation. The standard serializers are `LambdaSharp.Serialization.LambdaNewtonsoftJsonSerializer` and `LambdaSharp.Serialization.LambdaNewtonsoftJsonSerializer`.
+  * Updated CloudFormation to v22.0.0
 
 * SDK
   * Optimized cold-start times for by deserializing Amazon Lambda data-structures by using `LambdaSystemTextJsonSerializer`, which is built on `System.Text.Json`. This change avoids jitting the heavy `Newtonsoft.Json` assembly unless required by the end-user code.
