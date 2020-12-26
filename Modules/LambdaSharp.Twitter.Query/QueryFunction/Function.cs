@@ -33,6 +33,8 @@ using Tweetinvi;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
 
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
+
 namespace LambdaSharp.Twitter.QueryFunction {
     using TwitterSearch = Tweetinvi.Search;
 

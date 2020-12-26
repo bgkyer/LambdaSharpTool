@@ -25,6 +25,8 @@ using Amazon.S3.Model;
 using LambdaSharp;
 using LambdaSharp.CustomResource;
 
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
+
 namespace LambdaSharpS3Subscriber.ResourceHandler {
     using LambdaSubscription = Amazon.S3.Model.LambdaFunctionConfiguration;
     using LambdaFilter = Amazon.S3.Model.Filter;
