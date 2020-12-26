@@ -13,7 +13,7 @@ using LambdaSharp.App.EventBus.Actions;
 using LambdaSharp.ApiGateway;
 using Newtonsoft.Json.Linq;
 
-// [assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
 
 namespace LambdaSharp.App.EventBus.ListenerFunction {
 

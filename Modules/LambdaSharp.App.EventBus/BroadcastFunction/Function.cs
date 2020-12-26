@@ -14,7 +14,7 @@ using Amazon.Runtime;
 using LambdaSharp.App.EventBus.Actions;
 using Newtonsoft.Json.Linq;
 
-// [assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
 
 namespace LambdaSharp.App.EventBus.BroadcastFunction {
 

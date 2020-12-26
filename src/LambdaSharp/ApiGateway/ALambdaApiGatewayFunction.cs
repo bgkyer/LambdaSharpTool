@@ -232,7 +232,7 @@ namespace LambdaSharp.ApiGateway {
                 // exception was raised by an asynchronous endpoint; the failure needs to be recorded for playback
                 LogError(e, $"async route '{signature}' threw {e.GetType()}");
                 try {
-                    await RecordFailedMessageAsync(LambdaLogLevel.ERROR, FailedMessageOrigin.ApiGateway, LambdaSerializer.Serialize(request), e);
+                    await RecordFailedMessageAsync(LambdaLogLevel.ERROR, FailedMessageOrigin.ApiGateway, LambdaSerializerSettings.LambdaSharpSerializer.Serialize(request), e);
                     LogMetric("AsyncRequestDead.Count", 1, LambdaMetricUnit.Count, dimensionNames, dimensionValues);
                 } catch {
                     LogMetric("AsyncRequestFailed.Count", 1, LambdaMetricUnit.Count, dimensionNames, dimensionValues);
