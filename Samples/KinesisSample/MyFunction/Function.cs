@@ -20,6 +20,8 @@ using System.Threading.Tasks;
 using Amazon.Lambda.KinesisEvents;
 using LambdaSharp;
 
+// [assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
+
 namespace KinesisSample.MyFunction {
 
     public sealed class Function : ALambdaFunction<KinesisEvent, string> {
@@ -28,10 +30,10 @@ namespace KinesisSample.MyFunction {
         public override Task InitializeAsync(LambdaConfig config)
             => Task.CompletedTask;
 
-        public override async Task<string> ProcessMessageAsync(KinesisEvent evt) {
-            LogInfo($"# Kinesis Records = {evt.Records.Count}");
-            for(var i = 0; i < evt.Records.Count; ++i) {
-                var record = evt.Records[i];
+        public override async Task<string> ProcessMessageAsync(KinesisEvent kinesisEvent) {
+            LogInfo($"# Kinesis Records = {kinesisEvent.Records.Count}");
+            for(var i = 0; i < kinesisEvent.Records.Count; ++i) {
+                var record = kinesisEvent.Records[i];
                 LogInfo($"Record #{i}");
                 LogInfo($"AwsRegion = {record.AwsRegion}");
                 LogInfo($"EventId = {record.EventId}");

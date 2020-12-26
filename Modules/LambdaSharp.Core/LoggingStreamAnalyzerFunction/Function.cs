@@ -36,6 +36,8 @@ using LambdaSharp.Logging.Events.Models;
 using LambdaSharp.Logging.Metrics;
 using LambdaSharp.Logging.Metrics.Models;
 
+// [assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
+
 namespace LambdaSharp.Core.LoggingStreamAnalyzerFunction {
 
     public class LogEventsMessage {

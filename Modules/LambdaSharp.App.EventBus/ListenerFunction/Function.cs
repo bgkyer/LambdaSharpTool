@@ -10,9 +10,10 @@ using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
 using LambdaSharp.App.EventBus.Records;
 using LambdaSharp.App.EventBus.Actions;
-using LambdaSharp;
 using LambdaSharp.ApiGateway;
 using Newtonsoft.Json.Linq;
+
+// [assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
 
 namespace LambdaSharp.App.EventBus.ListenerFunction {
 

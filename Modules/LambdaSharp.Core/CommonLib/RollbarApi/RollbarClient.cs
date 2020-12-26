@@ -24,8 +24,8 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using LambdaSharp.Serialization;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace LambdaSharp.Core.RollbarApi {
 
@@ -71,11 +71,11 @@ namespace LambdaSharp.Core.RollbarApi {
         public string? Status { get; set; }
 
         [JsonProperty("date_created")]
-        [JsonConverter(typeof(UnixDateTimeConverter))]
+        [JsonConverter(typeof(JsonEpochSecondsDateTimeConverter))]
         public DateTimeOffset Created { get; set; }
 
         [JsonProperty("date_modified")]
-        [JsonConverter(typeof(UnixDateTimeConverter))]
+        [JsonConverter(typeof(JsonEpochSecondsDateTimeConverter))]
         public DateTimeOffset Modified { get; set; }
     }
 
@@ -95,11 +95,11 @@ namespace LambdaSharp.Core.RollbarApi {
         public string? Status { get; set; }
 
         [JsonProperty("date_created")]
-        [JsonConverter(typeof(UnixDateTimeConverter))]
+        [JsonConverter(typeof(JsonEpochSecondsDateTimeConverter))]
         public DateTime Created { get; set; }
 
         [JsonProperty("date_modified")]
-        [JsonConverter(typeof(UnixDateTimeConverter))]
+        [JsonConverter(typeof(JsonEpochSecondsDateTimeConverter))]
         public DateTime Modified { get; set; }
     }
 
