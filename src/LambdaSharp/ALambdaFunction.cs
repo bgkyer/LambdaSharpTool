@@ -180,7 +180,12 @@ namespace LambdaSharp {
             /// <summary>
             /// The message originated from the Simple Queue Service service.
             /// </summary>
-            SQS
+            SQS,
+
+            /// <summary>
+            /// The message originated from the CloudWatch service.
+            /// </summary>
+            CloudWatch
         }
 
         //--- Class Fields ---

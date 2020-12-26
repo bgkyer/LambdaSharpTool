@@ -49,7 +49,8 @@ namespace LambdaSharp.Tool.Cli {
         Topic,
         WebSocket,
         WebSocketProxy,
-        Finalizer
+        Finalizer,
+        Event
     }
 
     public class CliNewCommand : ACliCommand {

@@ -55,11 +55,19 @@ namespace LambdaSharp.Serialization {
                     .GetCustomAttributes(typeof(LambdaSerializerAttribute), false)
                     .OfType<LambdaSerializerAttribute>()
                     .FirstOrDefault();
-                AssemblySerializer = (serializerAttribute != null)
-                    ? (ILambdaJsonSerializer)(Activator.CreateInstance(serializerAttribute.SerializerType) ?? throw new ShouldNeverHappenException())
+                if(serializerAttribute == null) {
 
                     // TODO (2020-12-25, bjorg): default to LambdaSharpSerializer when Newtonsoft.Json references have been removed
-                    : new LambdaNewtonsoftJsonSerializer();
+                    AssemblySerializer = new LambdaNewtonsoftJsonSerializer();
+                } else if(serializerAttribute.SerializerType == typeof(LambdaSystemTextJsonSerializer)) {
+
+                    // share same instance when possible
+                    AssemblySerializer = LambdaSharpSerializer;
+                } else {
+
+                    // instantiate custom serializer
+                    AssemblySerializer = (ILambdaJsonSerializer)(Activator.CreateInstance(serializerAttribute.SerializerType) ?? throw new ShouldNeverHappenException());
+                }
             }
         }
     }
