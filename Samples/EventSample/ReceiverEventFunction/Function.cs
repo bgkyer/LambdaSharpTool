@@ -33,17 +33,14 @@ namespace Sample.Event.ReceiverEventFunction {
     public sealed class Function : ALambdaEventFunction<EventDetails> {
 
         //--- Methods ---
-        public override async Task InitializeAsync(LambdaConfig config) {
-
-            // TO-DO: add function initialization and reading configuration settings
-        }
+        public override async Task InitializeAsync(LambdaConfig config) { }
 
         public override async Task ProcessMessageAsync(EventDetails message) {
             var request = CurrentEvent;
             LogInfo($"Version = {request.Version}");
             LogInfo($"Account = {request.Account}");
             LogInfo($"Region = {request.Region}");
-            LogInfo($"Detail = {LambdaSerializer.Serialize(request.Detail)}");
+            LogInfo($"Detail = {LambdaSerializer.Serialize(message)}");
             LogInfo($"DetailType = {request.DetailType}");
             LogInfo($"Source = {request.Source}");
             LogInfo($"Time = {request.Time}");
