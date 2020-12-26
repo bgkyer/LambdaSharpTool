@@ -28,6 +28,8 @@ using LambdaSharp.Core.RollbarApi;
 using LambdaSharp.CustomResource;
 using LambdaSharp.Exceptions;
 
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
+
 namespace LambdaSharp.Core.RegistrationFunction {
 
     public class RegistrationResourceProperties {
