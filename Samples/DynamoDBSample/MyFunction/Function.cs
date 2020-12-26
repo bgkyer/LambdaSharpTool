@@ -20,8 +20,6 @@ using System.Threading.Tasks;
 using Amazon.Lambda.DynamoDBEvents;
 using LambdaSharp;
 
-// [assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
-
 namespace DynamoDBSample.MyFunction {
 
     public sealed class Function : ALambdaFunction<DynamoDBEvent, string> {
