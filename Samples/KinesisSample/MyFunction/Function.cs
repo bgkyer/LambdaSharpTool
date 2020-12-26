@@ -16,11 +16,11 @@
  * limitations under the License.
  */
 
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Amazon.Lambda.KinesisEvents;
 using LambdaSharp;
-
-// [assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
 
 namespace KinesisSample.MyFunction {
 
@@ -43,7 +43,11 @@ namespace KinesisSample.MyFunction {
                 LogInfo($"EventVersion = {record.EventVersion}");
                 LogInfo($"InvokeIdentityArn = {record.InvokeIdentityArn}");
                 LogInfo($"ApproximateArrivalTimestamp = {record.Kinesis.ApproximateArrivalTimestamp}");
-                LogInfo($"Kinesis.Data.Length = {record.Kinesis.Data.Length}");
+                var bytes = record.Kinesis.Data.ToArray();
+                LogInfo($"Kinesis.Data.Length = {bytes.Length}");
+                if(bytes.All(b => (b >= 32) && (b < 128))) {
+                    LogInfo($"Kinesis.Data = {Encoding.ASCII.GetString(bytes)}");
+                }
                 LogInfo($"Kinesis.KinesisSchemaVersion = {record.Kinesis.KinesisSchemaVersion}");
                 LogInfo($"KinesisPartitionKey = {record.Kinesis.PartitionKey}");
                 LogInfo($"KinesisSequenceNumber = {record.Kinesis.SequenceNumber}");

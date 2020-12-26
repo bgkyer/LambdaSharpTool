@@ -25,8 +25,6 @@ using System.Threading.Tasks;
 using Amazon.Lambda.KinesisFirehoseEvents;
 using LambdaSharp;
 
-// [assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
-
 namespace Sample.KinesisFirehose.FirehoseAnalyzerFunction {
 
     public sealed class Function : ALambdaFunction<KinesisFirehoseEvent, KinesisFirehoseResponse> {
