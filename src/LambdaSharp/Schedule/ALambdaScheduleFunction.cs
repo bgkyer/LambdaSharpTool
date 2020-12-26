@@ -64,7 +64,6 @@ namespace LambdaSharp.Schedule {
         /// <returns>The task object representing the asynchronous operation.</returns>
         public override sealed async Task<Stream> ProcessMessageStreamAsync(Stream stream) {
             var schedule = LambdaSerializerSettings.LambdaSharpSerializer.Deserialize<LambdaScheduleEvent>(stream);
-            LogInfo($"received schedule event '{schedule.Name ?? schedule.Id}'");
             await ProcessEventAsync(schedule);
             return "Ok".ToStream();
         }
