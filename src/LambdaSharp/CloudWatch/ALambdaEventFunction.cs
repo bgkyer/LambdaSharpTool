@@ -20,9 +20,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Amazon.Lambda.CloudWatchEvents;
-using LambdaSharp.CloudWatch.Internal;
 using LambdaSharp.Logging;
 using LambdaSharp.Logging.Metrics;
 using LambdaSharp.Serialization;
@@ -114,7 +114,9 @@ namespace LambdaSharp.CloudWatch {
                 // cloudwatch event deserialization
                 LogInfo("deserializing CloudWatch event");
                 try {
-                    var cloudWatchEvent = LambdaSerializerSettings.LambdaSharpSerializer.Deserialize<CloudWatchEvent>(cloudWatchEventBody);
+
+                    // deserialize using JsonElement as type for 'Detail' property; this allows us to re-deserialize it with the custom lambda serializer
+                    var cloudWatchEvent = LambdaSerializerSettings.LambdaSharpSerializer.Deserialize<CloudWatchEvent<JsonElement>>(cloudWatchEventBody);
 
                     // message deserialization
                     LogInfo("deserializing event detail");
