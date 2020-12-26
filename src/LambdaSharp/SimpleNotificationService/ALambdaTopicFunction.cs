@@ -61,7 +61,7 @@ namespace LambdaSharp.SimpleNotificationService {
         /// The <see cref="CurrentRecord"/> property holds the SNS message record that is currently being processed.
         /// </summary>
         /// <remarks>
-        /// This property is only set during the invocation of <see cref="ProcessMessageStreamAsync(Stream)"/>. Otherwise, it returns <c>null</c>.
+        /// This property is only set during the invocation of <see cref="ProcessMessageAsync(TMessage)"/>. Otherwise, it returns <c>null</c>.
         /// </remarks>
         /// <value>The <see cref="SNSEvent.SNSMessage"/> instance.</value>
         protected SNSEvent.SNSMessage CurrentRecord => _currentRecord;
@@ -137,7 +137,7 @@ namespace LambdaSharp.SimpleNotificationService {
                     try {
 
                         // attempt to send failed message to the dead-letter queue
-                        await RecordFailedMessageAsync(LambdaLogLevel.ERROR, FailedMessageOrigin.SQS, LambdaSerializer.Serialize(snsEventBody), e);
+                        await RecordFailedMessageAsync(LambdaLogLevel.ERROR, FailedMessageOrigin.SNS, LambdaSerializer.Serialize(snsEventBody), e);
 
                         // record failed processing metrics
                         metrics.Add(("MessageDead.Count", 1, LambdaMetricUnit.Count));
