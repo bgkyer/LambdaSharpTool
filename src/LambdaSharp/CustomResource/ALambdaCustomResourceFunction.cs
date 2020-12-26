@@ -257,7 +257,7 @@ namespace LambdaSharp.CustomResource {
                 body = reader.ReadToEnd();
             }
 
-            // deserialize stream into a generic JSON object
+            // check if custom resource request is wrapped in an SNS envelope
             LogInfo("deserializing request");
             bool hasRecords;
             using(var json = JsonDocument.Parse(body)) {
