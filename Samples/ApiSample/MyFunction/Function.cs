@@ -22,6 +22,8 @@ using Amazon.Lambda.APIGatewayEvents;
 using LambdaSharp;
 using LambdaSharp.ApiGateway;
 
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
+
 namespace ApiSample.MyFunction {
 
     public sealed class Function : ALambdaApiGatewayFunction {

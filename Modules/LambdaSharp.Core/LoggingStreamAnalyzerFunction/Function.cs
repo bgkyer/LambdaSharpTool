@@ -136,7 +136,12 @@ namespace LambdaSharp.Core.LoggingStreamAnalyzerFunction {
             var dynamoClient = new AmazonDynamoDBClient();
             _registrations = new RegistrationTable(dynamoClient, tableName);
             _cachedRegistrations = new Dictionary<string, OwnerMetaData>();
-            _rollbarClient = new RollbarClient(null, null, message => LogInfo(message));
+            _rollbarClient = new RollbarClient(
+                httpClient: null,
+                accountReadAccessToken: null,
+                accountWriteAccessToken: null,
+                message => LogInfo(message)
+            );
             _eventsClient = new AmazonCloudWatchEventsClient();
             _firehoseClient = new AmazonKinesisFirehoseClient();
             _selfMetaData = new OwnerMetaData {

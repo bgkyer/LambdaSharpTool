@@ -20,6 +20,7 @@ using System;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
@@ -27,6 +28,7 @@ using LambdaSharp.Core.Registrations;
 using LambdaSharp.Core.RollbarApi;
 using LambdaSharp.CustomResource;
 using LambdaSharp.Exceptions;
+using LambdaSharp.Serialization;
 
 [assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
 
@@ -50,7 +52,11 @@ namespace LambdaSharp.Core.RegistrationFunction {
         public string? FunctionId { get; set; }
         public string? FunctionName { get; set; }
         public string? FunctionLogGroupName { get; set; }
+
+        [JsonConverter(typeof(JsonParseIntConverter))]
         public int FunctionMaxMemory { get; set; }
+
+        [JsonConverter(typeof(JsonParseIntConverter))]
         public int FunctionMaxDuration { get; set; }
         public string? FunctionPlatform { get; set; }
         public string? FunctionFramework { get; set; }
@@ -120,6 +126,7 @@ namespace LambdaSharp.Core.RegistrationFunction {
             var tableName = config.ReadDynamoDBTableName("RegistrationTable");
             _registrations = new RegistrationTable(new AmazonDynamoDBClient(), tableName);
             _rollbarClient = new RollbarClient(
+                HttpClient,
                 config.ReadText("RollbarReadAccessToken", defaultValue: null),
                 config.ReadText("RollbarWriteAccessToken", defaultValue: null),
                 message => LogInfo(message)

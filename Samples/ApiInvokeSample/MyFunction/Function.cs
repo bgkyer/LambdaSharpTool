@@ -23,6 +23,8 @@ using System.Threading.Tasks;
 using LambdaSharp;
 using LambdaSharp.ApiGateway;
 
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
+
 namespace ApiInvokeSample.MyFunction {
 
     public sealed class Function : ALambdaApiGatewayFunction {

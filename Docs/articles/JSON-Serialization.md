@@ -12,7 +12,7 @@ By default, _LambdaSharp_ uses _Newtonsoft.Json_ for JSON serialization of custo
 
 Lambda functions using _System.Text.Json_ must declare `LambdaSystemTextJsonSerializer` as their JSON serializer using the `JsonSerializer` assembly attribute.
 ```csharp
-[assembly: JsonSerializer(LambdaSystemTextJsonSerializer)]
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
 ```
 
 Microsoft has published an excellent [migration guide](https://docs.microsoft.com/en-us/dotnet/standard/serialization/system-text-json-migrate-from-newtonsoft-how-to) for switching from _Newtonsoft.Json_ to _System.Text.Json_. In addition to the guide, the following sections explain how to migrate existing data-structures.
@@ -79,8 +79,8 @@ Replace attribute for explicitly naming JSON elements.
 
 Replace attribute for requiring a JSON property (used by JSON schema generator for API Gateway models)
 * Before: `[JsonRequired]` -or- `[JsonProperty(Required = Required.DisallowNull)]`
-* After: `[DataMember(IsRequired = true)]`
-* Requires: `using System.Runtime.Serialization;`
+* After: `[Required]`
+* Requires: `using System.ComponentModel.DataAnnotations;`
 
 ### Derived Classes Serialization
 

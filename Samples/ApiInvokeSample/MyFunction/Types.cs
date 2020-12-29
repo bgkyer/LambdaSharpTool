@@ -17,55 +17,55 @@
  */
 
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace ApiInvokeSample.MyFunction {
 
     public class Item {
 
         //--- Properties ---
-        [JsonRequired]
+        [Required]
         public string Id { get; set; }
 
-        [JsonRequired]
+        [Required]
         public string Value { get; set; }
     }
 
     public class AddItemRequest {
 
         //--- Properties ---
-        [JsonRequired]
+        [Required]
         public string Value { get; set; }
     }
 
     public class AddItemResponse {
 
         //--- Properties ---
-        [JsonRequired]
+        [Required]
         public string Id { get; set; }
     }
 
     public class GetItemsResponse {
 
         //--- Properties ---
-        [JsonRequired]
+        [Required]
         public List<Item> Items = new List<Item>();
     }
 
     public class GetItemResponse {
 
         //--- Properties ---
-        [JsonRequired]
+        [Required]
         public string Id { get; set; }
 
-        [JsonRequired]
+        [Required]
         public string Value { get; set; }
     }
 
     public class DeleteItemResponse {
 
         //--- Properties ---
-        [JsonRequired]
+        [Required]
         public bool Deleted;
     }
 }
