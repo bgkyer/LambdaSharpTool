@@ -8,6 +8,3 @@ apiRules:
   - exclude:
       uidRegex: ^System
       type: Type
-  - exclude:
-      uidRegex: ^Amazon
-      type: Type

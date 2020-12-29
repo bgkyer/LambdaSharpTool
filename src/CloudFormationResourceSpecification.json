@@ -44261,6 +44261,7 @@
           "Required": false
         },
         "RepositoryPolicyText": {
+          "PrimitiveType": "Json",
           "Required": false
         }
       }
@@ -55238,9 +55239,9 @@
           "Type": "Device"
         },
         "Tags": {
-          "ItemType": "Json",
+          "ItemType": "Tag",
           "Required": false,
-          "Type": "Tag"
+          "Type": "List"
         }
       }
     },
@@ -55265,9 +55266,9 @@
           "Required": true
         },
         "Tags": {
-          "ItemType": "Json",
+          "ItemType": "Tag",
           "Required": false,
-          "Type": "Tag"
+          "Type": "List"
         }
       }
     },
@@ -55510,6 +55511,7 @@
           "Required": true
         },
         "ModelPackageGroupPolicy": {
+          "PrimitiveType": "Json",
           "Required": false
         },
         "Tags": {
