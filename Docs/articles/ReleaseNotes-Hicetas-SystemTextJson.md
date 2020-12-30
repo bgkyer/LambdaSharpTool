@@ -4,6 +4,7 @@
 > 1. Test Slack base class since it's now based on System.Text.Json
 > 1. Test custom serializer
 > 1. Write article on providing a custom serializer
+> 1. Review API Sample with Assembly invoke
 
 #### BREAKING CHANGES
 
