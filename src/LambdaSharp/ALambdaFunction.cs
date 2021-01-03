@@ -286,13 +286,6 @@ namespace LambdaSharp {
         protected DateTime UtcNow => Provider.UtcNow;
 
         /// <summary>
-        /// Retrieves the <see cref="ILambdaSerializer"/> instance used for serializing/deserializing JSON data.
-        /// </summary>
-        /// <value>The <see cref="ILambdaSerializer"/> instance.</value>
-        [Obsolete("Use LambdaSerializer instead. This property will be removed in the next major release.")]
-        protected ILambdaSerializer JsonSerializer => Provider.JsonSerializer;
-
-        /// <summary>
         /// An instance of <see cref="ILambdaJsonSerializer"/>, as specified by the <see cref="LambdaSerializerAttribute"/> attribute on the assembly,
         /// used for serializing/deserializing JSON data.
         /// </summary>

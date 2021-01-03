@@ -29,7 +29,6 @@ using Amazon.Lambda.Core;
 using Amazon.SQS;
 using Amazon.SQS.Model;
 using LambdaSharp.ConfigSource;
-using LambdaSharp.Serialization;
 
 namespace LambdaSharp {
 
@@ -60,7 +59,6 @@ namespace LambdaSharp {
         /// <param name="utcNowCallback">A function that return the current <c>DateTime</c> in UTC timezone. Defaults to <see cref="DateTime.UtcNow"/> when <c>null</c>.</param>
         /// <param name="logCallback">An action that logs a string message. Defaults to <see cref="LambdaLogger.Log"/> when <c>null</c>.</param>
         /// <param name="configSource">A <see cref="ILambdaConfigSource"/> instance from which the Lambda function configuration is read. Defaults to <see cref="LambdaSystemEnvironmentSource"/> instance when <c>null</c>.</param>
-        /// <param name="jsonSerializer">A <see cref="ILambdaSerializer"/> instance for serializing and deserializing JSON data. Defaults to <see cref="LambdaLogger.Log"/> when <c>null</c>.</param>
         /// <param name="kmsClient">A <see cref="IAmazonKeyManagementService"/> client instance. Defaults to <see cref="AmazonKeyManagementServiceClient"/> when <c>null</c>.</param>
         /// <param name="sqsClient">A <see cref="IAmazonSQS"/> client instance. Defaults to <see cref="AmazonSQSClient"/> when <c>null</c>.</param>
         /// <param name="eventsClient">A <see cref="IAmazonCloudWatchEvents"/> client instance. Defaults to <see cref="AmazonCloudWatchEventsClient"/> when <c>null</c>.</param>
@@ -69,7 +67,6 @@ namespace LambdaSharp {
             Func<DateTime> utcNowCallback = null,
             Action<string> logCallback = null,
             ILambdaConfigSource configSource = null,
-            ILambdaSerializer jsonSerializer = null,
             IAmazonKeyManagementService kmsClient = null,
             IAmazonSQS sqsClient = null,
             IAmazonCloudWatchEvents eventsClient = null,
@@ -78,7 +75,6 @@ namespace LambdaSharp {
             _nowCallback = utcNowCallback ?? (() => DateTime.UtcNow);
             _logCallback = logCallback ?? LambdaLogger.Log;
             ConfigSource = configSource ?? new LambdaSystemEnvironmentSource();
-            JsonSerializer = jsonSerializer ?? new LambdaNewtonsoftJsonSerializer();
             KmsClient = kmsClient ?? new AmazonKeyManagementServiceClient();
             SqsClient = sqsClient ?? new AmazonSQSClient();
             EventsClient = eventsClient ?? new AmazonCloudWatchEventsClient();
@@ -107,15 +103,6 @@ namespace LambdaSharp {
         /// </summary>
         /// <value>The <see cref="ILambdaConfigSource"/> instance.</value>
         public ILambdaConfigSource ConfigSource { get; }
-
-        /// <summary>
-        /// Retrieves the <see cref="ILambdaSerializer"/> instance used for serializing/deserializing JSON data.
-        /// </summary>
-        /// <value>The <see cref="ILambdaSerializer"/> instance.</value>
-        ///
-
-        // TODO (2020-12-25, bjorg): remove this obsolete property
-        public ILambdaSerializer JsonSerializer { get; }
 
         /// <summary>
         /// Retrieves the <see cref="IAmazonKeyManagementService"/> instance used for communicating with the

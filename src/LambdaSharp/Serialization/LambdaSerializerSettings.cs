@@ -56,9 +56,7 @@ namespace LambdaSharp.Serialization {
                     .OfType<LambdaSerializerAttribute>()
                     .FirstOrDefault();
                 if(serializerAttribute == null) {
-
-                    // TODO (2020-12-25, bjorg): default to LambdaSharpSerializer when Newtonsoft.Json references have been removed
-                    AssemblySerializer = new LambdaNewtonsoftJsonSerializer();
+                    AssemblySerializer = new LambdaSystemTextJsonSerializer();
                 } else if(serializerAttribute.SerializerType == typeof(LambdaSystemTextJsonSerializer)) {
 
                     // share same instance when possible

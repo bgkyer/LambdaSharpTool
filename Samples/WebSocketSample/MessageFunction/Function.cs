@@ -32,6 +32,8 @@ using Newtonsoft.Json.Linq;
 using Demo.WebSocketsChat.Common;
 using LambdaSharp.ApiGateway;
 
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaNewtonsoftJsonSerializer))]
+
 namespace WebSocketsSample.MessageFunction {
 
     public class Message {

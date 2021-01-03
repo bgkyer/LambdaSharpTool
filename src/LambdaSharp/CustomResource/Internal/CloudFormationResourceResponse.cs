@@ -21,7 +21,6 @@ using System.Text.Json.Serialization;
 namespace LambdaSharp.CustomResource.Internal {
 
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     internal enum CloudFormationResourceResponseStatus {
         SUCCESS,
         FAILED

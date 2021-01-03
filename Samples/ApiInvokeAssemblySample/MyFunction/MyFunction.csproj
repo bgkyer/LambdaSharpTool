@@ -9,6 +9,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\LambdaSharp\LambdaSharp.csproj" />
+    <ProjectReference Include="..\..\..\src\LambdaSharp.Serialization.NewtonsoftJson\LambdaSharp.Serialization.NewtonsoftJson.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>
 </Project>

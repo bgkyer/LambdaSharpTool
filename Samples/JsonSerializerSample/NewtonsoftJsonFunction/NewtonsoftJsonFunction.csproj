@@ -9,6 +9,9 @@
     <NoWarn>CS1998</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\src\LambdaSharp.Serialization.NewtonsoftJson\LambdaSharp.Serialization.NewtonsoftJson.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Condition="'$(LAMBDASHARP)'==''" Include="LambdaSharp" Version="0.8.1.*"/>
     <ProjectReference Condition="'$(LAMBDASHARP)'!=''" Include="$(LAMBDASHARP)\src\LambdaSharp\LambdaSharp.csproj" />
   </ItemGroup>

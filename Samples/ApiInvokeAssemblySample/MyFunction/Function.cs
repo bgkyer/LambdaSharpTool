@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 using LambdaSharp;
 using LambdaSharp.ApiGateway;
 
-[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaNewtonsoftJsonSerializer))]
 
 namespace ApiInvokeSample.MyFunction {
 

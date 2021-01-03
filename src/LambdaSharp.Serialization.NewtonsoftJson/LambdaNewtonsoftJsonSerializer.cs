@@ -20,6 +20,8 @@ using System;
 using System.IO;
 using Amazon.Lambda.Serialization.Json;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 
 namespace LambdaSharp.Serialization {
 
@@ -28,6 +30,49 @@ namespace LambdaSharp.Serialization {
     /// for serialization.
     /// </summary>
     public class LambdaNewtonsoftJsonSerializer : Amazon.Lambda.Serialization.Json.JsonSerializer, ILambdaJsonSerializer {
+
+        //--- Types ---
+        private sealed class ContractResolver : IContractResolver {
+
+            //--- Class Fields ---
+            private static StringEnumConverter _stringEnumConverter;
+
+            //--- Class Properties ---
+            private static StringEnumConverter StringEnumConverter {
+                get {
+                    if(_stringEnumConverter == null) {
+                        _stringEnumConverter = new StringEnumConverter();
+                    }
+                    return _stringEnumConverter;
+                }
+            }
+
+            //--- Fields ---
+            private readonly IContractResolver _parent;
+
+            //--- Constructors ---
+            public ContractResolver(IContractResolver parent) => _parent = parent ?? throw new ArgumentNullException(nameof(parent));
+
+            //--- Methods ---
+            JsonContract IContractResolver.ResolveContract(Type type) {
+                var result = _parent.ResolveContract(type);
+
+                // override converter for some built-in LambdaSharp types
+                switch(type.FullName) {
+                case "LambdaSharp.CustomResource.RequestType":
+                    result.Converter = StringEnumConverter;
+                    break;
+                case "LambdaSharp.CustomResource.Internal.CloudFormationResourceResponseStatus":
+                    result.Converter = StringEnumConverter;
+                    break;
+                default:
+
+                    // nothing to do
+                    break;
+                }
+                return result;
+            }
+        }
 
         //--- Class Fields ---
         private static JsonSerializerSettings _staticSettings;

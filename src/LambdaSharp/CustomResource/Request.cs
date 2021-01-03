@@ -25,7 +25,6 @@ namespace LambdaSharp.CustomResource {
     /// operation on the custom resource.
     /// </summary>
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     public enum RequestType {
 
         /// <summary>
