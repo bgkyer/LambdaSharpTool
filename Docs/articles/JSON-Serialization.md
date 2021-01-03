@@ -17,6 +17,11 @@ Lambda functions using _System.Text.Json_ must declare `LambdaSystemTextJsonSeri
 
 Microsoft has published an excellent [migration guide](https://docs.microsoft.com/en-us/dotnet/standard/serialization/system-text-json-migrate-from-newtonsoft-how-to) for switching from _Newtonsoft.Json_ to _System.Text.Json_. In addition to the guide, the following sections explain how to migrate existing data-structures.
 
+Alternatively, functions can use _Newtonsoft.Json_ as their JSON serializer:
+```csharp
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaNewtonsoftJsonSerializer))]
+```
+
 ### Update Projects
 
 Upgrade projects to .NET Core 3.1 by changing the target framework in the _.csproj_ file.
