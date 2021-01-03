@@ -18,7 +18,7 @@
 
 using System;
 using System.IO;
-using Amazon.Lambda.Serialization.SystemTextJson;
+using Amazon.Lambda.Serialization.Json;
 using Newtonsoft.Json;
 
 namespace LambdaSharp.Serialization {

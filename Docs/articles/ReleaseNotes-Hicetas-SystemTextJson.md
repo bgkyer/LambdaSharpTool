@@ -29,3 +29,6 @@
   * Optimized cold-start times for by deserializing Amazon Lambda data-structures by using `LambdaSystemTextJsonSerializer`, which is built on `System.Text.Json`. This change avoids jitting the heavy `Newtonsoft.Json` assembly unless required by the end-user code.
   * Added constructor to customize serializer settings for `LambdaSystemTextJsonSerializer`.
   * Added constructor to customize serializer settings for `LambdaNewtonsoftJsonSerializer`.
+
+* Samples
+  * Added `Samples/JsonSerializerSample` module showing how to specify the JSON serializer for a Lambda function.

@@ -35,3 +35,4 @@ Please refer to the [Folder Structure Documentation](https://lambdasharp.net/art
 1. [Blazor WebAssembly App](BlazorSample/)
 1. [Blazor WebAssembly App w/ CloudWatch Events](BlazorEventsSample/)
 1. [Debug Logging](DebugSample/)
+1. [Custom JSON Serializer](JsonSerializerSample/)

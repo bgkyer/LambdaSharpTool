@@ -131,6 +131,7 @@ lash deploy  \
     Samples/DynamoDBSample/bin/cloudformation.json \
     Samples/EventSample/bin/cloudformation.json \
     Samples/FinalizerSample/bin/cloudformation.json \
+    Samples/JsonSerializerSample/bin/cloudformation.json \
     Samples/KinesisSample/bin/cloudformation.json \
     Samples/KinesisFirehoseSample/bin/cloudformation.json \
     Samples/LambdaLayerSample/bin/cloudformation.json \
