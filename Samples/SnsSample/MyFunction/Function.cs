@@ -20,6 +20,8 @@ using System.Threading.Tasks;
 using LambdaSharp;
 using LambdaSharp.SimpleNotificationService;
 
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
+
 namespace SnsSample.MyFunction {
 
     public class MyMessage {

@@ -16,9 +16,10 @@
  * limitations under the License.
  */
 
-using System;
 using System.Threading.Tasks;
 using LambdaSharp;
+
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
 
 namespace Sample.Debug.MyFunction {
 

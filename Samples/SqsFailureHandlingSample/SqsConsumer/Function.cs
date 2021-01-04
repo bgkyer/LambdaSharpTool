@@ -22,6 +22,8 @@ using LambdaSharp;
 using LambdaSharp.Exceptions;
 using LambdaSharp.SimpleQueueService;
 
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
+
 namespace SqsSample.Consumer {
 
     public sealed class Function : ALambdaQueueFunction<int> {

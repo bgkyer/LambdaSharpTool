@@ -24,6 +24,8 @@ using Amazon.S3.Model;
 using LambdaSharp;
 using LambdaSharp.Finalizer;
 
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
+
 namespace FinalizerSample.Finalizer {
 
     public sealed class Function : ALambdaFinalizerFunction {

@@ -21,26 +21,28 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using LambdaSharp;
 
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
+
 namespace MacroSample.MyFunction {
 
     public class MacroRequest {
 
         //--- Properties ---
-        public string Region;
-        public string AccountId;
-        public IDictionary<string, object> Fragment;
-        public string TransformId;
-        public IDictionary<string, object> Params;
-        public string RequestId;
-        public IDictionary<string, object> TemplateParameterValues;
+        public string Region { get; set; }
+        public string AccountId { get; set; }
+        public IDictionary<string, object> Fragment { get; set; }
+        public string TransformId { get; set; }
+        public IDictionary<string, object> Params { get; set; }
+        public string RequestId { get; set; }
+        public IDictionary<string, object> TemplateParameterValues { get; set; }
     }
 
     public class MacroResponse {
 
         //--- Properties ---
-        public string RequestId;
-        public string Status;
-        public object Fragment;
+        public string RequestId { get; set; }
+        public string Status { get; set; }
+        public object Fragment { get; set; }
     }
 
     public sealed class Function : ALambdaFunction<MacroRequest, MacroResponse> {

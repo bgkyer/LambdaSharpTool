@@ -22,12 +22,14 @@ using System.Threading.Tasks;
 using LambdaSharp;
 using LambdaSharp.CloudWatch;
 
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
+
 namespace Sample.Event.ReceiverEventFunction {
 
     public class EventDetails {
 
         //--- Properties ---
-        public string? Message { get; set; }
+        public string Message { get; set; }
     }
 
     public sealed class Function : ALambdaEventFunction<EventDetails> {
@@ -35,12 +37,12 @@ namespace Sample.Event.ReceiverEventFunction {
         //--- Methods ---
         public override async Task InitializeAsync(LambdaConfig config) { }
 
-        public override async Task ProcessMessageAsync(EventDetails message) {
+        public override async Task ProcessEventAsync(EventDetails details) {
             var request = CurrentEvent;
             LogInfo($"Version = {request.Version}");
             LogInfo($"Account = {request.Account}");
             LogInfo($"Region = {request.Region}");
-            LogInfo($"Detail = {LambdaSerializer.Serialize(message)}");
+            LogInfo($"Detail = {LambdaSerializer.Serialize(details)}");
             LogInfo($"DetailType = {request.DetailType}");
             LogInfo($"Source = {request.Source}");
             LogInfo($"Time = {request.Time}");

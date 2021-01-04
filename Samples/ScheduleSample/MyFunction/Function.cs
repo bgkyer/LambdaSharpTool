@@ -20,6 +20,8 @@ using System.Threading.Tasks;
 using LambdaSharp;
 using LambdaSharp.Schedule;
 
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
+
 namespace ScheduleSample.MyFunction {
 
     public sealed class Function : ALambdaScheduleFunction {

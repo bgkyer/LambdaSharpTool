@@ -23,6 +23,9 @@ using Alexa.NET.Request.Type;
 using Alexa.NET.Response;
 using LambdaSharp;
 
+// NOTE (2021-01-04, bjorg): Alexa.NET uses Newtonsoft.Json for serialization
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaNewtonsoftJsonSerializer))]
+
 namespace AlexaSample.MyFunction {
 
     public sealed class Function : ALambdaFunction<SkillRequest, SkillResponse> {

@@ -60,7 +60,7 @@ namespace LambdaSharp.CloudWatch {
         /// The <see cref="CurrentEvent"/> property holds the CloudWatch event that is currently being processed.
         /// </summary>
         /// <remarks>
-        /// This property is only set during the invocation of <see cref="ProcessMessageAsync(TMessage)"/>. Otherwise, it returns <c>null</c>.
+        /// This property is only set during the invocation of <see cref="ProcessEventAsync(TMessage)"/>. Otherwise, it returns <c>null</c>.
         /// </remarks>
         /// <value>The <see cref="CloudWatchEvent{TEvent}"/> instance.</value>
         protected CloudWatchEvent<TMessage> CurrentEvent => _currentEvent;
@@ -68,11 +68,11 @@ namespace LambdaSharp.CloudWatch {
         //--- Abstract Methods ---
 
         /// <summary>
-        /// The <see cref="ProcessMessageAsync(TMessage)"/> method is invoked for every received CloudWatch event.
+        /// The <see cref="ProcessEventAsync(TMessage)"/> method is invoked for every received CloudWatch event.
         /// </summary>
         /// <param name="message">The deserialized CloudWatch event message.</param>
         /// <returns>The task object representing the asynchronous operation.</returns>
-        public abstract Task ProcessMessageAsync(TMessage message);
+        public abstract Task ProcessEventAsync(TMessage message);
 
         //--- Methods ---
 
@@ -135,7 +135,7 @@ namespace LambdaSharp.CloudWatch {
                         Time = cloudWatchEvent.Time,
                         Version = cloudWatchEvent.Version
                     };
-                    await ProcessMessageAsync(_currentEvent.Detail);
+                    await ProcessEventAsync(_currentEvent.Detail);
 
                     // record successful processing metrics
                     stopwatch.Stop();

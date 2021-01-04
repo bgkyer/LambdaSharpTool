@@ -20,6 +20,8 @@ using System.Threading.Tasks;
 using LambdaSharp;
 using LambdaSharp.SimpleQueueService;
 
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
+
 namespace SqsSample.MyFunction {
 
     public class MyMessage {

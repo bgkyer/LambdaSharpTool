@@ -19,6 +19,8 @@
 using System.Threading.Tasks;
 using LambdaSharp;
 
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
+
 namespace Sample.Event.MyFunction {
 
     public class FunctionRequest { }

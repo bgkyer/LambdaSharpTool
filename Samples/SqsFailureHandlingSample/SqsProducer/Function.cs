@@ -21,6 +21,8 @@ using System.Threading.Tasks;
 using Amazon.SQS;
 using LambdaSharp;
 
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
+
 namespace SqsSample.Producer {
 
     public sealed class Function : ALambdaFunction<int, string> {

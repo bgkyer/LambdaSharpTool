@@ -20,6 +20,8 @@ using System.Threading.Tasks;
 using LambdaSharp;
 using LambdaSharp.Logging.Metrics;
 
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
+
 namespace Sample.Metric.MyFunction {
 
     public class FunctionRequest { }

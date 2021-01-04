@@ -24,6 +24,8 @@ using LambdaSharp;
 using LambdaSharp.ApiGateway;
 using Demo.WebSocketsChat.Common;
 
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
+
 namespace WebSocketsSample.ConnectionFunction {
 
     public sealed class Function : ALambdaApiGatewayFunction {

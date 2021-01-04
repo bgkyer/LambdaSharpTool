@@ -20,6 +20,8 @@ using System.Threading.Tasks;
 using LambdaSharp;
 using LambdaSharp.CustomResource;
 
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
+
 namespace CustomResourceSample.ResourceHandler {
 
     public class ResourceProperties {

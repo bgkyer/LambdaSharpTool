@@ -20,6 +20,8 @@ using System.Threading.Tasks;
 using Amazon.Lambda.S3Events;
 using LambdaSharp;
 
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
+
 namespace S3Sample.MyFunction {
 
     public sealed class Function : ALambdaFunction<S3Event, string> {

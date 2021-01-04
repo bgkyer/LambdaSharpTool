@@ -18,21 +18,13 @@
 
 using System.Threading.Tasks;
 
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
+
 namespace LambdaSharp.Samples.VpcFunction.MyFunction {
 
-    public class FunctionRequest {
+    public class FunctionRequest { }
 
-        //--- Properties ---
-
-        // TO-DO: add request fields
-    }
-
-    public class FunctionResponse {
-
-        //--- Properties ---
-
-        // TO-DO: add response fields
-    }
+    public class FunctionResponse { }
 
     public sealed class Function : ALambdaFunction<FunctionRequest, FunctionResponse> {
 
@@ -40,11 +32,7 @@ namespace LambdaSharp.Samples.VpcFunction.MyFunction {
         public override Task InitializeAsync(LambdaConfig config)
             => Task.CompletedTask;
 
-        public override async Task<FunctionResponse> ProcessMessageAsync(FunctionRequest request) {
-
-            // TO-DO: add business logic
-
-            return new FunctionResponse();
-        }
+        public override async Task<FunctionResponse> ProcessMessageAsync(FunctionRequest request)
+            => new FunctionResponse();
     }
 }
