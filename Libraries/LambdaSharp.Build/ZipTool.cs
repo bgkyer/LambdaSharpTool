@@ -23,7 +23,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using ICSharpCode.SharpZipLib.Zip;
-using LambdaSharp.Build.Internal;
 
 namespace LambdaSharp.Build {
 
