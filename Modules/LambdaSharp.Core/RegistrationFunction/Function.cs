@@ -52,11 +52,7 @@ namespace LambdaSharp.Core.RegistrationFunction {
         public string? FunctionId { get; set; }
         public string? FunctionName { get; set; }
         public string? FunctionLogGroupName { get; set; }
-
-        [JsonConverter(typeof(JsonParseIntConverter))]
         public int FunctionMaxMemory { get; set; }
-
-        [JsonConverter(typeof(JsonParseIntConverter))]
         public int FunctionMaxDuration { get; set; }
         public string? FunctionPlatform { get; set; }
         public string? FunctionFramework { get; set; }

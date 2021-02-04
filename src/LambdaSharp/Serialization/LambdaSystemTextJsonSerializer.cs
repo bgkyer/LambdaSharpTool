@@ -19,6 +19,7 @@
 using System;
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Amazon.Lambda.Serialization.SystemTextJson;
 
 namespace LambdaSharp.Serialization {
@@ -42,6 +43,8 @@ namespace LambdaSharp.Serialization {
         /// <param name="customizer">A callback to customize the serializer settings.</param>
         public LambdaSystemTextJsonSerializer(Action<JsonSerializerOptions> customizer) : base(settings => {
             settings.IgnoreNullValues = true;
+            settings.IncludeFields = true;
+            settings.NumberHandling = JsonNumberHandling.AllowReadingFromString;
             customizer?.Invoke(settings);
         }) { }
 

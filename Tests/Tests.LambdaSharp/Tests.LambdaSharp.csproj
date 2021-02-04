@@ -30,6 +30,9 @@
     <Compile Include="..\..\src\LambdaSharp.Serialization.NewtonsoftJson\LambdaNewtonsoftJsonSerializer.cs" Link="LambdaNewtonsoftJsonSerializer.cs" />
     <Compile Include="..\..\src\LambdaSharp\Serialization\LambdaSystemTextJsonSerializer.cs" Link="LambdaSystemTextJsonSerializer.cs" />
   </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' != 'net5.0'">
+    <PackageReference Include="System.Text.Json" Version="5.0.1" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\LambdaSharp.Logging\LambdaSharp.Logging.csproj" />
   </ItemGroup>

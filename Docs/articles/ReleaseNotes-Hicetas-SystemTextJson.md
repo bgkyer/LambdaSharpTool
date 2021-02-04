@@ -8,10 +8,12 @@
 
 #### BREAKING CHANGES
 
+
 * CLI
   * Added constraint that custom Lambda serializers must derive from `LambdaSharp.Serialization.ILambdaJsonSerializer` or the CLI will emit an error during compilation.
 
 * SDK
+  * .NET Core 3.1 assembly
   * Renamed `LambdaJsonSerializer` to `LambdaNewtonsoftJsonSerializer` to make it clear this JSON serializer is based on `Newtonsoft.Json`.
   * Changed `ALambdaFunction.LambdaSerializer` property type to `ILambdaJsonSerializer`.
   * Changed target framework for `LambdaSharp` project to `netcoreapp3.1` which is required by the `Amazon.Lambda.Serialization.SystemTextJson` assembly.
