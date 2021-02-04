@@ -58,30 +58,30 @@ namespace Sample.JsonSerializer.CustomJsonSerializerFunction {
             switch(response) {
             case FunctionRequest functionRequest: {
 
-                // custom serialization for FunctionRequest type
-                var builder = new StringBuilder();
-                var jsonWriter = new JsonWriter(builder);
-                jsonWriter.WriteObjectStart();
-                jsonWriter.WritePropertyName("foo");
-                jsonWriter.Write(functionRequest.Bar);
-                jsonWriter.WriteObjectEnd();
-                var json = builder.ToString();
-                responseStream.Write(Encoding.UTF8.GetBytes(json));
+                    // custom serialization for FunctionRequest type
+                    var builder = new StringBuilder();
+                    var jsonWriter = new JsonWriter(builder);
+                    jsonWriter.WriteObjectStart();
+                    jsonWriter.WritePropertyName("foo");
+                    jsonWriter.Write(functionRequest.Bar);
+                    jsonWriter.WriteObjectEnd();
+                    var json = builder.ToString();
+                    responseStream.Write(Encoding.UTF8.GetBytes(json));
+                }
                 break;
-            }
             case FunctionResponse functionResponse: {
 
-                // custom serialization for FunctionResponse type
-                var builder = new StringBuilder();
-                var jsonWriter = new JsonWriter(builder);
-                jsonWriter.WriteObjectStart();
-                jsonWriter.WritePropertyName("foo");
-                jsonWriter.Write(functionResponse.Bar);
-                jsonWriter.WriteObjectEnd();
-                var json = builder.ToString();
-                responseStream.Write(Encoding.UTF8.GetBytes(json));
+                    // custom serialization for FunctionResponse type
+                    var builder = new StringBuilder();
+                    var jsonWriter = new JsonWriter(builder);
+                    jsonWriter.WriteObjectStart();
+                    jsonWriter.WritePropertyName("foo");
+                    jsonWriter.Write(functionResponse.Bar);
+                    jsonWriter.WriteObjectEnd();
+                    var json = builder.ToString();
+                    responseStream.Write(Encoding.UTF8.GetBytes(json));
+                }
                 break;
-            }
             default:
                 throw new NotSupportedException($"JSON serialization is not supported for {response?.GetType().FullName ?? "<null>"}");
             }

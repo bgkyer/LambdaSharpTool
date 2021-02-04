@@ -6,7 +6,9 @@ keywords: newtonsoft, json, serialization, system
 
 # JSON Serialization
 
-By default, _LambdaSharp_ uses _Newtonsoft.Json_ for JSON serialization of custom types. _Newtonsoft.Json_ is very popular and flexible serialization library. However, it is also bulky and slow to initialize. .NET Core 3.x introduces its own JSON serialization in the _System.Text.Json_ namespace. This article describes how to switch from the default _Newtonsoft.Json_ to _System.Text.Json_, as well as what to look out for.
+Starting with v0.8.2, _LambdaSharp_ uses _System.Text.Json_ v5.0 instead of _Newtonsoft.Json_ for JSON serialization of built-in types. Custom types are handled with the JSON serializer specified using the `LambdaSerializer` assembly attribute.
+
+This article describes how to switch from the default _Newtonsoft.Json_ to _System.Text.Json_, as well as what to look out for.
 
 ## Migrating JSON Serialization from _Newtonsoft.Json_ to _System.Text.Json_
 
@@ -15,9 +17,9 @@ Lambda functions using _System.Text.Json_ must declare `LambdaSystemTextJsonSeri
 [assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
 ```
 
-Microsoft has published an excellent [migration guide](https://docs.microsoft.com/en-us/dotnet/standard/serialization/system-text-json-migrate-from-newtonsoft-how-to) for switching from _Newtonsoft.Json_ to _System.Text.Json_. In addition to the guide, the following sections explain how to migrate existing data-structures.
+Microsoft has published an excellent [migration guide](https://docs.microsoft.com/en-us/dotnet/standard/serialization/system-text-json-migrate-from-newtonsoft-how-to?pivots=dotnet-5-0) for switching from _Newtonsoft.Json_ to _System.Text.Json_. In addition to the guide, the following sections explain how to migrate existing data-structures.
 
-Alternatively, functions can use _Newtonsoft.Json_ as their JSON serializer:
+Alternatively, functions can continue to use _Newtonsoft.Json_ as their JSON serializer by including the `LambdaSharp.Serialization.NewtonsoftJson` assembly from NuGet:
 ```csharp
 [assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaNewtonsoftJsonSerializer))]
 ```
@@ -29,23 +31,23 @@ Upgrade projects to .NET Core 3.1 by changing the target framework in the _.cspr
 * After: `<TargetFramework>netcoreapp3.1</TargetFramework>`
 
 Remove all _Newtonsoft.Json_ package dependencies (version may vary).
-* Remove: `<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />`
+* Remove: `<PackageReference Include="Newtonsoft.Json" />`
 
-### Replace Fields with Public Properties
+### Replace Non-Public Properties/Fields with Public Properties/Fields
 
-Unlike _Newtonsoft.Json_, _System.Text.Json_ does not serialize fields and non-public properties.
-
-Fields must be converted to public, mutable properties.
-* Before: `public string Name;`
-* After: `public string Name { get; set; }`
+Unlike _Newtonsoft.Json_, _System.Text.Json_ does not serialize non-public properties/fields.
 
 Non-public properties must be converted to public, mutable properties.
-* Before: `internal string Name { get; set; };`
+* Before: `internal string Name { get; set; }`
 * After: `public string Name { get; set; }`
 
 Limited mutable properties must be converted to public, mutable properties to be deserialized properly.
-* Before: `public string Name { get; protected set; };`
+* Before: `public string Name { get; protected set; }`
 * After: `public string Name { get; set; }`
+
+Non-public fields must be converted to public, mutable fields.
+* Before: `internal string Name;`
+* After: `public string Name;`
 
 ### Convert JSON string values to `enum` properties
 
@@ -55,7 +57,7 @@ _Newtonsoft.Json_ provides `StringEnumConverter` to convert JSON string to `enum
 
 ### Convert JSON integer values to `DateTimeOffset`/`DateTime` properties
 
-_Newtonsoft.Json_ provides `UnixDateTimeConverter` to convert JSON integer to `DateTime` properties. _System.Text.Json_ does not include such a converter. Instead, _LambdaSharp.Serialization_ defines `JsonEpochSecondsDateTimeOffsetConverter` and `JsonEpochSecondsDateTimeConverter` to convert `DateTimeOffset` and `DateTime`, respectively to a JSON integer representing the UNIX epoch seconds.
+_Newtonsoft.Json_ provides `UnixDateTimeConverter` to convert JSON integer to `DateTime` properties. _System.Text.Json_ does not include such a converter. Instead, _LambdaSharp.Serialization_ defines `JsonEpochSecondsDateTimeOffsetConverter` and `JsonEpochSecondsDateTimeConverter` to convert `DateTimeOffset` and `DateTime`, respectively to a JSON integer representing the UNIX epoch in seconds.
 
 ```csharp
 [JsonConverter(typeof(JsonEpochSecondsDateTimeOffsetConverter))]
@@ -69,12 +71,6 @@ public DateTimeOffset Epoch { get; set; }
 public DateTime Epoch { get; set; }
 ```
 
-### Convert JSON string values to `int` properties
-
-Beware of `int` properties that expect a JSON string. _Newtonsoft.Json_ would automatically convert the string to an `int` value. _System.Text.Json_ ignores the property instead. Use `JsonParseIntConverter` to parse JSON string and JSON integer values.
-* Before: `public int Timestamp { get; set; }`
-* After: `[JsonConverter(typeof(JsonParseIntConverter))] public int Timestamp { get; set; }`
-
 ### Update Property Attributes
 
 Replace attribute for explicitly naming JSON elements.
@@ -86,6 +82,47 @@ Replace attribute for requiring a JSON property (used by JSON schema generator f
 * Before: `[JsonRequired]` -or- `[JsonProperty(Required = Required.DisallowNull)]`
 * After: `[Required]`
 * Requires: `using System.ComponentModel.DataAnnotations;`
+
+### Case-Sensitive Serialization
+
+_Newtonsoft.Json_ is not case-sensitive on property/field names, but _System.Text.Json_ is.
+
+#### Solution 1: Use _Newtonsoft.Json_ Serializer
+
+Keep using the _Newtonsoft.Json_ serializer instead by adding the `LambdaSharp.Serialization.NewtonsoftJson` NuGet package and assembly attribute for it.
+
+```csharp
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaNewtonsoftJsonSerializer))]`
+```
+
+#### Solution 2: Provide Proper Case-Sensitive Spelling for Property/Field
+
+Use the `[JsonPropertyName("name")]` attribute to provide the property/field name with the case-sensitive spelling.
+
+```csharp
+class MyClass {
+
+    //--- Properties ---
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
+}
+```
+
+#### Solution 3: Custom _System.Text.Json_ Serializer Settings
+
+Create a custom serializer that overrides the default _System.Text.Json_ behavior in its constructor.
+
+```csharp
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(MySerializer))]
+
+public class MySerializer : LambdaSharp.Serialization.LambdaSystemTextJsonSerializer {
+
+    //--- Constructors ---
+    public MySerializer() : base(settings => {
+        settings.settings.PropertyNameCaseInsensitive = true;
+    }) { }
+}
+```
 
 ### Derived Classes Serialization
 
@@ -149,6 +186,33 @@ public class ExpressionConverter : JsonConverter<AExpression> {
         default:
             throw new ArgumentException($"unsupported serialization type {value?.GetType().FullName ?? "<null>"}");
         }
+    }
+}
+```
+
+## Custom JSON Serializer
+
+Custom JSON serializer implementation can also be used by providing a class that derives from `ILambdaJsonSerializer`.
+
+For example, the following JSON serializer uses [LitJSON](https://litjson.net/) instead.
+
+```csharp
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(MySerializer))]
+
+public class MySerializer : ILambdaJsonSerializer {
+
+    //--- Methods ---
+    public object Deserialize(Stream stream, Type type) {
+        var reader = new StreamReader(stream);
+        var json = reader.ReadToEnd();
+        return LitJson.JsonMapper.ToObject(json, type);
+    }
+
+    public T Deserialize<T>(Stream requestStream) => (T)Deserialize(stream, typeof(T));
+
+    public void Serialize<T>(T response, Stream responseStream) {
+        var json = LitJson.JsonMapper.ToJson(response);
+        responseStream.Write(Encoding.UTF8.GetBytes(json));
     }
 }
 ```
