@@ -26,11 +26,11 @@ using Amazon.ApiGatewayManagementApi.Model;
 using Amazon.DynamoDBv2;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Runtime;
+using Demo.WebSocketsChat.Common;
 using LambdaSharp;
+using LambdaSharp.ApiGateway;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Demo.WebSocketsChat.Common;
-using LambdaSharp.ApiGateway;
 
 [assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaNewtonsoftJsonSerializer))]
 
