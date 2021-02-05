@@ -186,7 +186,7 @@ namespace LambdaSharp.Core.LoggingStreamAnalyzerFunction {
                         }
 
                         // skip log event from own module
-                        if(logEventsMessage.LogGroup.Contains(Info.FunctionName)) {
+                        if((Info.FunctionName != null) && logEventsMessage.LogGroup.Contains(Info.FunctionName)) {
                             LogInfo($"skipping log events message from own event log (record-id: {record.RecordId})");
                             RecordDropped(record);
                             continue;
@@ -237,11 +237,11 @@ namespace LambdaSharp.Core.LoggingStreamAnalyzerFunction {
                                 );
                             } catch(Exception e) {
                                 if(owner.FunctionId != null) {
-                                    LogError(e, "log event [{1}] processing failed (function-id: {3}, record-id: {0}):\n{2}", record.RecordId, logEventIndex, logEvent.Message, owner.FunctionId);
+                                    LogError(e, "log event [{1}] processing failed (function-id: {3}, record-id: {0}):\n{2}", record.RecordId, logEventIndex, logEvent.Message ?? "<null>", owner.FunctionId);
                                 } else if(owner.AppId != null) {
-                                    LogError(e, "log event [{1}] processing failed (app-id: {3}, record-id: {0}):\n{2}", record.RecordId, logEventIndex, logEvent.Message, owner.AppId);
+                                    LogError(e, "log event [{1}] processing failed (app-id: {3}, record-id: {0}):\n{2}", record.RecordId, logEventIndex, logEvent.Message ?? "<null>", owner.AppId);
                                 } else {
-                                    LogError(e, "log event [{1}] processing failed (log-group: {3}, record-id: {0}):\n{2}", record.RecordId, logEventIndex, logEvent.Message, logEventsMessage.LogGroup);
+                                    LogError(e, "log event [{1}] processing failed (log-group: {3}, record-id: {0}):\n{2}", record.RecordId, logEventIndex, logEvent.Message ?? "<null>", logEventsMessage.LogGroup);
                                 }
 
                                 // mark this log events message as failed and stop processing more log events

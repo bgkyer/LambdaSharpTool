@@ -113,7 +113,7 @@ namespace LambdaSharp.Core.RollbarApi {
 
         //--- Class Methods ---
         private static string Serialize<T>(T value) => JsonSerializer.Serialize<T>(value, _serializerOptions);
-        private static T Deserialize<T>(string json) => JsonSerializer.Deserialize<T>(json, _serializerOptions);
+        private static T Deserialize<T>(string json) => JsonSerializer.Deserialize<T>(json, _serializerOptions) ?? throw new InvalidDataException($"Data return null: {json}");
 
         //--- Fields ---
         private readonly HttpClient? _httpClient;
