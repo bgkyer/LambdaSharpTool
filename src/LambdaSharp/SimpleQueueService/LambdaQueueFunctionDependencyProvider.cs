@@ -45,11 +45,11 @@ namespace LambdaSharp.SimpleQueueService {
         /// <param name="kmsClient">A <see cref="IAmazonKeyManagementService"/> client instance. Defaults to <see cref="AmazonKeyManagementServiceClient"/> when <c>null</c>.</param>
         /// <param name="sqsClient">A <see cref="IAmazonSQS"/> client instance. Defaults to <see cref="AmazonSQSClient"/> when <c>null</c>.</param>
         public LambdaQueueFunctionDependencyProvider(
-            Func<DateTime> utcNowCallback = null,
-            Action<string> logCallback = null,
-            ILambdaConfigSource configSource = null,
-            IAmazonKeyManagementService kmsClient = null,
-            IAmazonSQS sqsClient = null
+            Func<DateTime>? utcNowCallback = null,
+            Action<string>? logCallback = null,
+            ILambdaConfigSource? configSource = null,
+            IAmazonKeyManagementService? kmsClient = null,
+            IAmazonSQS? sqsClient = null
         ) : base(utcNowCallback, logCallback, configSource, kmsClient, sqsClient) { }
 
         //--- Methods ---

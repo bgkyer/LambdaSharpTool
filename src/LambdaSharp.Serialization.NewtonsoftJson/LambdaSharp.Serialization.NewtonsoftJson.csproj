@@ -3,6 +3,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Deterministic>true</Deterministic>
     <RootNamespace>LambdaSharp.Serialization</RootNamespace>
+    <Nullable>enable</Nullable>
     <NoWarn>CS1998</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <IncludeSymbols>true</IncludeSymbols>

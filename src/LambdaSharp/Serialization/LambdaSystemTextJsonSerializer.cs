@@ -41,7 +41,7 @@ namespace LambdaSharp.Serialization {
         /// Constructs instance of serializer.
         /// </summary>
         /// <param name="customizer">A callback to customize the serializer settings.</param>
-        public LambdaSystemTextJsonSerializer(Action<JsonSerializerOptions> customizer) : base(settings => {
+        public LambdaSystemTextJsonSerializer(Action<JsonSerializerOptions>? customizer) : base(settings => {
             settings.IgnoreNullValues = true;
             settings.IncludeFields = true;
             settings.NumberHandling = JsonNumberHandling.AllowReadingFromString;
@@ -60,7 +60,7 @@ namespace LambdaSharp.Serialization {
                     memoryStream = new MemoryStream();
                     stream.CopyTo(memoryStream);
                 }
-                return JsonSerializer.Deserialize(memoryStream.ToArray(), type, SerializerOptions);
+                return JsonSerializer.Deserialize(memoryStream.ToArray(), type, SerializerOptions) ?? throw new JsonException("stream deserialized to null");
             } catch(Exception e) {
                 string message;
                 if(type == typeof(string)) {

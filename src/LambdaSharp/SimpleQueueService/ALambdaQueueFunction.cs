@@ -45,7 +45,7 @@ namespace LambdaSharp.SimpleQueueService {
     public abstract class ALambdaQueueFunction<TMessage> : ALambdaFunction {
 
         //--- Fields ---
-        private SQSEvent.SQSMessage _currentRecord;
+        private SQSEvent.SQSMessage? _currentRecord;
 
         //--- Constructors ---
 
@@ -60,7 +60,7 @@ namespace LambdaSharp.SimpleQueueService {
         /// custom implementation of <see cref="ILambdaQueueFunctionDependencyProvider"/>.
         /// </summary>
         /// <param name="provider">Custom implementation of <see cref="ILambdaQueueFunctionDependencyProvider"/>.</param>
-        protected ALambdaQueueFunction(ILambdaQueueFunctionDependencyProvider provider) : base(provider ?? new LambdaQueueFunctionDependencyProvider()) { }
+        protected ALambdaQueueFunction(ILambdaQueueFunctionDependencyProvider? provider) : base(provider ?? new LambdaQueueFunctionDependencyProvider()) { }
 
         //--- Properties ---
 
@@ -78,7 +78,7 @@ namespace LambdaSharp.SimpleQueueService {
         /// This property is only set during the invocation of <see cref="ProcessMessageStreamAsync(Stream)"/>. Otherwise, it returns <c>null</c>.
         /// </remarks>
         /// <value>The <see cref="SQSEvent.SQSMessage"/> instance.</value>
-        protected SQSEvent.SQSMessage CurrentRecord => _currentRecord;
+        protected SQSEvent.SQSMessage CurrentRecord => _currentRecord ?? throw new InvalidOperationException();
 
         //--- Abstract Methods ---
 

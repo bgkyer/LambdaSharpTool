@@ -45,20 +45,20 @@ namespace LambdaSharp.ApiGateway {
         private class ApiGatewayInvocationMappings {
 
             //--- Properties ---
-            public List<ApiGatewayInvocationMapping> Mappings { get; set; }
+            public List<ApiGatewayInvocationMapping>? Mappings { get; set; }
         }
 
         private class ApiGatewayInvocationMapping {
 
             //--- Properties ---
-            public string RestApi { get; set; }
-            public string WebSocket { get; set; }
-            public string Method { get; set; }
+            public string? RestApi { get; set; }
+            public string? WebSocket { get; set; }
+            public string? Method { get; set; }
         }
 
         //--- Fields ---
-        private ApiGatewayInvocationTargetDirectory _directory;
-        private APIGatewayProxyRequest _currentRequest;
+        private ApiGatewayInvocationTargetDirectory? _directory;
+        private APIGatewayProxyRequest? _currentRequest;
 
         //--- Constructors ---
 
@@ -71,7 +71,7 @@ namespace LambdaSharp.ApiGateway {
         /// Initializes a new <see cref="ALambdaApiGatewayFunction"/> instance using a custom implementation of <see cref="ILambdaFunctionDependencyProvider"/>.
         /// </summary>
         /// <param name="provider">Custom implementation of <see cref="ILambdaFunctionDependencyProvider"/>.</param>
-        protected ALambdaApiGatewayFunction(ILambdaFunctionDependencyProvider provider) : base(provider) { }
+        protected ALambdaApiGatewayFunction(ILambdaFunctionDependencyProvider? provider) : base(provider) { }
 
         //--- Properties ---
 
@@ -82,7 +82,7 @@ namespace LambdaSharp.ApiGateway {
         /// This property is only set during the invocation of <see cref="ProcessMessageAsync(APIGatewayProxyRequest)"/>. Otherwise, it returns <c>null</c>.
         /// </remarks>
         /// <value>The <see cref="APIGatewayProxyRequest"/> instance.</value>
-        protected APIGatewayProxyRequest CurrentRequest => _currentRequest;
+        protected APIGatewayProxyRequest CurrentRequest => _currentRequest ?? throw new InvalidOperationException();
 
         //--- Methods ---
 
@@ -159,10 +159,10 @@ namespace LambdaSharp.ApiGateway {
             _currentRequest = request;
             APIGatewayProxyResponse response;
             var signature = "<null>";
-            IEnumerable<string> dimensionNames = null;
-            Dictionary<string, string> dimensionValues = null;
+            IEnumerable<string> dimensionNames = new string[0];
+            Dictionary<string, string> dimensionValues = new Dictionary<string, string>();
             try {
-                ApiGatewayInvocationTargetDirectory.InvocationTargetDelegate invocationTarget;
+                ApiGatewayInvocationTargetDirectory.InvocationTargetDelegate? invocationTarget;
                 bool isAsync;
                 var requestContext = request.RequestContext;
                 var stopwatch = Stopwatch.StartNew();
@@ -183,10 +183,8 @@ namespace LambdaSharp.ApiGateway {
                         dimensionNames = new[] {
                             "Stack,Method,Resource"
                         };
-                        dimensionValues = new Dictionary<string, string> {
-                            ["Method"] = requestContext.HttpMethod,
-                            ["Resource"] = requestContext.ResourcePath
-                        };
+                        dimensionValues["Method"] = requestContext.HttpMethod;
+                        dimensionValues["Resource"] = requestContext.ResourcePath;
                     }
                 } else if(requestContext.RouteKey != null) {
 
@@ -199,9 +197,7 @@ namespace LambdaSharp.ApiGateway {
                         dimensionNames = new[] {
                             "Stack,Route"
                         };
-                        dimensionValues = new Dictionary<string, string> {
-                            ["Route"] = requestContext.RouteKey
-                        };
+                        dimensionValues["Route"] = requestContext.RouteKey;
                     }
                 } else {
 

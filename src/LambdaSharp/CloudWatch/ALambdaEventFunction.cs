@@ -37,7 +37,7 @@ namespace LambdaSharp.CloudWatch {
     public abstract class ALambdaEventFunction<TMessage> : ALambdaFunction {
 
         //--- Fields ---
-        private CloudWatchEvent<TMessage>  _currentEvent;
+        private CloudWatchEvent<TMessage>?  _currentEvent;
 
         //--- Constructors ---
 
@@ -52,7 +52,7 @@ namespace LambdaSharp.CloudWatch {
         /// custom implementation of <see cref="ILambdaFunctionDependencyProvider"/>.
         /// </summary>
         /// <param name="provider">Custom implementation of <see cref="ILambdaFunctionDependencyProvider"/>.</param>
-        protected ALambdaEventFunction(ILambdaFunctionDependencyProvider provider) : base(provider) { }
+        protected ALambdaEventFunction(ILambdaFunctionDependencyProvider? provider) : base(provider) { }
 
         //--- Properties ---
 
@@ -63,7 +63,7 @@ namespace LambdaSharp.CloudWatch {
         /// This property is only set during the invocation of <see cref="ProcessEventAsync(TMessage)"/>. Otherwise, it returns <c>null</c>.
         /// </remarks>
         /// <value>The <see cref="CloudWatchEvent{TEvent}"/> instance.</value>
-        protected CloudWatchEvent<TMessage> CurrentEvent => _currentEvent;
+        protected CloudWatchEvent<TMessage> CurrentEvent => _currentEvent ?? throw new InvalidOperationException();
 
         //--- Abstract Methods ---
 

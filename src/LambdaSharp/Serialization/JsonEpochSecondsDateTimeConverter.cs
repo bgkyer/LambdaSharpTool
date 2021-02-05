@@ -37,7 +37,7 @@ namespace LambdaSharp.Serialization {
         /// <param name="options">An object that specifies serialization options to use.</param>
         /// <returns></returns>
        public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-            => DateTimeOffset.FromUnixTimeSeconds(long.Parse(reader.GetString())).UtcDateTime;
+            => DateTimeOffset.FromUnixTimeSeconds(long.Parse(reader.GetString() ?? throw new JsonException("expected JSON string"))).UtcDateTime;
 
         /// <summary>
         /// Writes a specified value as JSON.

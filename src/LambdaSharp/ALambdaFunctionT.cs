@@ -43,7 +43,7 @@ namespace LambdaSharp {
         /// custom implementation of <see cref="ILambdaFunctionDependencyProvider"/>.
         /// </summary>
         /// <param name="provider">Custom implementation of <see cref="ILambdaFunctionDependencyProvider"/>.</param>
-        protected ALambdaFunction(ILambdaFunctionDependencyProvider provider) : base(provider ?? new LambdaFunctionDependencyProvider()) { }
+        protected ALambdaFunction(ILambdaFunctionDependencyProvider? provider) : base(provider ?? new LambdaFunctionDependencyProvider()) { }
 
         //--- Properties ---
 

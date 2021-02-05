@@ -35,7 +35,7 @@ namespace LambdaSharp.Serialization {
         private sealed class ContractResolver : IContractResolver {
 
             //--- Class Fields ---
-            private static StringEnumConverter _stringEnumConverter;
+            private static StringEnumConverter? _stringEnumConverter;
 
             //--- Class Properties ---
             private static StringEnumConverter StringEnumConverter {
@@ -75,7 +75,7 @@ namespace LambdaSharp.Serialization {
         }
 
         //--- Class Fields ---
-        private static JsonSerializerSettings _staticSettings;
+        private static JsonSerializerSettings? _staticSettings;
 
         //--- Constructors ---
 
@@ -88,7 +88,7 @@ namespace LambdaSharp.Serialization {
         /// Constructs instance of serializer.
         /// </summary>
         /// <param name="customizeSerializerSettings">A callback to customize the serializer settings.</param>
-        public LambdaNewtonsoftJsonSerializer(Action<JsonSerializerSettings> customizeSerializerSettings) : base(settings => {
+        public LambdaNewtonsoftJsonSerializer(Action<JsonSerializerSettings>? customizeSerializerSettings) : base(settings => {
             _staticSettings = settings;
             settings.NullValueHandling = NullValueHandling.Ignore;
             customizeSerializerSettings?.Invoke(settings);

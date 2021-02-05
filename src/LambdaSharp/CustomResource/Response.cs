@@ -24,7 +24,7 @@ namespace LambdaSharp.CustomResource {
     /// properties expected by the AWS CloudFormation service.
     /// </summary>
     /// <typeparam name="TAttributes">The response attributes for the custom resource.</typeparam>
-    public class Response<TAttributes> {
+    public class Response<TAttributes> where TAttributes : class {
 
         //--- Properties ---
 
@@ -34,7 +34,7 @@ namespace LambdaSharp.CustomResource {
         /// non-empty string and must be identical for all responses for the
         /// same resource.
         /// </summary>
-        public string PhysicalResourceId { get; set; }
+        public string? PhysicalResourceId { get; set; }
 
         /// <summary>
         /// Optional. Indicates whether to mask the output of the custom
@@ -42,13 +42,13 @@ namespace LambdaSharp.CustomResource {
         /// true, all returned values are masked with asterisks (*****). The
         /// default value is false.
         /// </summary>
-        public bool NoEcho;
+        public bool NoEcho { get; set; }
 
         /// <summary>
         /// Optional. The custom resource provider-defined name-value pairs to
         /// send with the response. You can access the values provided here by
         /// name in the template with <c>Fn::GetAtt</c>.
         /// </summary>
-        public TAttributes Attributes;
+        public TAttributes? Attributes { get; set; }
     }
 }

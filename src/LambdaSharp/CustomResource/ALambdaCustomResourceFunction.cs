@@ -44,7 +44,10 @@ namespace LambdaSharp.CustomResource {
     /// </summary>
     /// <typeparam name="TProperties">The request properties for the custom resource.</typeparam>
     /// <typeparam name="TAttributes">The response attributes for the custom resource.</typeparam>
-    public abstract class ALambdaCustomResourceFunction<TProperties, TAttributes> : ALambdaFunction {
+    public abstract class ALambdaCustomResourceFunction<TProperties, TAttributes> : ALambdaFunction
+        where TProperties : class
+        where TAttributes : class
+    {
 
         //--- Constants ---
         private const int MAX_SEND_ATTEMPTS = 3;
@@ -69,7 +72,7 @@ namespace LambdaSharp.CustomResource {
         /// custom implementation of <see cref="ILambdaFunctionDependencyProvider"/>.
         /// </summary>
         /// <param name="provider">Custom implementation of <see cref="ILambdaFunctionDependencyProvider"/>.</param>
-        protected ALambdaCustomResourceFunction(ILambdaFunctionDependencyProvider provider) : base(provider) { }
+        protected ALambdaCustomResourceFunction(ILambdaFunctionDependencyProvider? provider) : base(provider) { }
 
 
         //--- Abstract Methods ---
@@ -289,7 +292,7 @@ namespace LambdaSharp.CustomResource {
             CloudFormationResourceRequest<TProperties> rawRequest,
             CloudFormationResourceResponse<TAttributes> rawResponse
         ) {
-            Exception exception = null;
+            Exception? exception = null;
             var backoff = TimeSpan.FromMilliseconds(100);
 
             // write response to pre-signed S3 URL

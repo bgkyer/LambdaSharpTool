@@ -41,7 +41,7 @@ namespace LambdaSharp.Serialization {
         /// The JSON serializer defined by the executing assembly. This property is <c>null</c> until initialized by
         /// the <see cref="ALambdaFunction"/> constructor.
         /// </summary>
-        public static ILambdaJsonSerializer AssemblySerializer { get; set; }
+        public static ILambdaJsonSerializer? AssemblySerializer { get; set; }
 
         //--- Methods ---
         internal static void InitializeAssemblySerializer(Assembly assembly) {

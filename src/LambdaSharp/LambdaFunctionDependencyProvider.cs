@@ -64,12 +64,12 @@ namespace LambdaSharp {
         /// <param name="eventsClient">A <see cref="IAmazonCloudWatchEvents"/> client instance. Defaults to <see cref="AmazonCloudWatchEventsClient"/> when <c>null</c>.</param>
         /// <param name="debugLoggingEnabled">A boolean indicating if debug logging is enabled.</param>
         public LambdaFunctionDependencyProvider(
-            Func<DateTime> utcNowCallback = null,
-            Action<string> logCallback = null,
-            ILambdaConfigSource configSource = null,
-            IAmazonKeyManagementService kmsClient = null,
-            IAmazonSQS sqsClient = null,
-            IAmazonCloudWatchEvents eventsClient = null,
+            Func<DateTime>? utcNowCallback = null,
+            Action<string>? logCallback = null,
+            ILambdaConfigSource? configSource = null,
+            IAmazonKeyManagementService? kmsClient = null,
+            IAmazonSQS? sqsClient = null,
+            IAmazonCloudWatchEvents? eventsClient = null,
             bool? debugLoggingEnabled = null
         ) {
             _nowCallback = utcNowCallback ?? (() => DateTime.UtcNow);
@@ -145,7 +145,7 @@ namespace LambdaSharp {
         /// <param name="secretBytes">Array containing the encrypted bytes.</param>
         /// <param name="encryptionContext">An optional encryption context. Can be <c>null</c>.</param>
         /// <returns>The task object representing the asynchronous operation.</returns>
-        public virtual async Task<byte[]> DecryptSecretAsync(byte[] secretBytes, Dictionary<string, string> encryptionContext)
+        public virtual async Task<byte[]> DecryptSecretAsync(byte[] secretBytes, Dictionary<string, string>? encryptionContext)
             => (await KmsClient.DecryptAsync(new DecryptRequest {
                     CiphertextBlob = new MemoryStream(secretBytes),
                     EncryptionContext = encryptionContext
@@ -159,7 +159,7 @@ namespace LambdaSharp {
         /// <param name="encryptionKeyId">The KMS key ID used encrypt the plaintext bytes.</param>
         /// <param name="encryptionContext">An optional encryption context. Can be <c>null</c>.</param>
         /// <returns>The task object representing the asynchronous operation.</returns>
-        public virtual async Task<byte[]> EncryptSecretAsync(byte[] plaintextBytes, string encryptionKeyId, Dictionary<string, string> encryptionContext)
+        public virtual async Task<byte[]> EncryptSecretAsync(byte[] plaintextBytes, string encryptionKeyId, Dictionary<string, string>? encryptionContext)
             => (await KmsClient.EncryptAsync(new EncryptRequest {
                     KeyId = encryptionKeyId,
                     Plaintext = new MemoryStream(plaintextBytes),
@@ -174,7 +174,7 @@ namespace LambdaSharp {
         /// <param name="message">The message to send.</param>
         /// <param name="messageAttributes">Optional attributes for the message.</param>
         /// <returns>The task object representing the asynchronous operation.</returns>
-        public virtual Task SendMessageToQueueAsync(string deadLetterQueueUrl, string message, IEnumerable<KeyValuePair<string, string>> messageAttributes)
+        public virtual Task SendMessageToQueueAsync(string deadLetterQueueUrl, string message, IEnumerable<KeyValuePair<string, string>>? messageAttributes)
             => SqsClient.SendMessageAsync(new SendMessageRequest {
                 QueueUrl = deadLetterQueueUrl,
                 MessageBody = message,

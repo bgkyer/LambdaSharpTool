@@ -49,7 +49,7 @@ namespace LambdaSharp.CustomResource {
     /// properties sent by the AWS CloudFormation service.
     /// </summary>
     /// <typeparam name="TProperties">The request properties for the custom resource.</typeparam>
-    public class Request<TProperties> {
+    public class Request<TProperties> where TProperties : class {
 
         //--- Properties ---
 
@@ -67,7 +67,7 @@ namespace LambdaSharp.CustomResource {
         /// be up to 60 characters long and can include alphanumeric and the
         /// following characters: <c>_@-</c>.
         /// </summary>
-        public string ResourceType { get; set; }
+        public string? ResourceType { get; set; }
 
         /// <summary>
         /// The Amazon Resource Name (ARN) that identifies the stack that
@@ -77,7 +77,7 @@ namespace LambdaSharp.CustomResource {
         /// can use to uniquely identify a request on a particular custom
         /// resource.
         /// </summary>
-        public string StackId { get; set; }
+        public string? StackId { get; set; }
 
         /// <summary>
         /// The template developer-chosen name (logical ID) of the custom
@@ -85,25 +85,25 @@ namespace LambdaSharp.CustomResource {
         /// facilitate communication between the custom resource provider and
         /// the template developer.
         /// </summary>
-        public string LogicalResourceId { get; set; }
+        public string? LogicalResourceId { get; set; }
 
         /// <summary>
         /// A required custom resource provider-defined physical ID that is
         /// unique for that provider.
         /// </summary>
-        public string PhysicalResourceId { get; set; }
+        public string? PhysicalResourceId { get; set; }
 
         /// <summary>
         /// This field contains the contents of the Properties object sent by
         /// the template developer. Its contents are defined by the custom
         /// resource provider.
         /// </summary>
-        public TProperties ResourceProperties { get; set; }
+        public TProperties? ResourceProperties { get; set; }
 
         /// <summary>
         /// Used only for Update requests. Contains the resource properties
         /// that were declared previous to the update request.
         /// </summary>
-        public TProperties OldResourceProperties { get; set; }
+        public TProperties? OldResourceProperties { get; set; }
     }
 }
