@@ -56,7 +56,7 @@ namespace LambdaSharp.Serialization {
                     .OfType<LambdaSerializerAttribute>()
                     .FirstOrDefault();
                 if(serializerAttribute == null) {
-                    AssemblySerializer = new LambdaSystemTextJsonSerializer();
+                    throw new NotSupportedException("assembly must contain LambdaSerializerAttribute");
                 } else if(serializerAttribute.SerializerType == typeof(LambdaSystemTextJsonSerializer)) {
 
                     // share same instance when possible

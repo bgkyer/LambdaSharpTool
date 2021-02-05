@@ -86,14 +86,24 @@ namespace LambdaSharp.Modules {
                     outdated = false;
                     break;
                 case "netcoreapp2.1":
-                case "netcoreapp3.1":
 
-                    // .NET Core 2.1/3.1 projects (Lambda) require 0.8.0.* or 0.8.1.*
+                    // .NET Core 2.1 projects (Lambda) require 0.8.0.* or 0.8.1.*
                     valid = (libraryVersion.Major == 0)
                         && (libraryVersion.Minor == 8)
                         && (
                             (libraryVersion.Build == 0)
                             || (libraryVersion.Build == 1)
+                        );
+                    break;
+                case "netcoreapp3.1":
+
+                    // .NET Core 3.1 projects (Lambda) require 0.8.0.* or 0.8.2.*
+                    valid = (libraryVersion.Major == 0)
+                        && (libraryVersion.Minor == 8)
+                        && (
+                            (libraryVersion.Build == 0)
+                            || (libraryVersion.Build == 1)
+                            || (libraryVersion.Build == 2)
                         );
                     break;
                 default:

@@ -784,6 +784,10 @@ namespace LambdaSharp.Tool.Cli {
                     .GetCustomAttributes(typeof(Amazon.Lambda.Core.LambdaSerializerAttribute), false)
                     .OfType<Amazon.Lambda.Core.LambdaSerializerAttribute>()
                     .FirstOrDefault();
+
+                // check which version of LambdaSharp assembly is referenced (0.8.2+ requires attribute)
+                var lambdaSharpAssembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(assembly => assembly.GetName().Name == "LambdaSharp");
+                var requireLambdaSerializerAttribute = lambdaSharpAssembly?.GetName().Version?.CompareTo(new Version("0.8.2.0")) >= 0;
                 if(lambdaSerializationAssemblyAttribute != null) {
                     switch(lambdaSerializationAssemblyAttribute.SerializerType.FullName) {
                     case "LambdaSharp.Serialization.LambdaNewtonsoftJsonSerializer":
@@ -820,6 +824,10 @@ namespace LambdaSharp.Tool.Cli {
                         }
                         break;
                     }
+                } else if(requireLambdaSerializerAttribute) {
+
+                    // require Lambda serializer attribute
+                    throw new ProcessTargetInvocationException($"add Lambda serializer attribute [assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]");
                 } else {
                     output?.WriteLine("=> Default Lambda serializer used");
                 }

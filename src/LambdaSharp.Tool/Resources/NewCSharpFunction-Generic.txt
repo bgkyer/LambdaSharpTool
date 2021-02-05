@@ -2,6 +2,8 @@ using System;
 using System.Threading.Tasks;
 using LambdaSharp;
 
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
+
 namespace %%ROOTNAMESPACE%% {
 
     public class FunctionRequest {
