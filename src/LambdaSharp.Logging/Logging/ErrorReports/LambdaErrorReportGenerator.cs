@@ -20,9 +20,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using LambdaSharp.Exceptions;
+using LambdaSharp.Internal;
 using LambdaSharp.Logging.ErrorReports.Models;
 
 namespace LambdaSharp.Logging.ErrorReports {
@@ -39,7 +41,9 @@ namespace LambdaSharp.Logging.ErrorReports {
         private const string LANGUAGE = "csharp";
 
         //--- Class Fields ---
-        private static readonly HashAlgorithm _algorithm = MD5.Create();
+        private static readonly HashAlgorithm _algorithm = RuntimeInformation.IsOSPlatform(OSPlatform.Create("BROWSER"))
+            ? (HashAlgorithm)new MonoMD5()
+            : MD5.Create();
 
         //--- Class Methods ---
         private static string ToHash(string value) {
