@@ -659,7 +659,8 @@ namespace LambdaSharp.Tool.Cli {
 
             // generate project
             var substitutions = new Dictionary<string, string> {
-                ["ROOTNAMESPACE"] = rootNamespace
+                ["ROOTNAMESPACE"] = rootNamespace,
+                ["APPNAME"] = appName
             };
             using(var projectStream = typeof(CliNewCommand).Assembly.GetManifestResourceStream("LambdaSharp.Tool.Resources.BlazorProjectTemplate.zip"))
             using(var projectArchive = new ZipArchive(projectStream)) {
