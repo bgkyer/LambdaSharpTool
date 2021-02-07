@@ -1037,6 +1037,9 @@ System.Console.WriteLine($"*** PATTERN TYPE: {pattern?.GetType().FullName ?? "<n
                 case "netcoreapp3.1":
                     runtime = Amazon.Lambda.Runtime.Dotnetcore31.ToString();
                     break;
+                case "net5":
+                    runtime = Amazon.Lambda.Runtime.ProvidedAl2.ToString();
+                    break;
                 default:
                     LogError($"could not determine runtime from target framework: {targetFramework}; specify 'Runtime' attribute explicitly");
                     break;

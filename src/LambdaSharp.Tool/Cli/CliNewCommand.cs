@@ -50,7 +50,8 @@ namespace LambdaSharp.Tool.Cli {
         WebSocket,
         WebSocketProxy,
         Finalizer,
-        Event
+        Event,
+        SelfContainedNet5
     }
 
     public class CliNewCommand : ACliCommand {
@@ -557,7 +558,7 @@ namespace LambdaSharp.Tool.Cli {
             }
 
             // create function project
-            var isNetCore31OrLater = (framework.CompareTo("netcoreapp3.") >= 0);
+            var isNetCore31OrLater = VersionInfoCompatibility.IsNetCore3OrLater(framework);
             var projectFile = Path.Combine(projectDirectory, functionName + ".csproj");
             var substitutions = new Dictionary<string, string> {
                 ["FRAMEWORK"] = framework,
@@ -565,7 +566,9 @@ namespace LambdaSharp.Tool.Cli {
                 ["LAMBDASHARP_VERSION"] = VersionInfoCompatibility.GetLambdaSharpAssemblyWildcardVersion(settings.ToolVersion, framework)
             };
             try {
-                var projectContents = ReadResource("NewCSharpFunctionProject.xml", substitutions);
+                var projectContents = (functionType == FunctionType.SelfContainedNet5)
+                    ? ReadResource("NewCSharpFunctionSelfContainedNet5Project.xml", substitutions)
+                    : ReadResource("NewCSharpFunctionProject.xml", substitutions);
                 File.WriteAllText(projectFile, projectContents);
                 Console.WriteLine($"Created project file: {Path.GetRelativePath(Directory.GetCurrentDirectory(), projectFile)}");
             } catch(Exception e) {

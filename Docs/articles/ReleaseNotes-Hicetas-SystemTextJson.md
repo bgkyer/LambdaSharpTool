@@ -1,28 +1,29 @@
 ### (v0.8.2.0) - TBD
 
-> TODO:
-> 1. Test Slack base class since it's now based on System.Text.Json
-> 1. Review API Sample with Assembly invoke
-
 #### BREAKING CHANGES
 
 * CLI
   * Added constraint that custom Lambda serializers must derive from `LambdaSharp.Serialization.ILambdaJsonSerializer` or the CLI will emit an error during compilation.
 
 * SDK
-  * .NET Core 3.1 assembly
   * Renamed `LambdaJsonSerializer` to `LambdaNewtonsoftJsonSerializer` to make it clear this JSON serializer is based on `Newtonsoft.Json`.
+  * Moved `LambdaNewtonsoftJsonSerializer` to its own NuGet package _LambdaSharp.Serialization.NewtonsoftJson_ to remove dependency on _Newtonsoft.Json` NuGet package for _LambdaSharp_ assembly.
   * Changed `ALambdaFunction.LambdaSerializer` property type to `ILambdaJsonSerializer`.
   * Changed target framework for `LambdaSharp` project to `netcoreapp3.1` which is required by the `Amazon.Lambda.Serialization.SystemTextJson` assembly.
   * Changed target framework for `LambdaSharp.Slack` project to `netcoreapp3.1` which is required by the `LambdaSharp` assembly.
+  * Updated _AWSSDK.Core_ dependencies to version 3.5
 
 #### Features
 
 * CLI
-  * Lambda projects can now explicitly specify one of the standard LambdaSharp serializers without causing an error or warning during compilation. The standard serializers are `LambdaSharp.Serialization.LambdaNewtonsoftJsonSerializer` and `LambdaSharp.Serialization.LambdaNewtonsoftJsonSerializer`.
+  * Added support for self-contained .NET 5 Lambda functions.
+  * Update Blazor WebAssembly app template to target .NET 5.
+  * Lambda projects can now explicitly specify one of the standard LambdaSharp serializers without causing an error or warning during compilation. The standard serializers are:
+    * `LambdaSharp.Serialization.LambdaSystemTextJsonSerializer` (included in _LambdaSharp_ assembly)
+    * `LambdaSharp.Serialization.LambdaNewtonsoftJsonSerializer` (requires _LambdaSharp.Serialization.NewtonsoftJson_ assembly)
   * Lambda project can now explicitly specify a custom serializer. The custom serializer must derive from `ILambdaJsonSerializer`.
-  * Updated CloudFormation to v22.0.0
-  * Update Blazor WebAssembly app template to target .NET 5
+  * Removed dependency on _Amazon.Lambda.Tools_. _Amazon.Lambda.Tools_ is no longer requires to build, publish, or deploy LambdaSharp modules.
+  * Updated CloudFormation to v22.0.0.
 
 * SDK
   * Added new `ALambdaEventFunction<TMessage>` base class for handling CloudWatch events.
@@ -34,3 +35,4 @@
 
 * Samples
   * Added `Samples/JsonSerializerSample` module showing how to specify and customize the JSON serializer for a Lambda function.
+  * Added `Samples/LambdaCustomRuntime` module showing how to build a Lambda function using .NET 5.

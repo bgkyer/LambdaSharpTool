@@ -130,5 +130,15 @@ namespace LambdaSharp.Build {
                 }
             }
         }
+
+        public void ZipFolderWithExecutable(string outputPackagePath, string folder) {
+            var files = new List<KeyValuePair<string, string>>();
+            foreach(var filePath in Directory.GetFiles(folder, "*", SearchOption.AllDirectories)) {
+                var relativeFilePathName = Path.GetRelativePath(folder, filePath);
+                files.Add(new KeyValuePair<string, string>(relativeFilePathName, filePath));
+            }
+            files = files.OrderBy(file => file.Key).ToList();
+            new ZipTool(BuildEventsConfig).ZipWithExecutable(outputPackagePath, files);
+        }
     }
 }
