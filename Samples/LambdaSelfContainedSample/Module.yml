@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-Module: Sample.LambdaCustomRuntime
+Module: Sample.LambdaSelfContained
 Description: A sample module defining a Lambda function using a custom runtime
 Items:
 
-  - Function: MyCustomRuntimeFunction
+  - Function: MySelfContainedFunction
     Description: Lambda function using the custom runtime
     Memory: 256
     Timeout: 30

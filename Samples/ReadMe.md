@@ -35,4 +35,4 @@ Please refer to the [Folder Structure Documentation](https://lambdasharp.net/art
 1. [Lambda Function in VPC](VpcFunctionSample/)
 1. [Lambda Function with Lambda Layer](LambdaLayerSample/)
 1. [Custom JSON Serializer](JsonSerializerSample/)
-1. [Custom Runtime](LambdaCustomRuntimeSample/)
+1. [Self-Contained Lambda Function](LambdaSelfContainedSample/)

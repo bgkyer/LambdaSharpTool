@@ -22,7 +22,7 @@ using LambdaSharp;
 
 [assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
 
-namespace Sample.LambdaCustomRuntime.MyCustomRuntimeFunction {
+namespace Sample.LambdaSelfContained.MySelfContainedFunction {
 
     public class FunctionRequest { }
 
