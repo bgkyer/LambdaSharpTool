@@ -51,7 +51,7 @@ namespace LambdaSharp.Tool.Cli {
         WebSocketProxy,
         Finalizer,
         Event,
-        SelfContainedNet5
+        SelfContainedGeneric
     }
 
     public class CliNewCommand : ACliCommand {
@@ -566,7 +566,7 @@ namespace LambdaSharp.Tool.Cli {
                 ["LAMBDASHARP_VERSION"] = VersionInfoCompatibility.GetLambdaSharpAssemblyWildcardVersion(settings.ToolVersion, framework)
             };
             try {
-                var projectContents = (functionType == FunctionType.SelfContainedNet5)
+                var projectContents = (functionType == FunctionType.SelfContainedGeneric)
                     ? ReadResource("NewCSharpFunctionSelfContainedNet5Project.xml", substitutions)
                     : ReadResource("NewCSharpFunctionProject.xml", substitutions);
                 File.WriteAllText(projectFile, projectContents);
