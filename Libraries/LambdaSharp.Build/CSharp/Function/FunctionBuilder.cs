@@ -222,7 +222,8 @@ namespace LambdaSharp.Build.CSharp.Function {
             var isNetCore31OrLater = VersionInfoCompatibility.IsNetCore3OrLater(projectFile.TargetFramework);
             var isAmazonLinux2 = Provider.IsAmazonLinux2();
             var isReadyToRun = isNetCore31OrLater && isAmazonLinux2;
-            var isSelfContained = VersionInfoCompatibility.IsNet5OrLater(projectFile.TargetFramework);
+            var isSelfContained = (projectFile.OutputType == "Exe")
+                || (projectFile.AssemblyName == "bootstrap");
             var readyToRunText = isReadyToRun ? ", ReadyToRun" : "";
             var selfContained = isSelfContained ? ", SelfContained" : "";
             Provider.WriteLine($"=> Building function {Provider.InfoColor}{function.FullName}{Provider.ResetColor} [{projectFile.TargetFramework}, {buildConfiguration}{readyToRunText}{selfContained}]");
@@ -232,6 +233,18 @@ namespace LambdaSharp.Build.CSharp.Function {
             if(projectFile.RemoveAmazonLambdaToolsReference()) {
                 LogWarn($"removing obsolete AWS Lambda Tools extension from {Path.GetRelativePath(Provider.WorkingDirectory, function.Project)}");
                 projectFile.Save(function.Project);
+            }
+
+            // validate project properties for self-contained functions
+            if(
+                isSelfContained
+                && (
+                    (projectFile.OutputType != "Exe")
+                    || (projectFile.AssemblyName != "bootstrap")
+                )
+            ) {
+                LogError("function project must have <OutputType>Exe</OutputType> and <AssemblyName>bootstrap</AssemblyName> properties");
+                return;
             }
 
             // validate the project is using the most recent lambdasharp assembly references

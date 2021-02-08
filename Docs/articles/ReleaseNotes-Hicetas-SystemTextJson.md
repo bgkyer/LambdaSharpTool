@@ -35,4 +35,4 @@
 
 * Samples
   * Added `Samples/JsonSerializerSample` module showing how to specify and customize the JSON serializer for a Lambda function.
-  * Added `Samples/LambdaCustomRuntime` module showing how to build a Lambda function using .NET 5.
+  * Added `Samples/LambdaSelfContainedSample` module showing how to build a Lambda function using .NET 5.

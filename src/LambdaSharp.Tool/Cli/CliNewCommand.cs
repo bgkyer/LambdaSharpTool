@@ -567,7 +567,7 @@ namespace LambdaSharp.Tool.Cli {
             };
             try {
                 var projectContents = (functionType == FunctionType.SelfContainedGeneric)
-                    ? ReadResource("NewCSharpFunctionSelfContainedNet5Project.xml", substitutions)
+                    ? ReadResource("NewCSharpFunctionSelfContainedProject.xml", substitutions)
                     : ReadResource("NewCSharpFunctionProject.xml", substitutions);
                 File.WriteAllText(projectFile, projectContents);
                 Console.WriteLine($"Created project file: {Path.GetRelativePath(Directory.GetCurrentDirectory(), projectFile)}");
