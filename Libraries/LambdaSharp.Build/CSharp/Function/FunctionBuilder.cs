@@ -257,6 +257,7 @@ namespace LambdaSharp.Build.CSharp.Function {
             if(function.HasHandlerValidation) {
                 if(isSelfContained) {
 
+                    // TODO (2021-02-08, bjorg): validate the assembly has a Main() entry point
                 } else {
 
                     // verify the function handler can be found in the compiled assembly

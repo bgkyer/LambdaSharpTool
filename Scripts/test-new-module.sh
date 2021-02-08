@@ -73,6 +73,11 @@ if [ $? -ne 0 ]; then
     exit $?
 fi
 
+lash new function --type selfcontainedgeneric MySelfContainedFunction --verbose:exceptions
+if [ $? -ne 0 ]; then
+    exit $?
+fi
+
 lash new function Finalizer --verbose:exceptions
 if [ $? -ne 0 ]; then
     exit $?
