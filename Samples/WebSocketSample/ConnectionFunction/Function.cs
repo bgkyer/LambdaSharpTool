@@ -24,14 +24,15 @@ using LambdaSharp;
 using LambdaSharp.ApiGateway;
 using Demo.WebSocketsChat.Common;
 
-[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
-
 namespace WebSocketsSample.ConnectionFunction {
 
     public sealed class Function : ALambdaApiGatewayFunction {
 
         //--- Fields ---
         private ConnectionsTable _connections;
+
+        //--- Constructors ---
+        public Function() : base(new LambdaSharp.Serialization.LambdaSystemTextJsonSerializer()) { }
 
         //--- Methods ---
         public override async Task InitializeAsync(LambdaConfig config) {

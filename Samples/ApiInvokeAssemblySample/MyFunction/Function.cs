@@ -21,11 +21,12 @@ using System.Threading.Tasks;
 using LambdaSharp;
 using LambdaSharp.ApiGateway;
 
-[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaNewtonsoftJsonSerializer))]
-
 namespace ApiInvokeSample.MyFunction {
 
     public sealed class Function : ALambdaApiGatewayFunction, ILogicDependencyProvider {
+
+        //--- Constructors ---
+        public Function() : base(new LambdaSharp.Serialization.LambdaNewtonsoftJsonSerializer()) { }
 
         //--- Methods ---
         public override async Task InitializeAsync(LambdaConfig config) { }

@@ -92,8 +92,6 @@ namespace LambdaSharp.Logging.Events {
                 DetailType = detailType,
                 Detail = (detail is string detailText)
                     ? detailText
-
-                    // TODO (2020-12-24, bjorg): we should use the assembly lambda serializer here since this data-structure is controlled by the developer
                     : JsonSerializer.Serialize(detail, JsonSerializerOptions),
                 Resources = lambdaResources
             };

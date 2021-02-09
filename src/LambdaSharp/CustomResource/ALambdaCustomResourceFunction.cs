@@ -65,15 +65,26 @@ namespace LambdaSharp.CustomResource {
         /// Initializes a new <see cref="ALambdaCustomResourceFunction{TProperties,TAttributes}"/> instance using the default
         /// implementation of <see cref="ILambdaFunctionDependencyProvider"/>.
         /// </summary>
-        protected ALambdaCustomResourceFunction() : this(null) { }
+        /// <param name="serializer">Custom implementation of <see cref="ILambdaJsonSerializer"/>.</param>
+        protected ALambdaCustomResourceFunction(ILambdaJsonSerializer serializer) : this(serializer, provider: null) { }
 
         /// <summary>
         /// Initializes a new <see cref="ALambdaCustomResourceFunction{TProperties,TAttributes}"/> instance using a
         /// custom implementation of <see cref="ILambdaFunctionDependencyProvider"/>.
         /// </summary>
+        /// <param name="serializer">Custom implementation of <see cref="ILambdaJsonSerializer"/>.</param>
         /// <param name="provider">Custom implementation of <see cref="ILambdaFunctionDependencyProvider"/>.</param>
-        protected ALambdaCustomResourceFunction(ILambdaFunctionDependencyProvider? provider) : base(provider) { }
+        protected ALambdaCustomResourceFunction(ILambdaJsonSerializer serializer, ILambdaFunctionDependencyProvider? provider) : base(provider) {
+            LambdaSerializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
+        }
 
+        //--- Properties ---
+
+        /// <summary>
+        /// An instance of <see cref="ILambdaJsonSerializer"/> used for serializing/deserializing JSON data.
+        /// </summary>
+        /// <value>The <see cref="ILambdaJsonSerializer"/> instance.</value>
+        protected ILambdaJsonSerializer LambdaSerializer { get; }
 
         //--- Abstract Methods ---
 

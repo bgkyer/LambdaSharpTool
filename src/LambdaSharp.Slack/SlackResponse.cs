@@ -35,6 +35,7 @@ namespace LambdaSharp.Slack {
         }
 
         //--- Fields ---
+
         [JsonPropertyName("response_type")]
         public string ResponseType { get; set; }
 

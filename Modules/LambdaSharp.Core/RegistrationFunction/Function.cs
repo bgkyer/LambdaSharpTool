@@ -30,8 +30,6 @@ using LambdaSharp.CustomResource;
 using LambdaSharp.Exceptions;
 using LambdaSharp.Serialization;
 
-[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
-
 namespace LambdaSharp.Core.RegistrationFunction {
 
     public class RegistrationResourceProperties {
@@ -110,6 +108,9 @@ namespace LambdaSharp.Core.RegistrationFunction {
         private RollbarClient? _rollbarClient;
         private string? _rollbarProjectPattern;
         private string? _coreSecretsKey;
+
+        //--- Constructors ---
+        public Function() : base(new LambdaSharp.Serialization.LambdaSystemTextJsonSerializer()) { }
 
         //--- Properties ---
         private RegistrationTable Registrations => _registrations ?? throw new InvalidOperationException();

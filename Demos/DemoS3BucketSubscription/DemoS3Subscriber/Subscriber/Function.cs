@@ -20,11 +20,12 @@ using System.Threading.Tasks;
 using Amazon.Lambda.S3Events;
 using LambdaSharp;
 
-[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
-
 namespace DemoS3Subscriber.Subscriber {
 
     public sealed class Function : ALambdaFunction<S3Event, string> {
+
+        //--- Constructors ---
+        public Function() : base(new LambdaSharp.Serialization.LambdaSystemTextJsonSerializer()) { }
 
         //--- Methods ---
         public override Task InitializeAsync(LambdaConfig config)

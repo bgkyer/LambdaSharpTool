@@ -3,8 +3,6 @@ using System.Threading.Tasks;
 using LambdaSharp;
 using LambdaSharp.ApiGateway;
 
-[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
-
 namespace %%ROOTNAMESPACE%% {
 
     public class ApiGatewayEndpointRequest {
@@ -22,6 +20,9 @@ namespace %%ROOTNAMESPACE%% {
     }
 
     public sealed class Function : ALambdaApiGatewayFunction {
+
+        //--- Constructors ---
+        public Function() : base(new LambdaSharp.Serialization.LambdaSystemTextJsonSerializer()) { }
 
         //--- Methods ---
         public override async Task InitializeAsync(LambdaConfig config) {

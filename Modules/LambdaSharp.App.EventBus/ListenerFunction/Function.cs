@@ -13,8 +13,6 @@ using LambdaSharp.App.EventBus.Actions;
 using LambdaSharp.ApiGateway;
 using Newtonsoft.Json.Linq;
 
-[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
-
 namespace LambdaSharp.App.EventBus.ListenerFunction {
 
     public sealed class Function : ALambdaApiGatewayFunction {
@@ -41,6 +39,9 @@ namespace LambdaSharp.App.EventBus.ListenerFunction {
         private string _broadcastApiUrl;
         private string _httpApiToken;
         private string _clientApiKey;
+
+        //--- Constructors ---
+        public Function() : base(new LambdaSharp.Serialization.LambdaSystemTextJsonSerializer()) { }
 
         //--- Methods ---
         public override async Task InitializeAsync(LambdaConfig config) {

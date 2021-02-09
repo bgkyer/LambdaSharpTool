@@ -19,9 +19,6 @@
 using System.Threading.Tasks;
 using LambdaSharp;
 
-// using a custom JSON serializer based on LitJson (https://litjson.net/)
-[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(Sample.JsonSerializer.CustomJsonSerializerFunction.CustomJsonSerializer))]
-
 namespace Sample.JsonSerializer.CustomJsonSerializerFunction {
 
     public class FunctionRequest {
@@ -37,6 +34,11 @@ namespace Sample.JsonSerializer.CustomJsonSerializerFunction {
     }
 
     public sealed class Function : ALambdaFunction<FunctionRequest, FunctionResponse> {
+
+        //--- Constructors ---
+
+        // using a custom JSON serializer based on LitJson (https://litjson.net/)
+        public Function() : base(new CustomJsonSerializer()) { }
 
         //--- Methods ---
         public override async Task InitializeAsync(LambdaConfig config) { }

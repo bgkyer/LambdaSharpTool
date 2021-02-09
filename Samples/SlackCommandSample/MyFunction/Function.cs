@@ -21,8 +21,6 @@ using System.Threading.Tasks;
 using LambdaSharp;
 using LambdaSharp.Slack;
 
-[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
-
 namespace SlackCommandSample.MyFunction {
 
     public sealed class Function : ALambdaSlackCommandFunction {

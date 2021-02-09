@@ -260,14 +260,6 @@ namespace LambdaSharp {
             Provider = provider ?? new LambdaFunctionDependencyProvider();
             ErrorReportGenerator = new LogErrorReportGenerator(Provider);
 
-            // TODO (2020-12-24, bjorg): consider moving this to ALambdaFunction<T1,T2> since this class doesn't actually require
-            //  a serializer to work. Also, consider passing in the ILambdaJsonSerializer via constructor instead of relyong on
-            //  assembly attribute.
-            if(LambdaSerializerSettings.AssemblySerializer is null) {
-                LambdaSerializerSettings.InitializeAssemblySerializer(GetType().Assembly);
-            }
-            LambdaSerializer = LambdaSerializerSettings.AssemblySerializer ?? throw new ShouldNeverHappenException();
-
             // initialize function fields from configuration
             _started = UtcNow;
         }
@@ -286,13 +278,6 @@ namespace LambdaSharp {
         /// </summary>
         /// <value>Current date-time in UTC timezone.</value>
         protected DateTime UtcNow => Provider.UtcNow;
-
-        /// <summary>
-        /// An instance of <see cref="ILambdaJsonSerializer"/>, as specified by the <see cref="LambdaSerializerAttribute"/> attribute on the assembly,
-        /// used for serializing/deserializing JSON data.
-        /// </summary>
-        /// <value>The <see cref="ILambdaJsonSerializer"/> instance.</value>
-        protected ILambdaJsonSerializer LambdaSerializer { get; set; }
 
         /// <summary>
         /// Retrieve the Lambda function initialization settings.
@@ -654,37 +639,6 @@ namespace LambdaSharp {
         }
 
         /// <summary>
-        /// The <see cref="DeserializeJson{T}(Stream)"/> method deserializes the JSON object from a <see cref="Stream"/> instance.
-        /// </summary>
-        /// <param name="stream">The stream to deserialize.</param>
-        /// <typeparam name="T">The deserialization target type.</typeparam>
-        /// <returns>Deserialized instance.</returns>
-        [Obsolete("Use LambdaSerializer.Deserialize<T>(Stream) instead. This method will be removed in the next major release.")]
-        protected T DeserializeJson<T>(Stream stream) => LambdaSerializer.Deserialize<T>(stream);
-
-        /// <summary>
-        /// The <see cref="DeserializeJson{T}(string)"/> method deserializes the JSON object from a <c>string</c>.
-        /// </summary>
-        /// <param name="json">The <c>string</c> to deserialize.</param>
-        /// <typeparam name="T">The deserialization target type.</typeparam>
-        /// <returns>Deserialized instance.</returns>
-        [Obsolete("Use LambdaSerializer.Deserialize<T>(string) instead. This method will be removed in the next major release.")]
-        protected T DeserializeJson<T>(string json) => LambdaSerializer.Deserialize<T>(json.ToStream());
-
-        /// <summary>
-        /// The <see cref="SerializeJson(object)"/> method serializes an instance to a JSON <c>string</c>.
-        /// </summary>
-        /// <param name="value">The instance to serialize.</param>
-        /// <returns>Serialized JSON <c>string</c>.</returns>
-        [Obsolete("Use LambdaSerializer.Serialize<T>(T) instead. This method will be removed in the next major release.")]
-        protected string SerializeJson(object value) {
-            using(var stream = new MemoryStream()) {
-                LambdaSerializer.Serialize(value, stream);
-                return Encoding.UTF8.GetString(stream.ToArray());
-            }
-        }
-
-        /// <summary>
         /// The <see cref="DecryptSecretAsync(string, Dictionary{string, string})"/> method decrypts a Base64-encoded string with an optional encryption context. The Lambda function
         /// requires permission to use the <c>kms:Decrypt</c> operation on the KMS key used to
         /// encrypt the original message.
@@ -964,7 +918,7 @@ namespace LambdaSharp {
         /// </summary>
         /// <param name="source">Name of the event source.</param>
         /// <param name="detailType">Free-form string used to decide what fields to expect in the event detail.</param>
-        /// <param name="detail">Data-structure to serialize as a JSON string using the <see cref="LambdaSerializer"/> property. If value is already a <code>string</code>, it is sent as-is. There is no other schema imposed. The data-structure may contain fields and nested subobjects.</param>
+        /// <param name="detail">Data-structure to serialize as a JSON string using <see cref="System.Text.Json.JsonSerializer"/>. If value is already a <code>string</code>, it is sent as-is. There is no other schema imposed. The data-structure may contain fields and nested subobjects.</param>
         /// <param name="resources">Optional AWS or custom resources, identified by unique identifier (e.g. ARN), which the event primarily concerns. Any number, including zero, may be present.</param>
         protected void LogEvent<T>(string source, string detailType, T detail, IEnumerable<string>? resources = null)
             => Logger.LogEvent(source, detailType, detail, resources);

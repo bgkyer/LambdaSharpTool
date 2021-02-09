@@ -22,8 +22,6 @@ using Amazon.APIGateway;
 using Amazon.APIGateway.Model;
 using LambdaSharp.Finalizer;
 
-[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
-
 namespace LambdaSharp.AppHosting.Finalizer {
 
     public sealed class Function : ALambdaFinalizerFunction {

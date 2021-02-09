@@ -46,14 +46,18 @@ namespace LambdaSharp.SimpleNotificationService {
         /// Initializes a new <see cref="ALambdaTopicFunction{TMessage}"/> instance using the default
         /// implementation of <see cref="ILambdaFunctionDependencyProvider"/>.
         /// </summary>
-        protected ALambdaTopicFunction() : this(null) { }
+        /// <param name="serializer">Custom implementation of <see cref="ILambdaJsonSerializer"/>.</param>
+        protected ALambdaTopicFunction(ILambdaJsonSerializer serializer) : this(serializer, provider: null) { }
 
         /// <summary>
         /// Initializes a new <see cref="ALambdaTopicFunction{TMessage}"/> instance using a
         /// custom implementation of <see cref="ILambdaFunctionDependencyProvider"/>.
         /// </summary>
+        /// <param name="serializer">Custom implementation of <see cref="ILambdaJsonSerializer"/>.</param>
         /// <param name="provider">Custom implementation of <see cref="ILambdaFunctionDependencyProvider"/>.</param>
-        protected ALambdaTopicFunction(ILambdaFunctionDependencyProvider? provider) : base(provider) { }
+        protected ALambdaTopicFunction(ILambdaJsonSerializer serializer, ILambdaFunctionDependencyProvider? provider) : base(provider) {
+            LambdaSerializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
+        }
 
         //--- Properties ---
 
@@ -65,6 +69,12 @@ namespace LambdaSharp.SimpleNotificationService {
         /// </remarks>
         /// <value>The <see cref="SNSEvent.SNSMessage"/> instance.</value>
         protected SNSEvent.SNSMessage CurrentRecord => _currentRecord ?? throw new InvalidOperationException();
+
+        /// <summary>
+        /// An instance of <see cref="ILambdaJsonSerializer"/> used for serializing/deserializing JSON data.
+        /// </summary>
+        /// <value>The <see cref="ILambdaJsonSerializer"/> instance.</value>
+        protected ILambdaJsonSerializer LambdaSerializer { get; }
 
         //--- Abstract Methods ---
 

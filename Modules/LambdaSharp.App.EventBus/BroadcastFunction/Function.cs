@@ -32,8 +32,6 @@ using Amazon.Runtime;
 using LambdaSharp.App.EventBus.Actions;
 using Newtonsoft.Json.Linq;
 
-[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
-
 namespace LambdaSharp.App.EventBus.BroadcastFunction {
 
     public sealed class Function : ALambdaFunction<APIGatewayHttpApiV2ProxyRequest, APIGatewayHttpApiV2ProxyResponse> {
@@ -44,6 +42,9 @@ namespace LambdaSharp.App.EventBus.BroadcastFunction {
         private string _eventTopicArn;
         private string _keepAliveRuleArn;
         private string _httpApiToken;
+
+        //--- Constructors ---
+        public Function() : base(new LambdaSharp.Serialization.LambdaSystemTextJsonSerializer()) { }
 
         //--- Methods ---
         public override async Task InitializeAsync(LambdaConfig config) {

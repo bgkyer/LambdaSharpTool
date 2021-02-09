@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using Amazon.CloudFormation;
 using Amazon.CloudFormation.Model;
 using LambdaSharp.CustomResource;
+using LambdaSharp.Serialization;
 
 namespace LambdaSharp.Finalizer {
 
@@ -42,14 +43,14 @@ namespace LambdaSharp.Finalizer {
         /// Initializes a new <see cref="ALambdaFinalizerFunction"/> instance using the default
         /// implementation of <see cref="ILambdaFunctionDependencyProvider"/>.
         /// </summary>
-        protected ALambdaFinalizerFunction() : this(null) { }
+        protected ALambdaFinalizerFunction() : this(provider: null) { }
 
         /// <summary>
         /// Initializes a new <see cref="ALambdaFinalizerFunction"/> instance using a
         /// custom implementation of <see cref="ILambdaFunctionDependencyProvider"/>.
         /// </summary>
         /// <param name="provider">Custom implementation of <see cref="ILambdaFunctionDependencyProvider"/>.</param>
-        protected ALambdaFinalizerFunction(ILambdaFunctionDependencyProvider? provider) : base(provider) { }
+        protected ALambdaFinalizerFunction(ILambdaFunctionDependencyProvider? provider) : base(LambdaSerializerSettings.LambdaSharpSerializer, provider) { }
 
         //--- Methods ---
 

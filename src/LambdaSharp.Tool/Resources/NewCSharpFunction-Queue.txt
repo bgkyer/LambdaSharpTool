@@ -3,8 +3,6 @@ using System.Threading.Tasks;
 using LambdaSharp;
 using LambdaSharp.SimpleQueueService;
 
-[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
-
 namespace %%ROOTNAMESPACE%% {
 
     public class Message {
@@ -15,6 +13,9 @@ namespace %%ROOTNAMESPACE%% {
     }
 
     public sealed class Function : ALambdaQueueFunction<Message> {
+
+        //--- Constructors ---
+        public Function() : base(new LambdaSharp.Serialization.LambdaSystemTextJsonSerializer()) { }
 
         //--- Methods ---
         public override async Task InitializeAsync(LambdaConfig config) {

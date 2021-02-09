@@ -25,8 +25,6 @@ using Amazon.S3.Model;
 using LambdaSharp;
 using LambdaSharp.CustomResource;
 
-[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
-
 namespace LambdaSharpS3Subscriber.ResourceHandler {
     using LambdaSubscription = Amazon.S3.Model.LambdaFunctionConfiguration;
     using LambdaFilter = Amazon.S3.Model.Filter;
@@ -61,6 +59,9 @@ namespace LambdaSharpS3Subscriber.ResourceHandler {
 
         //--- Fields ---
         private IAmazonS3 _s3Client;
+
+        //--- Constructors ---
+        public Function() : base(new LambdaSharp.Serialization.LambdaSystemTextJsonSerializer()) { }
 
         //--- Methods ---
         public override Task InitializeAsync(LambdaConfig config) {

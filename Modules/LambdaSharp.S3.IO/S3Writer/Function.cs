@@ -21,8 +21,6 @@ using System.Threading.Tasks;
 using Amazon.S3;
 using LambdaSharp.CustomResource;
 
-[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
-
 namespace LambdaSharp.S3.IO.S3Writer {
 
     public class S3WriterResourceProperties {
@@ -92,6 +90,9 @@ namespace LambdaSharp.S3.IO.S3Writer {
         private UnzipLogic _unzipLogic;
         private WriteJsonLogic _writeJsonLogic;
         private EmptyBucketLogic _emptyBucketLogic;
+
+        //--- Constructors ---
+        public Function() : base(new LambdaSharp.Serialization.LambdaSystemTextJsonSerializer()) { }
 
         //--- Methods ---
         public override async Task InitializeAsync(LambdaConfig config) {

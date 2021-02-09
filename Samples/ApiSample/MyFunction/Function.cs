@@ -22,11 +22,12 @@ using Amazon.Lambda.APIGatewayEvents;
 using LambdaSharp;
 using LambdaSharp.ApiGateway;
 
-[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
-
 namespace ApiSample.MyFunction {
 
     public sealed class Function : ALambdaApiGatewayFunction {
+
+        //--- Constructors ---
+        public Function() : base(new LambdaSharp.Serialization.LambdaSystemTextJsonSerializer()) { }
 
         //--- Methods ---
         public override Task InitializeAsync(LambdaConfig config)

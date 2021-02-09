@@ -32,8 +32,6 @@ using LambdaSharp.ApiGateway;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaNewtonsoftJsonSerializer))]
-
 namespace WebSocketsSample.MessageFunction {
 
     public class Message {
@@ -50,6 +48,9 @@ namespace WebSocketsSample.MessageFunction {
     }
 
     public sealed class Function : ALambdaApiGatewayFunction {
+
+        //--- Constructors ---
+        public Function() : base(new LambdaSharp.Serialization.LambdaNewtonsoftJsonSerializer()) { }
 
         //--- Fields ---
         private IAmazonApiGatewayManagementApi _amaClient;

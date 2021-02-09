@@ -53,14 +53,18 @@ namespace LambdaSharp.SimpleQueueService {
         /// Initializes a new <see cref="ALambdaQueueFunction{TMessage}"/> instance using the default
         /// implementation of <see cref="ILambdaQueueFunctionDependencyProvider"/>.
         /// </summary>
-        protected ALambdaQueueFunction() : this(null) { }
+        /// <param name="serializer">Custom implementation of <see cref="ILambdaJsonSerializer"/>.</param>
+        protected ALambdaQueueFunction(ILambdaJsonSerializer serializer) : this(serializer, provider: null) { }
 
         /// <summary>
         /// Initializes a new <see cref="ALambdaQueueFunction{TMessage}"/> instance using a
         /// custom implementation of <see cref="ILambdaQueueFunctionDependencyProvider"/>.
         /// </summary>
+        /// <param name="serializer">Custom implementation of <see cref="ILambdaJsonSerializer"/>.</param>
         /// <param name="provider">Custom implementation of <see cref="ILambdaQueueFunctionDependencyProvider"/>.</param>
-        protected ALambdaQueueFunction(ILambdaQueueFunctionDependencyProvider? provider) : base(provider ?? new LambdaQueueFunctionDependencyProvider()) { }
+        protected ALambdaQueueFunction(ILambdaJsonSerializer serializer, ILambdaQueueFunctionDependencyProvider? provider) : base(provider ?? new LambdaQueueFunctionDependencyProvider()) {
+            LambdaSerializer = serializer ?? throw new System.ArgumentNullException(nameof(serializer));
+        }
 
         //--- Properties ---
 
@@ -79,6 +83,12 @@ namespace LambdaSharp.SimpleQueueService {
         /// </remarks>
         /// <value>The <see cref="SQSEvent.SQSMessage"/> instance.</value>
         protected SQSEvent.SQSMessage CurrentRecord => _currentRecord ?? throw new InvalidOperationException();
+
+        /// <summary>
+        /// An instance of <see cref="ILambdaJsonSerializer"/> used for serializing/deserializing JSON data.
+        /// </summary>
+        /// <value>The <see cref="ILambdaJsonSerializer"/> instance.</value>
+        protected ILambdaJsonSerializer LambdaSerializer { get; }
 
         //--- Abstract Methods ---
 

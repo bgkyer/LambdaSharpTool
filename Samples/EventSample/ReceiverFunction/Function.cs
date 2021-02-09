@@ -22,8 +22,6 @@ using System.Threading.Tasks;
 using Amazon.Lambda.CloudWatchEvents;
 using LambdaSharp;
 
-[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
-
 // NOTE (2020-01-05, bjorg): see Sample.Event.ReceiverEventFunction in this sample, which uses the preferred ALambdaEventFunction<T> base class
 namespace Sample.Event.ReceiverFunction {
 
@@ -36,6 +34,9 @@ namespace Sample.Event.ReceiverFunction {
     public class FunctionResponse { }
 
     public sealed class Function : ALambdaFunction<CloudWatchEvent<EventDetails>, FunctionResponse> {
+
+        //--- Constructors ---
+        public Function() : base(new LambdaSharp.Serialization.LambdaSystemTextJsonSerializer()) { }
 
         //--- Methods ---
         public override async Task InitializeAsync(LambdaConfig config) { }

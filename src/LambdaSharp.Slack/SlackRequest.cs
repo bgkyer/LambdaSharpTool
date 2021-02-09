@@ -25,6 +25,7 @@ namespace LambdaSharp.Slack {
     public class SlackRequest {
 
         //--- Properties ---
+
         [JsonPropertyName("token")]
         public string Token { get; set; }
 

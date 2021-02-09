@@ -22,8 +22,6 @@ using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
 using LambdaSharp.SimpleNotificationService;
 
-[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
-
 namespace Demo.TwitterNotifier.NotifyFunction {
 
     public class Tweet {
@@ -48,6 +46,9 @@ namespace Demo.TwitterNotifier.NotifyFunction {
         private string _twitterQuery;
         private IAmazonSimpleNotificationService _snsClient;
         private string _notificationTopic;
+
+        //--- Constructors ---
+        public Function() : base(new LambdaSharp.Serialization.LambdaSystemTextJsonSerializer()) { }
 
         //--- Methods ---
         public override async Task InitializeAsync(LambdaConfig config) {

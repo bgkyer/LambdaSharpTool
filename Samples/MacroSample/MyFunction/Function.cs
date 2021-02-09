@@ -21,8 +21,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using LambdaSharp;
 
-[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
-
 namespace MacroSample.MyFunction {
 
     public class MacroRequest {
@@ -46,6 +44,9 @@ namespace MacroSample.MyFunction {
     }
 
     public sealed class Function : ALambdaFunction<MacroRequest, MacroResponse> {
+
+        //--- Constructors ---
+        public Function() : base(new LambdaSharp.Serialization.LambdaSystemTextJsonSerializer()) { }
 
         //--- Methods ---
         public override Task InitializeAsync(LambdaConfig config)

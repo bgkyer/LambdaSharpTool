@@ -65,13 +65,17 @@ namespace LambdaSharp.ApiGateway {
         /// <summary>
         /// Initializes a new <see cref="ALambdaApiGatewayFunction"/> instance using the default implementation of <see cref="ILambdaFunctionDependencyProvider"/>.
         /// </summary>
-        protected ALambdaApiGatewayFunction() : this(null) { }
+        /// <param name="serializer">Custom implementation of <see cref="ILambdaJsonSerializer"/>.</param>
+        protected ALambdaApiGatewayFunction(ILambdaJsonSerializer serializer) : this(serializer, provider: null) { }
 
         /// <summary>
         /// Initializes a new <see cref="ALambdaApiGatewayFunction"/> instance using a custom implementation of <see cref="ILambdaFunctionDependencyProvider"/>.
         /// </summary>
+        /// <param name="serializer">Custom implementation of <see cref="ILambdaJsonSerializer"/>.</param>
         /// <param name="provider">Custom implementation of <see cref="ILambdaFunctionDependencyProvider"/>.</param>
-        protected ALambdaApiGatewayFunction(ILambdaFunctionDependencyProvider? provider) : base(provider) { }
+        protected ALambdaApiGatewayFunction(ILambdaJsonSerializer serializer, ILambdaFunctionDependencyProvider? provider) : base(provider) {
+            LambdaSerializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
+        }
 
         //--- Properties ---
 
@@ -83,6 +87,12 @@ namespace LambdaSharp.ApiGateway {
         /// </remarks>
         /// <value>The <see cref="APIGatewayProxyRequest"/> instance.</value>
         protected APIGatewayProxyRequest CurrentRequest => _currentRequest ?? throw new InvalidOperationException();
+
+        /// <summary>
+        /// An instance of <see cref="ILambdaJsonSerializer"/> used for serializing/deserializing JSON data.
+        /// </summary>
+        /// <value>The <see cref="ILambdaJsonSerializer"/> instance.</value>
+        protected ILambdaJsonSerializer LambdaSerializer { get; }
 
         //--- Methods ---
 

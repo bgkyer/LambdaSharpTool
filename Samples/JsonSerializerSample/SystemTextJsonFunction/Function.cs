@@ -22,8 +22,6 @@ using LambdaSharp;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
-
 namespace Sample.JsonSerializer.SystemTextJsonFunction {
 
     public class FunctionRequest {
@@ -41,6 +39,9 @@ namespace Sample.JsonSerializer.SystemTextJsonFunction {
     }
 
     public sealed class Function : ALambdaFunction<FunctionRequest, FunctionResponse> {
+
+        //--- Constructors ---
+        public Function() : base(new LambdaSharp.Serialization.LambdaSystemTextJsonSerializer()) { }
 
         //--- Methods ---
         public override async Task InitializeAsync(LambdaConfig config) { }

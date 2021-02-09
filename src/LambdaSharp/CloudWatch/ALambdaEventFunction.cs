@@ -45,14 +45,18 @@ namespace LambdaSharp.CloudWatch {
         /// Initializes a new <see cref="ALambdaEventFunction{TEvent}"/> instance using the default
         /// implementation of <see cref="ILambdaFunctionDependencyProvider"/>.
         /// </summary>
-        protected ALambdaEventFunction() : this(null) { }
+        /// <param name="serializer">Custom implementation of <see cref="ILambdaJsonSerializer"/>.</param>
+        protected ALambdaEventFunction(ILambdaJsonSerializer serializer) : this(serializer, provider: null) { }
 
         /// <summary>
         /// Initializes a new <see cref="ALambdaEventFunction{TEvent}"/> instance using a
         /// custom implementation of <see cref="ILambdaFunctionDependencyProvider"/>.
         /// </summary>
+        /// <param name="serializer">Custom implementation of <see cref="ILambdaJsonSerializer"/>.</param>
         /// <param name="provider">Custom implementation of <see cref="ILambdaFunctionDependencyProvider"/>.</param>
-        protected ALambdaEventFunction(ILambdaFunctionDependencyProvider? provider) : base(provider) { }
+        protected ALambdaEventFunction(ILambdaJsonSerializer serializer, ILambdaFunctionDependencyProvider? provider) : base(provider) {
+            LambdaSerializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
+        }
 
         //--- Properties ---
 
@@ -64,6 +68,12 @@ namespace LambdaSharp.CloudWatch {
         /// </remarks>
         /// <value>The <see cref="CloudWatchEvent{TEvent}"/> instance.</value>
         protected CloudWatchEvent<TMessage> CurrentEvent => _currentEvent ?? throw new InvalidOperationException();
+
+        /// <summary>
+        /// An instance of <see cref="ILambdaJsonSerializer"/> used for serializing/deserializing JSON data.
+        /// </summary>
+        /// <value>The <see cref="ILambdaJsonSerializer"/> instance.</value>
+        protected ILambdaJsonSerializer LambdaSerializer { get; }
 
         //--- Abstract Methods ---
 

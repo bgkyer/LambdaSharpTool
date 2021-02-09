@@ -20,8 +20,6 @@ using System.Threading.Tasks;
 using LambdaSharp;
 using LambdaSharp.CustomResource;
 
-[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
-
 namespace CustomResourceSample.ResourceHandler {
 
     public class ResourceProperties {
@@ -39,6 +37,9 @@ namespace CustomResourceSample.ResourceHandler {
     }
 
     public sealed class Function : ALambdaCustomResourceFunction<ResourceProperties, ResourceAttributes> {
+
+        //--- Constructors ---
+        public Function() : base(new LambdaSharp.Serialization.LambdaSystemTextJsonSerializer()) { }
 
         //--- Methods ---
         public override Task InitializeAsync(LambdaConfig config)

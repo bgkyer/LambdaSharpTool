@@ -19,8 +19,6 @@
 using System.Threading.Tasks;
 using LambdaSharp;
 
-[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
-
 namespace Sample.LambdaLayer.MyFunction {
 
     public class FunctionRequest { }
@@ -28,6 +26,9 @@ namespace Sample.LambdaLayer.MyFunction {
     public class FunctionResponse { }
 
     public sealed class Function : ALambdaFunction<FunctionRequest, FunctionResponse> {
+
+        //--- Constructors ---
+        public Function() : base(new LambdaSharp.Serialization.LambdaSystemTextJsonSerializer()) { }
 
         //--- Methods ---
         public override Task InitializeAsync(LambdaConfig config)

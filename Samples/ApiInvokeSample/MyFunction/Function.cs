@@ -23,14 +23,15 @@ using System.Threading.Tasks;
 using LambdaSharp;
 using LambdaSharp.ApiGateway;
 
-[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
-
 namespace ApiInvokeSample.MyFunction {
 
     public sealed class Function : ALambdaApiGatewayFunction {
 
         //--- Fields ---
         private List<Item> _items = new List<Item>();
+
+        //--- Constructors ---
+        public Function() : base(new LambdaSharp.Serialization.LambdaSystemTextJsonSerializer()) { }
 
         //--- Methods ---
         public override Task InitializeAsync(LambdaConfig config)

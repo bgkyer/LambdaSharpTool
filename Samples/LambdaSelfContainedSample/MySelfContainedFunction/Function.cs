@@ -20,8 +20,6 @@ using System.Threading.Tasks;
 using Amazon.Lambda.RuntimeSupport;
 using LambdaSharp;
 
-[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
-
 namespace Sample.LambdaSelfContained.MySelfContainedFunction {
 
     public class FunctionRequest { }
@@ -42,6 +40,9 @@ namespace Sample.LambdaSelfContained.MySelfContainedFunction {
             using var bootstrap = new LambdaBootstrap(handlerWrapper);
             await bootstrap.RunAsync();
        }
+
+        //--- Constructors ---
+        public Function() : base(new LambdaSharp.Serialization.LambdaSystemTextJsonSerializer()) { }
 
         //--- Methods ---
         public override async Task InitializeAsync(LambdaConfig config) {

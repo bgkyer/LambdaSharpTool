@@ -35,6 +35,7 @@ namespace LambdaSharp.Slack {
 
         //--- Fields ---
         private string _slackVerificationToken;
+        private readonly ILambdaJsonSerializer _serializer = new LambdaSystemTextJsonSerializer();
 
         //--- Abstract Methods ---
         protected abstract Task ProcessSlackRequestAsync(SlackRequest request);
@@ -112,7 +113,7 @@ namespace LambdaSharp.Slack {
             var httpResponse = await HttpClient.SendAsync(new HttpRequestMessage {
                 RequestUri = new Uri(request.ResponseUrl),
                 Method = HttpMethod.Post,
-                Content = new StringContent(LambdaSerializer.Serialize(response))
+                Content = new StringContent(_serializer.Serialize(response))
             });
             return httpResponse.StatusCode == HttpStatusCode.OK;
         }
