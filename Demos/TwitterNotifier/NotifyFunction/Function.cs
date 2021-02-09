@@ -22,6 +22,8 @@ using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
 using LambdaSharp.SimpleNotificationService;
 
+[assembly: Amazon.Lambda.Core.LambdaSerializer(typeof(LambdaSharp.Serialization.LambdaSystemTextJsonSerializer))]
+
 namespace Demo.TwitterNotifier.NotifyFunction {
 
     public class Tweet {
