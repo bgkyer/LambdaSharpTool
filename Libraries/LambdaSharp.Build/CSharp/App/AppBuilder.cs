@@ -196,7 +196,7 @@ namespace LambdaSharp.Build.CSharp {
             }
 
             // extract version id from app
-            var assemblyFilepath = Path.Combine(projectDirectory, "bin", buildConfiguration, targetFramework, "publish", "wwwroot", "_framework", "_bin", $"{Path.GetFileNameWithoutExtension(app.Project)}.dll");
+            var assemblyFilepath = Path.Combine(projectDirectory, "bin", buildConfiguration, targetFramework, "publish", "wwwroot", "_framework", $"{Path.GetFileNameWithoutExtension(app.Project)}.dll");
             var assemblyMetadata = LambdaSharpAppAssemblyInformation(assemblyFilepath, appMetadataFilepath);
             if(assemblyMetadata?.ModuleVersionId == null) {
                 LogError($"unable to extract assembly metadata");

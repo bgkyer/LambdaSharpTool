@@ -65,13 +65,18 @@ namespace LambdaSharp.Modules {
         public static VersionInfo GetLambdaSharpAssemblyReferenceVersion(VersionInfo version) => version.GetMajorMinorVersion();
 
         public static bool IsNetCore3OrLater(string framework)
-            => (framework.StartsWith("netcoreapp") && (framework.CompareTo("netcoreapp3.") >= 0))
-                || IsNet5OrLater(framework);
+            => (
+                framework.StartsWith("netcoreapp", StringComparison.Ordinal)
+                && (string.Compare(framework, "netcoreapp3.", StringComparison.Ordinal) >= 0)
+            ) || IsNet5OrLater(framework);
 
         public static bool IsNet5OrLater(string framework)
-            => framework.StartsWith("net")
-                && !framework.StartsWith("netcoreapp")
-                && (framework.CompareTo("net5") >= 0);
+            => framework.StartsWith("net", StringComparison.Ordinal)
+                && !framework.StartsWith("netcoreapp", StringComparison.Ordinal)
+                && (
+                    string.Equals(framework, "net5", StringComparison.Ordinal)
+                    && (string.Compare(framework, "net5.", StringComparison.Ordinal) >= 0)
+                );
 
         public static bool IsValidLambdaSharpAssemblyReferenceForToolVersion(VersionInfo toolVersion, string projectFramework, string lambdaSharpAssemblyVersion, out bool outdated) {
 
@@ -116,6 +121,7 @@ namespace LambdaSharp.Modules {
                         );
                     break;
                 case "net5":
+                case "net5.0":
                     valid = (libraryVersion.Major == 0)
                         && (libraryVersion.Minor == 8)
                         && (libraryVersion.Build == 2);

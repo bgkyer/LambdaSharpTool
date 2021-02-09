@@ -1038,6 +1038,7 @@ System.Console.WriteLine($"*** PATTERN TYPE: {pattern?.GetType().FullName ?? "<n
                     runtime = Amazon.Lambda.Runtime.Dotnetcore31.ToString();
                     break;
                 case "net5":
+                case "net5.0":
                     runtime = Amazon.Lambda.Runtime.ProvidedAl2.ToString();
                     break;
                 default:

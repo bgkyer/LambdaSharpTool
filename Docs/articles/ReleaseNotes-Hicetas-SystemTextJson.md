@@ -2,12 +2,10 @@
 
 #### BREAKING CHANGES
 
-* CLI
-  * Added constraint that custom Lambda serializers must derive from `LambdaSharp.Serialization.ILambdaJsonSerializer` or the CLI will emit an error during compilation.
-
 * SDK
+  * LambdaSharp base classes for Lambda functions now require the JSON serializer to be provided. The JSON serializer must derive from `LambdaSharp.Serialization.ILambdaJsonSerializer`. The preferred JSON serializer is `LambdaSystemTextJsonSerializer`.
   * Renamed `LambdaJsonSerializer` to `LambdaNewtonsoftJsonSerializer` to make it clear this JSON serializer is based on `Newtonsoft.Json`.
-  * Moved `LambdaNewtonsoftJsonSerializer` to its own NuGet package _LambdaSharp.Serialization.NewtonsoftJson_ to remove dependency on _Newtonsoft.Json` NuGet package for _LambdaSharp_ assembly.
+  * Moved `LambdaNewtonsoftJsonSerializer` to its own NuGet package _LambdaSharp.Serialization.NewtonsoftJson_ to remove dependency on the _Newtonsoft.Json_ NuGet package for _LambdaSharp_ assembly.
   * Changed `ALambdaFunction.LambdaSerializer` property type to `ILambdaJsonSerializer`.
   * Changed target framework for `LambdaSharp` project to `netcoreapp3.1` which is required by the `Amazon.Lambda.Serialization.SystemTextJson` assembly.
   * Changed target framework for `LambdaSharp.Slack` project to `netcoreapp3.1` which is required by the `LambdaSharp` assembly.
@@ -18,10 +16,6 @@
 * CLI
   * Added support for self-contained .NET 5 Lambda functions.
   * Update Blazor WebAssembly app template to target .NET 5.
-  * Lambda projects can now explicitly specify one of the standard LambdaSharp serializers without causing an error or warning during compilation. The standard serializers are:
-    * `LambdaSharp.Serialization.LambdaSystemTextJsonSerializer` (included in _LambdaSharp_ assembly)
-    * `LambdaSharp.Serialization.LambdaNewtonsoftJsonSerializer` (requires _LambdaSharp.Serialization.NewtonsoftJson_ assembly)
-  * Lambda project can now explicitly specify a custom serializer. The custom serializer must derive from `ILambdaJsonSerializer`.
   * Removed dependency on _Amazon.Lambda.Tools_. _Amazon.Lambda.Tools_ is no longer requires to build, publish, or deploy LambdaSharp modules.
   * Updated CloudFormation to v22.0.0.
 

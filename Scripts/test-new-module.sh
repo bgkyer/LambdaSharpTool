@@ -73,7 +73,7 @@ if [ $? -ne 0 ]; then
     exit $?
 fi
 
-lash new function --type selfcontainedgeneric MySelfContainedFunction --verbose:exceptions
+lash new function --type selfcontained MySelfContainedFunction --verbose:exceptions
 if [ $? -ne 0 ]; then
     exit $?
 fi

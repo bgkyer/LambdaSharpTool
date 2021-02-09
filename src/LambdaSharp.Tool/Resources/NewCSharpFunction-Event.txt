@@ -23,7 +23,7 @@ namespace %%ROOTNAMESPACE%% {
             // TO-DO: add function initialization and reading configuration settings
         }
 
-        public override async Task ProcessMessageAsync(EventMessage message) {
+        public override async Task ProcessEventAsync(EventMessage message) {
 
             // TO-DO: add business logic
         }
