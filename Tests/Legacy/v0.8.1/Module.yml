@@ -1,0 +1,7 @@
+Module: Legacy.ModuleV081
+Items:
+
+  - Function: MyFunction
+    Description: TO-DO - update function description
+    Memory: 256
+    Timeout: 30

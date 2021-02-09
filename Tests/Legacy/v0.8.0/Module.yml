@@ -1,0 +1,6 @@
+Module: Legacy.ModuleV080
+Items:
+
+  - Function: MyFunction
+    Memory: 256
+    Timeout: 30

@@ -115,6 +115,17 @@ if [ $? -ne 0 ]; then
 fi
 
 
+echo "****************************"
+echo "*** Build Legacy Modules ***"
+echo "****************************"
+
+cd $LAMBDASHARP/Tests/Legacy
+lash build `find . -name "Module.yml"`
+if [ $? -ne 0 ]; then
+    exit $?
+fi
+
+
 # Deploy all λ# Sample Modules
 echo "**********************"
 echo "*** Deploy Samples ***"
