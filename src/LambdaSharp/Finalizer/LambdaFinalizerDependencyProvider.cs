@@ -18,6 +18,7 @@
 
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Amazon.CloudFormation;
 using Amazon.CloudFormation.Model;
@@ -65,11 +66,12 @@ namespace LambdaSharp.Finalizer {
         /// Checks if the specified stack is currently being deleted.
         /// </summary>
         /// <param name="stackId">CloudFormation stack ID</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>Boolean indicating if the specified stack is being deleted.</returns>
-        public async Task<bool> IsStackDeleteInProgress(string stackId) {
+        public async Task<bool> IsStackDeleteInProgressAsync(string stackId, CancellationToken cancellationToken) {
             var stack = (await _cloudFormationClient.DescribeStacksAsync(new DescribeStacksRequest {
                 StackName = stackId
-            })).Stacks.FirstOrDefault();
+            }, cancellationToken)).Stacks.FirstOrDefault();
             return stack?.StackStatus == "DELETE_IN_PROGRESS";
         }
     }

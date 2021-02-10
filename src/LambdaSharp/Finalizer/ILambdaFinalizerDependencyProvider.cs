@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LambdaSharp.Finalizer {
@@ -33,7 +34,8 @@ namespace LambdaSharp.Finalizer {
         /// Checks if the specified stack is currently being deleted.
         /// </summary>
         /// <param name="stackId">CloudFormation stack ID</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>Boolean indicating if the specified stack is being deleted.</returns>
-        Task<bool> IsStackDeleteInProgress(string stackId);
+        Task<bool> IsStackDeleteInProgressAsync(string stackId, CancellationToken cancellationToken = default);
     }
 }
