@@ -17,11 +17,9 @@
  */
 
 using System;
-using System.Linq;
 using System.Threading.Tasks;
-using Amazon.CloudFormation;
-using Amazon.CloudFormation.Model;
 using LambdaSharp.CustomResource;
+using LambdaSharp.Exceptions;
 using LambdaSharp.Serialization;
 
 namespace LambdaSharp.Finalizer {
@@ -50,9 +48,16 @@ namespace LambdaSharp.Finalizer {
         /// custom implementation of <see cref="ILambdaFunctionDependencyProvider"/>.
         /// </summary>
         /// <param name="provider">Custom implementation of <see cref="ILambdaFunctionDependencyProvider"/>.</param>
-        protected ALambdaFinalizerFunction(ILambdaFunctionDependencyProvider? provider) : base(LambdaSerializerSettings.LambdaSharpSerializer, provider) { }
+        protected ALambdaFinalizerFunction(ILambdaFinalizerDependencyProvider? provider) : base(LambdaSerializerSettings.LambdaSharpSerializer, provider) {  }
 
         //--- Methods ---
+
+        /// <summary>
+        /// The <see cref="ILambdaFinalizerDependencyProvider"/> instance used by the Lambda function to
+        /// satisfy its required dependencies.
+        /// </summary>
+        /// <value>The <see cref="ILambdaFinalizerDependencyProvider"/> instance.</value>
+        protected new ILambdaFinalizerDependencyProvider Provider => (ILambdaFinalizerDependencyProvider)base.Provider;
 
         /// <summary>
         /// The <see cref="CreateDeployment(FinalizerProperties)"/> method is invoked when the LambdaSharp module is first created.
@@ -115,12 +120,7 @@ namespace LambdaSharp.Finalizer {
 
             // fetch status of stack to confirm this is a delete operation
             try {
-                var stack = (await new AmazonCloudFormationClient().DescribeStacksAsync(new DescribeStacksRequest {
-                    StackName = request.StackId
-                })).Stacks.FirstOrDefault();
-                if((stack != null) && (stack.StackStatus != "DELETE_IN_PROGRESS")) {
-
-                    // ignore finalizer delete if stack is not being deleted
+                if(!await Provider.IsStackDeleteInProgress(request.StackId ?? throw new ShouldNeverHappenException("Stack ID is null"))) {
                     LogInfo("skipping finalizer delete, because the stack is not being deleted");
                     return new Response<FinalizerAttributes>();
                 }
