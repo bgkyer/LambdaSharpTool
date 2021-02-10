@@ -20,16 +20,16 @@
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\src\LambdaSharp\ApiGateway\FromBodyAttribute.cs" Link="FromBodyAttribute.cs" />
-    <Compile Include="..\..\src\LambdaSharp\ApiGateway\FromUriAttribute.cs" Link="FromUriAttribute.cs" />
-    <Compile Include="..\..\src\LambdaSharp\ApiGateway\Internal\ApiGatewayAsyncEndpointException.cs" Link="ApiGatewayAsyncEndpointException.cs" />
-    <Compile Include="..\..\src\LambdaSharp\ApiGateway\Internal\ApiGatewayInvocationTargetDirectory.cs" Link="ApiGatewayInvocationTargetDirectory.cs" />
-    <Compile Include="..\..\src\LambdaSharp\ApiGateway\Internal\ApiGatewayInvocationTargetParameterException.cs" Link="ApiGatewayInvocationTargetParameterException.cs" />
-    <Compile Include="..\..\src\LambdaSharp\ApiGateway\Internal\ApiGatewayInvocationTargetReturnException.cs" Link="ApiGatewayInvocationTargetReturnException.cs" />
     <Compile Include="..\..\src\LambdaSharp\Exceptions\ShouldNeverHappenException.cs" Link="ShouldNeverHappenException.cs" />
     <Compile Include="..\..\src\LambdaSharp\Serialization\ILambdaJsonSerializer.cs" Link="ILambdaJsonSerializer.cs" />
-    <Compile Include="..\..\src\LambdaSharp.Serialization.NewtonsoftJson\LambdaNewtonsoftJsonSerializer.cs" Link="LambdaNewtonsoftJsonSerializer.cs" />
     <Compile Include="..\..\src\LambdaSharp\Serialization\LambdaSystemTextJsonSerializer.cs" Link="LambdaSystemTextJsonSerializer.cs" />
+    <Compile Include="..\..\src\LambdaSharp.ApiGateway\FromBodyAttribute.cs" Link="FromBodyAttribute.cs" />
+    <Compile Include="..\..\src\LambdaSharp.ApiGateway\FromUriAttribute.cs" Link="FromUriAttribute.cs" />
+    <Compile Include="..\..\src\LambdaSharp.ApiGateway\Internal\ApiGatewayAsyncEndpointException.cs" Link="ApiGatewayAsyncEndpointException.cs" />
+    <Compile Include="..\..\src\LambdaSharp.ApiGateway\Internal\ApiGatewayInvocationTargetDirectory.cs" Link="ApiGatewayInvocationTargetDirectory.cs" />
+    <Compile Include="..\..\src\LambdaSharp.ApiGateway\Internal\ApiGatewayInvocationTargetParameterException.cs" Link="ApiGatewayInvocationTargetParameterException.cs" />
+    <Compile Include="..\..\src\LambdaSharp.ApiGateway\Internal\ApiGatewayInvocationTargetReturnException.cs" Link="ApiGatewayInvocationTargetReturnException.cs" />
+    <Compile Include="..\..\src\LambdaSharp.Serialization.NewtonsoftJson\LambdaNewtonsoftJsonSerializer.cs" Link="LambdaNewtonsoftJsonSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\LambdaSharp.Logging\LambdaSharp.Logging.csproj" />

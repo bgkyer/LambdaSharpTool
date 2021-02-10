@@ -566,9 +566,7 @@ namespace LambdaSharp.Tool.Cli {
                 ["LAMBDASHARP_VERSION"] = VersionInfoCompatibility.GetLambdaSharpAssemblyWildcardVersion(settings.ToolVersion, framework)
             };
             try {
-                var projectContents = (functionType == FunctionType.SelfContained)
-                    ? ReadResource("NewCSharpFunctionSelfContainedProject.xml", substitutions)
-                    : ReadResource("NewCSharpFunctionProject.xml", substitutions);
+                var projectContents = ReadResource($"NewCSharpFunction-{functionType}.xml", substitutions);
                 File.WriteAllText(projectFile, projectContents);
                 Console.WriteLine($"Created project file: {Path.GetRelativePath(Directory.GetCurrentDirectory(), projectFile)}");
             } catch(Exception e) {

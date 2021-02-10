@@ -126,7 +126,10 @@ namespace LambdaSharp.Finalizer {
 
             // fetch status of stack to confirm this is a delete operation
             try {
-                if(!await Provider.IsStackDeleteInProgressAsync(request.StackId ?? throw new ShouldNeverHappenException("Stack ID is null"))) {
+                if(request.StackId == null) {
+                    throw new ArgumentException("StackId is missing", nameof(request));
+                }
+                if(!await Provider.IsStackDeleteInProgressAsync(request.StackId)) {
                     LogInfo("skipping finalizer delete, because the stack is not being deleted");
                     return new Response<FinalizerAttributes>();
                 }

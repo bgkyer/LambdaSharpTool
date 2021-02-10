@@ -84,9 +84,8 @@ export LAMBDASHARP_TIER=TestContrib$SUFFIX
 
 echo "Creating test tier: $LAMBDASHARP_TIER"
 lash init \
+    --quick-init \
     --core-services enabled \
-    --existing-s3-bucket-name="" \
-    --parameters $LAMBDASHARP/Scripts/lash-init-parameters.yml \
     --verbose:exceptions
 if [ $? -ne 0 ]; then
     exit $?

@@ -5,7 +5,6 @@
     <Deterministic>true</Deterministic>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <RootNamespace>WebSocketsSample.MessageFunction</RootNamespace>
-    <AWSProjectType>Lambda</AWSProjectType>
     <NoWarn>CS1998</NoWarn>
   </PropertyGroup>
   <ItemGroup>
@@ -14,7 +13,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
-    <ProjectReference Include="..\..\..\src\LambdaSharp\LambdaSharp.csproj" />
+    <ProjectReference Include="..\..\..\src\LambdaSharp.ApiGateway\LambdaSharp.ApiGateway.csproj" />
     <ProjectReference Include="..\..\..\src\LambdaSharp.Serialization.NewtonsoftJson\LambdaSharp.Serialization.NewtonsoftJson.csproj" />
   </ItemGroup>
 </Project>

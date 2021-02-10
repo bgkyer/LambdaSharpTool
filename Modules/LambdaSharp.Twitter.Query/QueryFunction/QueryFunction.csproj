@@ -4,7 +4,6 @@
     <Deterministic>true</Deterministic>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <RootNamespace>LambdaSharp.Twitter.QueryFunction</RootNamespace>
-    <AWSProjectType>Lambda</AWSProjectType>
     <Nullable>enable</Nullable>
     <NoWarn>CS1998</NoWarn>
   </PropertyGroup>
@@ -19,6 +18,6 @@
     <PackageReference Include="TweetinviAPI" Version="4.0.3" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\LambdaSharp\LambdaSharp.csproj" />
+    <ProjectReference Include="..\..\..\src\LambdaSharp.Schedule\LambdaSharp.Schedule.csproj" />
   </ItemGroup>
 </Project>

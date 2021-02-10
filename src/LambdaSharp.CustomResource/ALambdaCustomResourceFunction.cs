@@ -345,7 +345,7 @@ namespace LambdaSharp.CustomResource {
                 }
             }
             if(exception == null) {
-                exception = new ShouldNeverHappenException($"ALambdaCustomResourceFunction.WriteResponse failed w/o an explicit");
+                exception = new ShouldNeverHappenException($"ALambdaCustomResourceFunction.WriteResponse failed w/o an explicit exception");
             }
 
             // max attempts have been reached; fail permanently and record the failed request for playback

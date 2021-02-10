@@ -4,7 +4,6 @@
     <Deterministic>true</Deterministic>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <RootNamespace>LambdaSharp.Core.LoggingStreamAnalyzerFunction</RootNamespace>
-    <AWSProjectType>Lambda</AWSProjectType>
     <Nullable>enable</Nullable>
     <NoWarn>CS1998</NoWarn>
   </PropertyGroup>

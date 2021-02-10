@@ -15,6 +15,14 @@
   * Changed method signatures in `ALambdaFinalizerFunction`:
     * Renamed `CreateDeployment` to `CreateDeploymentAsync`, `CreateDeployment` to `CreateDeploymentAsync`, and `DeleteDeployment` to `DeleteDeploymentAsync`.
     * Added `System.Threading.CancellationToken` parameter to `CreateDeploymentAsync`, `CreateDeploymentAsync`, and `DeleteDeploymentAsync`.
+  * Moved the LambdaSharp namespaces to specialized assemblies:
+    * _LambdaSharp.ApiGateway_
+    * _LambdaSharp.CloudWatch_
+    * _LambdaSharp.CustomResource_
+    * _LambdaSharp.Finalizer_
+    * _LambdaSharp.Schedule_
+    * _LambdaSharp.SimpleNotificationService_
+    * _LambdaSharp.SimpleQueueService_
 
 #### Features
 
