@@ -2,6 +2,14 @@ Module: Legacy.ModuleV081
 Items:
 
   - Function: MyFunction
-    Description: TO-DO - update function description
+    Description: Lambda .NET Core 3.1 Function
     Memory: 256
     Timeout: 30
+
+  - App: MyApp
+    Description: Blazor .NET Standard 3.1 WebAssembly App
+
+  - Variable: MyAppWebsiteUrl
+    Description: MyApp Website URL
+    Scope: public
+    Value: !GetAtt MyApp::Bucket.Outputs.WebsiteUrl

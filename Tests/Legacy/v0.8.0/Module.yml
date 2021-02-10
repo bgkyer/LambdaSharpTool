@@ -2,5 +2,6 @@ Module: Legacy.ModuleV080
 Items:
 
   - Function: MyFunction
+    Description: Lambda .NET Core 3.1 Function
     Memory: 256
     Timeout: 30
