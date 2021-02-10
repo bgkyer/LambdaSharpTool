@@ -91,43 +91,47 @@ namespace LambdaSharp.Modules {
             // compare based on selected framework
             bool valid;
             switch(projectFramework) {
-                case "netstandard2.1":
+            case "netstandard2.1":
 
-                    // .NET Standard 2.1 projects (Blazor) require 0.8.1.*
-                    valid = (libraryVersion.Major == 0)
-                        && (libraryVersion.Minor == 8)
-                        && (libraryVersion.Build >= 1);
-                    outdated = false;
-                    break;
-                case "netcoreapp2.1":
+                // .NET Standard 2.1 projects (Blazor) require 0.8.1.* or 0.8.2.*
+                valid = (libraryVersion.Major == 0)
+                    && (libraryVersion.Minor == 8)
+                    && (
+                        (libraryVersion.Build == 1)
+                        || (libraryVersion.Build == 2)
+                    );
+                break;
+            case "netcoreapp2.1":
 
-                    // .NET Core 2.1 projects (Lambda) require 0.8.0.* or 0.8.1.*
-                    valid = (libraryVersion.Major == 0)
-                        && (libraryVersion.Minor == 8)
-                        && (
-                            (libraryVersion.Build == 0)
-                            || (libraryVersion.Build == 1)
-                        );
-                    break;
-                case "netcoreapp3.1":
+                // .NET Core 2.1 projects (Lambda) require 0.8.0.* or 0.8.1.*
+                valid = (libraryVersion.Major == 0)
+                    && (libraryVersion.Minor == 8)
+                    && (
+                        (libraryVersion.Build == 0)
+                        || (libraryVersion.Build == 1)
+                    );
+                break;
+            case "netcoreapp3.1":
 
-                    // .NET Core 3.1 projects (Lambda) require 0.8.0.* or 0.8.2.*
-                    valid = (libraryVersion.Major == 0)
-                        && (libraryVersion.Minor == 8)
-                        && (
-                            (libraryVersion.Build == 0)
-                            || (libraryVersion.Build == 1)
-                            || (libraryVersion.Build == 2)
-                        );
-                    break;
-                case "net5":
-                case "net5.0":
-                    valid = (libraryVersion.Major == 0)
-                        && (libraryVersion.Minor == 8)
-                        && (libraryVersion.Build == 2);
-                    break;
-                default:
-                    throw new VersionInfoCompatibilityUnsupportedFrameworkException(projectFramework);
+                // .NET Core 3.1 projects (Lambda) require 0.8.0.*, 0.8.1.*, or 0.8.2.*
+                valid = (libraryVersion.Major == 0)
+                    && (libraryVersion.Minor == 8)
+                    && (
+                        (libraryVersion.Build == 0)
+                        || (libraryVersion.Build == 1)
+                        || (libraryVersion.Build == 2)
+                    );
+                break;
+            case "net5":
+            case "net5.0":
+
+                // .NET 5 projects require 0.8.2.*
+                valid = (libraryVersion.Major == 0)
+                    && (libraryVersion.Minor == 8)
+                    && (libraryVersion.Build == 2);
+                break;
+            default:
+                throw new VersionInfoCompatibilityUnsupportedFrameworkException(projectFramework);
             }
             outdated = valid && VersionInfo.From(libraryVersion, strict: false).IsLessThanVersion(toolVersion.GetMajorMinorVersion());
             return valid;
