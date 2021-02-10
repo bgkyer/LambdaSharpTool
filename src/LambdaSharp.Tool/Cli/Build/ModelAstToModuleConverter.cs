@@ -310,6 +310,7 @@ System.Console.WriteLine($"*** PATTERN TYPE: {pattern?.GetType().FullName ?? "<n
                 "Parameter",
                 "Resource",
                 "ResourceType",
+                "Stack",
                 "Variable"
             });
 
@@ -498,7 +499,8 @@ System.Console.WriteLine($"*** PATTERN TYPE: {pattern?.GetType().FullName ?? "<n
                 });
                 break;
             case "Nested":
-                AtLocation(node.Nested, () => {
+            case "Stack":
+                AtLocation(node.Stack, () => {
 
                     // validation
                     if(node.Module == null) {
@@ -520,13 +522,13 @@ System.Console.WriteLine($"*** PATTERN TYPE: {pattern?.GetType().FullName ?? "<n
                         return innerModuleInfo;
                     });
 
-                    // create nested module definition
+                    // create nested stack definition
                     if(moduleInfo != null) {
 
-                        // create nested module item
-                        _builder.AddNestedModule(
+                        // create nested stack item
+                        _builder.AddNestedStack(
                             parent: parent,
-                            name: node.Nested,
+                            name: node.Stack,
                             description: node.Description,
                             moduleInfo: moduleInfo,
                             scope: ConvertScope(node.Scope),

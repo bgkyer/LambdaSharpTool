@@ -27,6 +27,9 @@
   * Added null-aware annotations to _LambdaSharp_ assembly.
   * Added [MD5 algorithm implementation from Mono](https://github.com/mono/mono/blob/master/mcs/class/corlib/System.Security.Cryptography/MD5CryptoServiceProvider.cs) in _LambdaSharp.Logging_ since it is not supported in .NET 5 WebAssembly currently.
 
+* Syntax
+  * Added `Stack` as the declaration keyword for nested stacks. Previously the keyword was `Nested`, which remains supported for backwards compatibility.
+
 * Samples
   * Added `Samples/JsonSerializerSample` module showing how to specify and customize the JSON serializer for a Lambda function.
   * Added `Samples/LambdaSelfContainedSample` module showing how to build a Lambda function using .NET 5.
