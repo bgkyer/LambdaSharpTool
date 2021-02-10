@@ -31,6 +31,7 @@
   * Update Blazor WebAssembly app template to target .NET 5.
   * Removed dependency on _Amazon.Lambda.Tools_. _Amazon.Lambda.Tools_ is no longer requires to build, publish, or deploy LambdaSharp modules.
   * Updated CloudFormation to v22.0.0.
+  * Allowed resource types to have an empty or omitted `Attributes` section.
 
 * SDK
   * Added new `ALambdaEventFunction<TMessage>` base class for handling CloudWatch events.

@@ -682,12 +682,9 @@ System.Console.WriteLine($"*** PATTERN TYPE: {pattern?.GetType().FullName ?? "<n
                     if(node.Attributes != null) {
                         AtLocation("Attributes", () => {
                             attributes = ParseTo<List<ModuleManifestResourceProperty>>(node.Attributes);
-
-                            // validate fields
-                            Validate((attributes?.Count() ?? 0) > 0, "empty or invalid 'Attributes' section");
                         });
                     } else {
-                        LogError("missing 'Attributes' section");
+                        attributes = new List<ModuleManifestResourceProperty>();
                     }
 
                     // create resource type
