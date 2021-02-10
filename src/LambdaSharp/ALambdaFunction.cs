@@ -194,6 +194,12 @@ namespace LambdaSharp {
         private static readonly Regex ModuleKeyPattern = new Regex(@"^(?<Namespace>\w+)\.(?<Name>[\w\.]+)(:(?<Version>\*|[\w\.\-]+))?(@(?<Origin>[\w\-%]+))?$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
         //--- Class Methods ---
+
+        /// <summary>
+        /// The <see cref="RestartLambda()"/> method forces the Lambda runtime to perform a cold start. This method should only be used when the processing environment has become corrupted beyond repair.
+        /// </summary>
+        protected static void RestartLambda() => System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(Type).GetType()).ToString();
+
         private static void ParseModuleInfoString(string? moduleInfo, out string? moduleNamespace, out string? moduleName, out string? moduleVersion, out string? moduleOrigin) {
             moduleNamespace = null;
             moduleName = null;
