@@ -134,6 +134,7 @@ namespace LambdaSharp.Tool.Cli {
 
                 // create JSON schema definition for API Gateway methods
                 cmd.Command("create-invoke-methods-schema", subCmd => {
+                    subCmd.ShowInHelpText = false;
                     subCmd.HelpOption();
                     subCmd.Description = "Create JSON schemas for API Gateway invoke methods";
                     var directoryOption = subCmd.Option("--directory|-d", "Directory where .NET assemblies are located", CommandOptionType.SingleValue);
@@ -231,6 +232,7 @@ namespace LambdaSharp.Tool.Cli {
 
                 // validate assembly as Lambda function
                 cmd.Command("validate-assembly", subCmd => {
+                    subCmd.ShowInHelpText = false;
                     subCmd.HelpOption();
                     subCmd.Description = "Validate Lambda assembly";
                     var directoryOption = subCmd.Option("--directory|-d", "Directory where .NET assemblies are located", CommandOptionType.SingleValue);
@@ -313,6 +315,7 @@ namespace LambdaSharp.Tool.Cli {
                 });
 
                 cmd.Command("extract-assembly-metadata", subCmd => {
+                    subCmd.ShowInHelpText = false;
                     subCmd.HelpOption();
                     subCmd.Description = "Extract metadata from .NET Core assembly";
                     var assemblyOption = subCmd.Option("--assembly", "Filepath to .NET Core assembly", CommandOptionType.SingleValue);
