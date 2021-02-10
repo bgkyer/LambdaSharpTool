@@ -639,33 +639,37 @@ namespace LambdaSharp {
         }
 
         /// <summary>
-        /// The <see cref="DecryptSecretAsync(string, Dictionary{string, string})"/> method decrypts a Base64-encoded string with an optional encryption context. The Lambda function
+        /// The <see cref="DecryptSecretAsync(string, Dictionary{string, string},CancellationToken)"/> method decrypts a Base64-encoded string with an optional encryption context. The Lambda function
         /// requires permission to use the <c>kms:Decrypt</c> operation on the KMS key used to
         /// encrypt the original message.
         /// </summary>
         /// <param name="secret">Base64-encoded string of the encrypted value.</param>
         /// <param name="encryptionContext">An optional encryption context. Can be <c>null</c>.</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>The task object representing the asynchronous operation.</returns>
-        protected async Task<string> DecryptSecretAsync(string secret, Dictionary<string, string>? encryptionContext = null) {
+        protected async Task<string> DecryptSecretAsync(string secret, Dictionary<string, string>? encryptionContext = null, CancellationToken cancellationToken = default) {
             return Encoding.UTF8.GetString(await Provider.DecryptSecretAsync(
                 Convert.FromBase64String(secret),
-                encryptionContext
+                encryptionContext,
+                cancellationToken
             ));
         }
 
         /// <summary>
-        /// The <see cref="EncryptSecretAsync(string, string, Dictionary{string, string})"/> encrypts a sequence of bytes using the specified KMS key. The Lambda function requires
+        /// The <see cref="EncryptSecretAsync(string, string, Dictionary{string, string},CancellationToken)"/> encrypts a sequence of bytes using the specified KMS key. The Lambda function requires
         /// permission to use the <c>kms:Encrypt</c> opeartion on the specified KMS key.
         /// </summary>
         /// <param name="text">The plaintext string to encrypt.</param>
         /// <param name="encryptionKeyId">The KMS key ID used encrypt the plaintext bytes.</param>
         /// <param name="encryptionContext">An optional encryption context. Can be <c>null</c>.</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>The task object representing the asynchronous operation.</returns>
-        protected async Task<string> EncryptSecretAsync(string text, string encryptionKeyId, Dictionary<string, string>? encryptionContext = null) {
+        protected async Task<string> EncryptSecretAsync(string text, string encryptionKeyId, Dictionary<string, string>? encryptionContext = null, CancellationToken cancellationToken = default) {
             return Convert.ToBase64String(await Provider.EncryptSecretAsync(
                 Encoding.UTF8.GetBytes(text),
                 encryptionKeyId ?? throw new ArgumentNullException(encryptionKeyId),
-                encryptionContext
+                encryptionContext,
+                cancellationToken
             ));
         }
 

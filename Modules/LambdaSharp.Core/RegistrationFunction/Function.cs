@@ -20,15 +20,14 @@ using System;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using LambdaSharp.Core.Registrations;
 using LambdaSharp.Core.RollbarApi;
 using LambdaSharp.CustomResource;
 using LambdaSharp.Exceptions;
-using LambdaSharp.Serialization;
 
 namespace LambdaSharp.Core.RegistrationFunction {
 
@@ -138,7 +137,7 @@ namespace LambdaSharp.Core.RegistrationFunction {
             }
         }
 
-        public override async Task<Response<RegistrationResourceAttributes>> ProcessCreateResourceAsync(Request<RegistrationResourceProperties> request) {
+        public override async Task<Response<RegistrationResourceAttributes>> ProcessCreateResourceAsync(Request<RegistrationResourceProperties> request, CancellationToken cancellationToken) {
             var properties = request.ResourceProperties;
 
             // request validation
@@ -202,7 +201,7 @@ namespace LambdaSharp.Core.RegistrationFunction {
             }
         }
 
-        public override async Task<Response<RegistrationResourceAttributes>> ProcessDeleteResourceAsync(Request<RegistrationResourceProperties> request) {
+        public override async Task<Response<RegistrationResourceAttributes>> ProcessDeleteResourceAsync(Request<RegistrationResourceProperties> request, CancellationToken cancellationToken) {
             var properties = request.ResourceProperties;
 
             // request validation
@@ -265,7 +264,7 @@ namespace LambdaSharp.Core.RegistrationFunction {
             return new Response<RegistrationResourceAttributes>();
         }
 
-        public override async Task<Response<RegistrationResourceAttributes>> ProcessUpdateResourceAsync(Request<RegistrationResourceProperties> request) {
+        public override async Task<Response<RegistrationResourceAttributes>> ProcessUpdateResourceAsync(Request<RegistrationResourceProperties> request, CancellationToken cancellationToken) {
 
             // request validation
             if(request.PhysicalResourceId == null) {

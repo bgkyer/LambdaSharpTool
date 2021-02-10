@@ -23,6 +23,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Amazon.Lambda.SNSEvents;
 using LambdaSharp.CustomResource.Internal;
@@ -36,9 +37,9 @@ namespace LambdaSharp.CustomResource {
     /// The <see cref="ALambdaCustomResourceFunction{TRequestProperties,TResponseProperties}"/> is the abstract base class for
     /// handling custom resources in <a href="https://aws.amazon.com/cloudformation/">AWS CloudFormation</a>. This class takes
     /// care of handling the communication protocol with the AWS CloudFormation service. Depending on the requested operation, the base class invokes either
-    /// <see cref="ALambdaCustomResourceFunction{TRequestProperties,TResponseProperties}.ProcessCreateResourceAsync(Request{TRequestProperties})"/>,
-    /// <see cref="ALambdaCustomResourceFunction{TRequestProperties,TResponseProperties}.ProcessUpdateResourceAsync(Request{TRequestProperties})"/>,
-    /// or <see cref="ALambdaCustomResourceFunction{TRequestProperties,TResponseProperties}.ProcessDeleteResourceAsync(Request{TRequestProperties})"/>.
+    /// <see cref="ALambdaCustomResourceFunction{TRequestProperties,TResponseProperties}.ProcessCreateResourceAsync(Request{TRequestProperties},CancellationToken)"/>,
+    /// <see cref="ALambdaCustomResourceFunction{TRequestProperties,TResponseProperties}.ProcessUpdateResourceAsync(Request{TRequestProperties},CancellationToken)"/>,
+    /// or <see cref="ALambdaCustomResourceFunction{TRequestProperties,TResponseProperties}.ProcessDeleteResourceAsync(Request{TRequestProperties},CancellationToken)"/>.
     /// In case of failure, the AWS CloudFormation service is automatically notified to avoid prolonged timeout errors during a
     /// CloudFormation stack operation.
     /// </summary>
@@ -89,28 +90,31 @@ namespace LambdaSharp.CustomResource {
         //--- Abstract Methods ---
 
         /// <summary>
-        /// The <see cref="ALambdaCustomResourceFunction{TRequestProperties,TResponseProperties}.ProcessCreateResourceAsync(Request{TRequestProperties})"/> method is invoked
+        /// The <see cref="ALambdaCustomResourceFunction{TRequestProperties,TResponseProperties}.ProcessCreateResourceAsync(Request{TRequestProperties},CancellationToken)"/> method is invoked
         /// when AWS CloudFormation attempts to create a custom resource.
         /// </summary>
         /// <param name="request">The CloudFormation request instance.</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>The task object representing the asynchronous operation.</returns>
-        public abstract Task<Response<TAttributes>> ProcessCreateResourceAsync(Request<TProperties> request);
+        public abstract Task<Response<TAttributes>> ProcessCreateResourceAsync(Request<TProperties> request, CancellationToken cancellationToken);
 
         /// <summary>
-        /// The <see cref="ALambdaCustomResourceFunction{TRequestProperties,TResponseProperties}.ProcessUpdateResourceAsync(Request{TRequestProperties})"/> method is invoked
+        /// The <see cref="ALambdaCustomResourceFunction{TRequestProperties,TResponseProperties}.ProcessUpdateResourceAsync(Request{TRequestProperties},CancellationToken)"/> method is invoked
         /// when AWS CloudFormation attempts to update a custom resource.
         /// </summary>
         /// <param name="request">The CloudFormation request instance.</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>The task object representing the asynchronous operation.</returns>
-        public abstract Task<Response<TAttributes>> ProcessUpdateResourceAsync(Request<TProperties> request);
+        public abstract Task<Response<TAttributes>> ProcessUpdateResourceAsync(Request<TProperties> request, CancellationToken cancellationToken);
 
         /// <summary>
-        /// The <see cref="ALambdaCustomResourceFunction{TRequestProperties,TResponseProperties}.ProcessDeleteResourceAsync(Request{TRequestProperties})"/> method is invoked
+        /// The <see cref="ALambdaCustomResourceFunction{TRequestProperties,TResponseProperties}.ProcessDeleteResourceAsync(Request{TRequestProperties},CancellationToken)"/> method is invoked
         /// when AWS CloudFormation attempts to delete a custom resource.
         /// </summary>
         /// <param name="request">The CloudFormation request instance.</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>The task object representing the asynchronous operation.</returns>
-        public abstract Task<Response<TAttributes>> ProcessDeleteResourceAsync(Request<TProperties> request);
+        public abstract Task<Response<TAttributes>> ProcessDeleteResourceAsync(Request<TProperties> request, CancellationToken cancellationToken);
 
         //--- Methods ---
 
@@ -142,25 +146,28 @@ namespace LambdaSharp.CustomResource {
 
                 // handle slack request
                 Task<Response<TAttributes>> responseTask;
+                CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
                 switch(request.RequestType) {
                 case RequestType.Create:
-                    responseTask = ProcessCreateResourceAsync(request);
+                    responseTask = ProcessCreateResourceAsync(request, cancellationTokenSource.Token);
                     break;
                 case RequestType.Update:
-                    responseTask = ProcessUpdateResourceAsync(request);
+                    responseTask = ProcessUpdateResourceAsync(request, cancellationTokenSource.Token);
                     break;
                 case RequestType.Delete:
-                    responseTask = ProcessDeleteResourceAsync(request);
+                    responseTask = ProcessDeleteResourceAsync(request, cancellationTokenSource.Token);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(request.RequestType), request.RequestType, "unexpected request value");
                 }
 
                 // check if the custom resource logic completes before function times out
-                var timeout = CurrentContext.RemainingTime - TimeSpan.FromSeconds(0.5);
+                var timeout = CurrentContext.RemainingTime - TimeSpan.FromSeconds(1.0);
                 if(await Task.WhenAny(Task.Delay(timeout), responseTask) != responseTask) {
 
-                    // TODO (2020-07-31, bjorg): set cancellation token when available on ProcessXYSResourceAsync()
+                    // cancel operation and wait 100ms before exiting
+                    cancellationTokenSource.Cancel();
+                    await Task.Delay(500);
                     throw new TimeoutException($"custom resource operation timed out");
                 }
 

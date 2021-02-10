@@ -10,6 +10,11 @@
   * Changed target framework for `LambdaSharp` project to `netcoreapp3.1` which is required by the `Amazon.Lambda.Serialization.SystemTextJson` assembly.
   * Changed target framework for `LambdaSharp.Slack` project to `netcoreapp3.1` which is required by the `LambdaSharp` assembly.
   * Updated _AWSSDK.Core_ dependencies to version 3.5
+  * Changed method signatures in `ALambdaCustomResourceFunction`:
+    * Added `System.Threading.CancellationToken` parameter to `ProcessCreateResourceAsync`, `ProcessUpdateResourceAsync`, and `ProcessDeleteResourceAsync`.
+  * Changed method signatures in `ALambdaFinalizerFunction`:
+    * Renamed `CreateDeployment` to `CreateDeploymentAsync`, `CreateDeployment` to `CreateDeploymentAsync`, and `DeleteDeployment` to `DeleteDeploymentAsync`.
+    * Added `System.Threading.CancellationToken` parameter to `CreateDeploymentAsync`, `CreateDeploymentAsync`, and `DeleteDeploymentAsync`.
 
 #### Features
 
@@ -26,6 +31,7 @@
   * Added constructor to customize serializer settings for `LambdaNewtonsoftJsonSerializer`.
   * Added null-aware annotations to _LambdaSharp_ assembly.
   * Added [MD5 algorithm implementation from Mono](https://github.com/mono/mono/blob/master/mcs/class/corlib/System.Security.Cryptography/MD5CryptoServiceProvider.cs) in _LambdaSharp.Logging_ since it is not supported in .NET 5 WebAssembly currently.
+  * Added logic in `ALambdaCustomResourceFunction` and `ALambdaFinalizerFunction` to trigger the `System.Threading.CancellationToken` 500ms before the function times out.
 
 * Syntax
   * Added `Stack` as the declaration keyword for nested stacks. Previously the keyword was `Nested`, which remains supported for backwards compatibility.

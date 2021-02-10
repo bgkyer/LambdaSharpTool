@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using LambdaSharp.CustomResource;
 using LambdaSharp.Exceptions;
@@ -60,38 +61,42 @@ namespace LambdaSharp.Finalizer {
         protected new ILambdaFinalizerDependencyProvider Provider => (ILambdaFinalizerDependencyProvider)base.Provider;
 
         /// <summary>
-        /// The <see cref="CreateDeployment(FinalizerProperties)"/> method is invoked when the LambdaSharp module is first created.
+        /// The <see cref="CreateDeploymentAsync(FinalizerProperties,CancellationToken)"/> method is invoked when the LambdaSharp module is first created.
         /// </summary>
         /// <param name="request">The <see cref="FinalizerProperties"/> instance with the new deployment information.</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>The task object representing the asynchronous operation.</returns>
-        public virtual async Task CreateDeployment(FinalizerProperties request) { }
+        public virtual async Task CreateDeploymentAsync(FinalizerProperties request, CancellationToken cancellationToken) { }
 
         /// <summary>
-        /// The <see cref="CreateDeployment(FinalizerProperties)"/> method is invoked when the LambdaSharp module is being updated.
+        /// The <see cref="CreateDeploymentAsync(FinalizerProperties,CancellationToken)"/> method is invoked when the LambdaSharp module is being updated.
         /// </summary>
         /// <param name="current">The <see cref="FinalizerProperties"/> instance with the next deployment information.</param>
         /// <param name="previous">The <see cref="FinalizerProperties"/> instance with the previous deployment information.</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>The task object representing the asynchronous operation.</returns>
-        public virtual async Task UpdateDeployment(FinalizerProperties current, FinalizerProperties previous) { }
+        public virtual async Task UpdateDeploymentAsync(FinalizerProperties current, FinalizerProperties previous, CancellationToken cancellationToken) { }
 
         /// <summary>
-        /// The <see cref="CreateDeployment(FinalizerProperties)"/> method is invoked when the LambdaSharp module is being torn down.
+        /// The <see cref="CreateDeploymentAsync(FinalizerProperties,CancellationToken)"/> method is invoked when the LambdaSharp module is being torn down.
         /// </summary>
         /// <param name="current">The <see cref="FinalizerProperties"/> instance with the current deployment information.</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>The task object representing the asynchronous operation.</returns>
-        public virtual async Task DeleteDeployment(FinalizerProperties current) { }
+        public virtual async Task DeleteDeploymentAsync(FinalizerProperties current, CancellationToken cancellationToken) { }
 
         /// <summary>
-        /// The <see cref="ProcessCreateResourceAsync(Request{FinalizerProperties})"/> method is invoked
+        /// The <see cref="ProcessCreateResourceAsync(Request{FinalizerProperties},CancellationToken)"/> method is invoked
         /// when AWS CloudFormation attempts to create a custom resource.
         /// </summary>
         /// <param name="request">The CloudFormation request instance.</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>The task object representing the asynchronous operation.</returns>
         /// <remarks>
         /// This method cannot be overridden.
         /// </remarks>
-        public override sealed async Task<Response<FinalizerAttributes>> ProcessCreateResourceAsync(Request<FinalizerProperties> request) {
-            await CreateDeployment(request.ResourceProperties ?? new FinalizerProperties());
+        public override sealed async Task<Response<FinalizerAttributes>> ProcessCreateResourceAsync(Request<FinalizerProperties> request, CancellationToken cancellationToken) {
+            await CreateDeploymentAsync(request.ResourceProperties ?? new FinalizerProperties(), cancellationToken);
             return new Response<FinalizerAttributes> {
                 PhysicalResourceId = FINALIZER_PHYSICAL_ID,
                 Attributes = new FinalizerAttributes()
@@ -99,15 +104,16 @@ namespace LambdaSharp.Finalizer {
         }
 
         /// <summary>
-        /// The <see cref="ProcessDeleteResourceAsync(Request{FinalizerProperties})"/> method is invoked
+        /// The <see cref="ProcessDeleteResourceAsync(Request{FinalizerProperties},CancellationToken)"/> method is invoked
         /// when AWS CloudFormation attempts to delete a custom resource.
         /// </summary>
         /// <param name="request">The CloudFormation request instance.</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>The task object representing the asynchronous operation.</returns>
         /// <remarks>
         /// This method cannot be overridden.
         /// </remarks>
-        public override sealed async Task<Response<FinalizerAttributes>> ProcessDeleteResourceAsync(Request<FinalizerProperties> request) {
+        public override sealed async Task<Response<FinalizerAttributes>> ProcessDeleteResourceAsync(Request<FinalizerProperties> request, CancellationToken cancellationToken) {
 
             // NOTE (2019-07-11, bjorg): in 0.7, the physical id was changed from being based on the module hash (checksum), to
             //  a constant identifier. Changing the physical id of a custom resource causes CloudFormation to perform
@@ -127,21 +133,22 @@ namespace LambdaSharp.Finalizer {
             } catch(Exception e) {
                 LogErrorAsInfo(e, "unable to describe stack {0} to determine if an update or delete operation is being performed", request.StackId ?? "<MISSING>");
             }
-            await DeleteDeployment(request.ResourceProperties ?? new FinalizerProperties());
+            await DeleteDeploymentAsync(request.ResourceProperties ?? new FinalizerProperties(), cancellationToken);
             return new Response<FinalizerAttributes>();
         }
 
          /// <summary>
-        /// The <see cref="ProcessUpdateResourceAsync(Request{FinalizerProperties})"/> method is invoked
+        /// The <see cref="ProcessUpdateResourceAsync(Request{FinalizerProperties},CancellationToken)"/> method is invoked
         /// when AWS CloudFormation attempts to update a custom resource.
         /// </summary>
         /// <param name="request">The CloudFormation request instance.</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>The task object representing the asynchronous operation.</returns>
-       /// <remarks>
+        /// <remarks>
         /// This method cannot be overridden.
         /// </remarks>
-        public override sealed async Task<Response<FinalizerAttributes>> ProcessUpdateResourceAsync(Request<FinalizerProperties> request) {
-            await UpdateDeployment(request.ResourceProperties ?? new FinalizerProperties(), request.OldResourceProperties ?? new FinalizerProperties());
+        public override sealed async Task<Response<FinalizerAttributes>> ProcessUpdateResourceAsync(Request<FinalizerProperties> request, CancellationToken cancellationToken) {
+            await UpdateDeploymentAsync(request.ResourceProperties ?? new FinalizerProperties(), request.OldResourceProperties ?? new FinalizerProperties(), cancellationToken);
             return new Response<FinalizerAttributes> {
                 PhysicalResourceId = FINALIZER_PHYSICAL_ID,
                 Attributes = new FinalizerAttributes()
