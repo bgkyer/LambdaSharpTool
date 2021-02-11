@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using LambdaSharp;
 
-namespace Legacy.ModuleV081.MyFunction {
+namespace Legacy.ModuleV081.MyGenericFunction {
 
     public class FunctionRequest {
 

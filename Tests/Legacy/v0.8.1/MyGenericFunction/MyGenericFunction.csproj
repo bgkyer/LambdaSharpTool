@@ -4,11 +4,12 @@
     <Deterministic>true</Deterministic>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
-    <RootNamespace>Legacy.ModuleV081.MyFunction</RootNamespace>
+    <RootNamespace>Legacy.ModuleV081.MyGenericFunction</RootNamespace>
     <AWSProjectType>Lambda</AWSProjectType>
     <NoWarn>CS1998</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LambdaSharp" Version="0.8.1.*"/>
+    <PackageReference Condition="'$(LAMBDASHARP)'==''" Include="LambdaSharp" Version="0.8.1.*"/>
+    <ProjectReference Condition="'$(LAMBDASHARP)'!=''" Include="$(LAMBDASHARP)\src\LambdaSharp\LambdaSharp.csproj" />
   </ItemGroup>
 </Project>
