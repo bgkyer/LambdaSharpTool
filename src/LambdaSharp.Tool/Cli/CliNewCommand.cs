@@ -672,7 +672,7 @@ namespace LambdaSharp.Tool.Cli {
                     } else {
 
                         // use app name for .csproj file
-                        entryPath = (entry.Name == "MyApp.csproj")
+                        entryPath = (entry.Name == "MyApp._csproj")
                             ? Path.Combine(projectDirectory, $"{appName}.csproj")
                             : entryPath;
                         using(var file = File.OpenWrite(entryPath))
