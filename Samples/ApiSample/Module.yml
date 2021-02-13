@@ -16,6 +16,9 @@
 
 Module: Sample.ApiGateway
 Description: A sample module integrating with API Gateway
+Pragmas:
+  - Overrides:
+      Module::RestApi::CorsOrigin: "*"
 Items:
 
   - Function: MyFunction

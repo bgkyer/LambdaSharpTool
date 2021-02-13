@@ -23,7 +23,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Amazon.Lambda.APIGatewayEvents;
 using LambdaSharp.ApiGateway.Internal;
-using LambdaSharp.Exceptions;
+using LambdaSharp.ConfigSource;
 using LambdaSharp.Logging;
 using LambdaSharp.Logging.Metrics;
 using LambdaSharp.Serialization;
@@ -59,6 +59,7 @@ namespace LambdaSharp.ApiGateway {
         //--- Fields ---
         private ApiGatewayInvocationTargetDirectory? _directory;
         private APIGatewayProxyRequest? _currentRequest;
+        private string? _corsOrigin;
 
         //--- Constructors ---
 
@@ -95,6 +96,17 @@ namespace LambdaSharp.ApiGateway {
         protected ILambdaJsonSerializer LambdaSerializer { get; }
 
         //--- Methods ---
+
+        /// <summary>
+        /// The <see cref="InitializePrologueAsync(ILambdaConfigSource)"/> method is invoked to prepare the Lambda function
+        /// for initialization. This is the first of three methods that are invoked to initialize the Lambda function.
+        /// </summary>
+        /// <param name="envSource">The <see cref="ILambdaConfigSource"/> instance from which to read the configuration settings.</param>
+        /// <returns>The task object representing the asynchronous operation.</returns>
+        protected override async Task InitializePrologueAsync(ILambdaConfigSource envSource) {
+            await base.InitializePrologueAsync(envSource);
+            _corsOrigin = envSource.Read("CORS_ORIGIN");
+        }
 
         /// <summary>
         /// The <see cref="InitializeEpilogueAsync()"/> method is invoked to complet the initialization of the
@@ -256,6 +268,14 @@ namespace LambdaSharp.ApiGateway {
                 response = CreateInvocationExceptionResponse(request, e);
             } finally {
                 _currentRequest = null;
+            }
+
+            // add optional CORS origin header to response
+            if(_corsOrigin != null) {
+                if(response.Headers == null) {
+                    response.Headers = new Dictionary<string, string>();
+                }
+                response.Headers.TryAdd("Access-Control-Allow-Origin", _corsOrigin);
             }
             return response;
         }

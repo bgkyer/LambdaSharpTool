@@ -67,7 +67,7 @@
     "DeploymentChecksum": {
       "Type": "String",
       "Description": "Deployment Checksum",
-      "Default": "2AA8C48D53B62D39F6076968A2188D0B"
+      "Default": "76DE3AC9413E3ED3DD20B5B6256DCC85"
     }
   },
   "Resources": {
@@ -205,7 +205,8 @@
                   "Ref": "AWS::NoValue"
                 }
               ]
-            }
+            },
+            "CORS_ORIGIN": "'*'"
           }
         },
         "Handler": "Function::LambdaSharpTestModule.Function.Function::FunctionHandlerAsync",
@@ -582,14 +583,6 @@
         "HttpMethod": "GET",
         "Integration": {
           "IntegrationHttpMethod": "POST",
-          "IntegrationResponses": [
-            {
-              "ResponseParameters": {
-                "method.response.header.Access-Control-Allow-Origin": "*"
-              },
-              "StatusCode": 200
-            }
-          ],
           "PassthroughBehavior": "WHEN_NO_TEMPLATES",
           "Type": "AWS_PROXY",
           "Uri": {
@@ -635,14 +628,6 @@
         "HttpMethod": "POST",
         "Integration": {
           "IntegrationHttpMethod": "POST",
-          "IntegrationResponses": [
-            {
-              "ResponseParameters": {
-                "method.response.header.Access-Control-Allow-Origin": "*"
-              },
-              "StatusCode": 200
-            }
-          ],
           "PassthroughBehavior": "WHEN_NO_TEMPLATES",
           "Type": "AWS_PROXY",
           "Uri": {
@@ -679,8 +664,8 @@
               "ResponseParameters": {
                 "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
                 "method.response.header.Access-Control-Allow-Methods": "'GET,OPTIONS,POST'",
-                "method.response.header.Access-Control-Allow-Origin": "*",
-                "method.response.header.Access-Control-Max-Age": "'600"
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Max-Age": "'600'"
               },
               "ResponseTemplates": {
                 "application/json": ""
@@ -735,14 +720,6 @@
         "HttpMethod": "GET",
         "Integration": {
           "IntegrationHttpMethod": "POST",
-          "IntegrationResponses": [
-            {
-              "ResponseParameters": {
-                "method.response.header.Access-Control-Allow-Origin": "*"
-              },
-              "StatusCode": 200
-            }
-          ],
           "PassthroughBehavior": "WHEN_NO_TEMPLATES",
           "Type": "AWS_PROXY",
           "Uri": {
@@ -775,14 +752,6 @@
         "HttpMethod": "PUT",
         "Integration": {
           "IntegrationHttpMethod": "POST",
-          "IntegrationResponses": [
-            {
-              "ResponseParameters": {
-                "method.response.header.Access-Control-Allow-Origin": "*"
-              },
-              "StatusCode": 200
-            }
-          ],
           "PassthroughBehavior": "WHEN_NO_TEMPLATES",
           "Type": "AWS_PROXY",
           "Uri": {
@@ -817,14 +786,6 @@
         "HttpMethod": "DELETE",
         "Integration": {
           "IntegrationHttpMethod": "POST",
-          "IntegrationResponses": [
-            {
-              "ResponseParameters": {
-                "method.response.header.Access-Control-Allow-Origin": "*"
-              },
-              "StatusCode": 200
-            }
-          ],
           "PassthroughBehavior": "WHEN_NO_TEMPLATES",
           "Type": "AWS_PROXY",
           "Uri": {
@@ -861,8 +822,8 @@
               "ResponseParameters": {
                 "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
                 "method.response.header.Access-Control-Allow-Methods": "'DELETE,GET,OPTIONS,PUT'",
-                "method.response.header.Access-Control-Allow-Origin": "*",
-                "method.response.header.Access-Control-Max-Age": "'600"
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Max-Age": "'600'"
               },
               "ResponseTemplates": {
                 "application/json": ""
@@ -907,11 +868,11 @@
         "RetentionInDays": 30
       }
     },
-    "ModuleRestApiDeploymentEB979F6A534D3D326A1690444AF94D6D": {
+    "ModuleRestApiDeployment3970628808DB34C69DD5AC91B3EBCDB6": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "Description": {
-          "Fn::Sub": "${AWS::StackName} API [EB979F6A534D3D326A1690444AF94D6D]"
+          "Fn::Sub": "${AWS::StackName} API [3970628808DB34C69DD5AC91B3EBCDB6]"
         },
         "RestApiId": {
           "Ref": "ModuleRestApi"
@@ -933,7 +894,7 @@
       "Type": "AWS::ApiGateway::Stage",
       "Properties": {
         "DeploymentId": {
-          "Ref": "ModuleRestApiDeploymentEB979F6A534D3D326A1690444AF94D6D"
+          "Ref": "ModuleRestApiDeployment3970628808DB34C69DD5AC91B3EBCDB6"
         },
         "Description": "Module REST API LATEST Stage",
         "MethodSettings": [
@@ -1202,7 +1163,7 @@
       "Version": "2019-07-04",
       "Module": "Test.TestModule:1.0-DEV",
       "Description": "LambdaSharp CloudFormation Test",
-      "TemplateChecksum": "2AA8C48D53B62D39F6076968A2188D0B",
+      "TemplateChecksum": "76DE3AC9413E3ED3DD20B5B6256DCC85",
       "Date": "2019-08-09T15:00:00Z",
       "CoreServicesVersion": "1",
       "ParameterSections": [
@@ -1302,7 +1263,7 @@
         "ModuleRestApiItemsResourceIdResourceDELETE": "Module::RestApi::ItemsResource::IdResource::DELETE",
         "ModuleRestApiItemsResourceIdResourceOPTIONS": "Module::RestApi::ItemsResource::IdResource::OPTIONS",
         "ModuleRestApiLogGroup": "Module::RestApi::LogGroup",
-        "ModuleRestApiDeploymentEB979F6A534D3D326A1690444AF94D6D": "Module::RestApi::DeploymentEB979F6A534D3D326A1690444AF94D6D",
+        "ModuleRestApiDeployment3970628808DB34C69DD5AC91B3EBCDB6": "Module::RestApi::Deployment3970628808DB34C69DD5AC91B3EBCDB6",
         "ModuleRestApiStage": "Module::RestApi::Stage"
       },
       "TypeNameMappings": {

@@ -140,6 +140,24 @@ namespace LambdaSharp.Tool.Cli.Build {
             // recursively create resources as needed
             var apiDeclarations = new Dictionary<string, object>();
             _builder.TryGetOverride("Module::RestApi::CorsOrigin", out var moduleRestApiCorsOrigin);
+            if(moduleRestApiCorsOrigin != null) {
+
+                // convert into a quoted expression
+                moduleRestApiCorsOrigin = FnSub("'${CorsOrigin}'", new Dictionary<string, object> {
+                    ["CorsOrigin"] = moduleRestApiCorsOrigin
+                });
+
+                // add CORS origin value to Lambda environment variables
+                foreach(var restApiRoute in _restApiRoutes) {
+                    if(restApiRoute.Function.Function.Environment == null) {
+                        restApiRoute.Function.Function.Environment = new Humidifier.Lambda.FunctionTypes.Environment();
+                    }
+                    if(restApiRoute.Function.Function.Environment.Variables == null) {
+                        restApiRoute.Function.Function.Environment.Variables = new Dictionary<string, dynamic>();
+                    }
+                    restApiRoute.Function.Function.Environment.Variables.TryAdd("CORS_ORIGIN", moduleRestApiCorsOrigin);
+                }
+            }
             AddRestApiResource(restApi, FnRef(restApi.FullName), FnGetAtt(restApi.FullName, "RootResourceId"), 0, _restApiRoutes, apiDeclarations, moduleRestApiCorsOrigin);
 
             // RestApi deployment depends on all methods and their hash (to force redeployment in case of change)
@@ -866,25 +884,6 @@ namespace LambdaSharp.Tool.Cli.Build {
                 // check if CORS origin header needs to be added
                 if(moduleRestApiCorsOrigin != null) {
 
-                    // ensure there is an integration response definition
-                    if(integration.IntegrationResponses == null) {
-                        integration.IntegrationResponses = new[] {
-                            new Humidifier.ApiGateway.MethodTypes.IntegrationResponse {
-                                StatusCode = 200
-                            }
-                        }.ToList();
-                    }
-
-                    // add CORS header to each integration response definition
-                    foreach(var integrationResponse in integration.IntegrationResponses) {
-                        if(integrationResponse.ResponseParameters == null) {
-                            integrationResponse.ResponseParameters = new Dictionary<string, dynamic>();
-                        }
-
-                        // only add CORS origin header if none is provided
-                        integrationResponse.ResponseParameters.TryAdd("method.response.header.Access-Control-Allow-Origin", moduleRestApiCorsOrigin);
-                    }
-
                     // ensure there is an method response definition
                     if(apiMethodResource.MethodResponses == null) {
                         apiMethodResource.MethodResponses = new[] {
@@ -1064,7 +1063,7 @@ namespace LambdaSharp.Tool.Cli.Build {
                 };
             }
 
-            Humidifier.ApiGateway.Method CreateCorsOptionsMethod(IEnumerable<string> httpMethods, object corsOrigin) {
+            Humidifier.ApiGateway.Method CreateCorsOptionsMethod(IEnumerable<string> httpMethods, object moduleRestApiCorsOrigin) {
                 return new Humidifier.ApiGateway.Method {
                     HttpMethod = "OPTIONS",
                     AuthorizationType = "NONE",
@@ -1079,8 +1078,8 @@ namespace LambdaSharp.Tool.Cli.Build {
                                 ResponseParameters = new Dictionary<string, dynamic> {
                                     ["method.response.header.Access-Control-Allow-Headers"] = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
                                     ["method.response.header.Access-Control-Allow-Methods"] = $"'{string.Join(",", httpMethods.Append("OPTIONS").OrderBy(httpMethod => httpMethod))}'",
-                                    ["method.response.header.Access-Control-Allow-Origin"] = corsOrigin,
-                                    ["method.response.header.Access-Control-Max-Age"] = "'600"
+                                    ["method.response.header.Access-Control-Allow-Origin"] = moduleRestApiCorsOrigin,
+                                    ["method.response.header.Access-Control-Max-Age"] = "'600'"
                                 },
                                 ResponseTemplates = new Dictionary<string, dynamic> {
                                     ["application/json"] = ""
