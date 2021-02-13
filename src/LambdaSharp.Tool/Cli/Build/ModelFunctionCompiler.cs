@@ -142,11 +142,6 @@ namespace LambdaSharp.Tool.Cli.Build {
             _builder.TryGetOverride("Module::RestApi::CorsOrigin", out var moduleRestApiCorsOrigin);
             if(moduleRestApiCorsOrigin != null) {
 
-                // convert into a quoted expression
-                moduleRestApiCorsOrigin = FnSub("'${CorsOrigin}'", new Dictionary<string, object> {
-                    ["CorsOrigin"] = moduleRestApiCorsOrigin
-                });
-
                 // add CORS origin value to Lambda environment variables
                 foreach(var restApiRoute in _restApiRoutes) {
                     if(restApiRoute.Function.Function.Environment == null) {
@@ -157,6 +152,11 @@ namespace LambdaSharp.Tool.Cli.Build {
                     }
                     restApiRoute.Function.Function.Environment.Variables.TryAdd("CORS_ORIGIN", moduleRestApiCorsOrigin);
                 }
+
+                // convert into a quoted expression
+                moduleRestApiCorsOrigin = FnSub("'${CorsOrigin}'", new Dictionary<string, object> {
+                    ["CorsOrigin"] = moduleRestApiCorsOrigin
+                });
             }
             AddRestApiResource(restApi, FnRef(restApi.FullName), FnGetAtt(restApi.FullName, "RootResourceId"), 0, _restApiRoutes, apiDeclarations, moduleRestApiCorsOrigin);
 

@@ -67,7 +67,7 @@
     "DeploymentChecksum": {
       "Type": "String",
       "Description": "Deployment Checksum",
-      "Default": "76DE3AC9413E3ED3DD20B5B6256DCC85"
+      "Default": "8EDC941788C9C6CA9808FA7E768BB198"
     }
   },
   "Resources": {
@@ -206,7 +206,7 @@
                 }
               ]
             },
-            "CORS_ORIGIN": "'*'"
+            "CORS_ORIGIN": "*"
           }
         },
         "Handler": "Function::LambdaSharpTestModule.Function.Function::FunctionHandlerAsync",
@@ -1163,7 +1163,7 @@
       "Version": "2019-07-04",
       "Module": "Test.TestModule:1.0-DEV",
       "Description": "LambdaSharp CloudFormation Test",
-      "TemplateChecksum": "76DE3AC9413E3ED3DD20B5B6256DCC85",
+      "TemplateChecksum": "8EDC941788C9C6CA9808FA7E768BB198",
       "Date": "2019-08-09T15:00:00Z",
       "CoreServicesVersion": "1",
       "ParameterSections": [
