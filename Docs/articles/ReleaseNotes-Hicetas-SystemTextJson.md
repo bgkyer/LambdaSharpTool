@@ -24,6 +24,20 @@
     * _LambdaSharp.SimpleNotificationService_
     * _LambdaSharp.SimpleQueueService_
 
+##### NuGet Package Migration Guide
+
+|Base Class                                             |NuGet Package                         |
+|-------------------------------------------------------|--------------------------------------|
+|ALambdaApiGatewayFunction<TRequest,TResponse>          |LambdaSharp.ApiGateway
+|ALambdaCustomResourceFunction<TProperties,TAttributes> |LambdaSharp.CustomResource
+|ALambdaEventFunction<TMessage>                         |LambdaSharp.CloudWatch
+|ALambdaFinalizerFunction                               |LambdaSharp.Finalizer
+|ALambdaFunction                                        |LambdaSharp
+|ALambdaFunction<TRequest,TResponse>                    |LambdaSharp
+|ALambdaQueueFunction<TMessage>                         |LambdaSharp.SimpleQueueService
+|ALambdaScheduleFunction                                |LambdaSharp.Schedule
+|ALambdaTopicFunction<TMessage>                         |LambdaSharp.SimpleNotificationService
+
 #### Features
 
 * CLI
