@@ -67,7 +67,7 @@
     "DeploymentChecksum": {
       "Type": "String",
       "Description": "Deployment Checksum",
-      "Default": "FF45DE5B3F12B4D14E91D79BB0F5256F"
+      "Default": "2AA8C48D53B62D39F6076968A2188D0B"
     }
   },
   "Resources": {
@@ -582,12 +582,31 @@
         "HttpMethod": "GET",
         "Integration": {
           "IntegrationHttpMethod": "POST",
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "*"
+              },
+              "StatusCode": 200
+            }
+          ],
           "PassthroughBehavior": "WHEN_NO_TEMPLATES",
           "Type": "AWS_PROXY",
           "Uri": {
             "Fn::Sub": "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Function.Arn}/invocations"
           }
         },
+        "MethodResponses": [
+          {
+            "ResponseModels": {
+              "application/json": "Empty"
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": false
+            },
+            "StatusCode": 200
+          }
+        ],
         "ResourceId": {
           "Ref": "ModuleRestApiItemsResource"
         },
@@ -616,12 +635,79 @@
         "HttpMethod": "POST",
         "Integration": {
           "IntegrationHttpMethod": "POST",
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "*"
+              },
+              "StatusCode": 200
+            }
+          ],
           "PassthroughBehavior": "WHEN_NO_TEMPLATES",
           "Type": "AWS_PROXY",
           "Uri": {
             "Fn::Sub": "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Function.Arn}/invocations"
           }
         },
+        "MethodResponses": [
+          {
+            "ResponseModels": {
+              "application/json": "Empty"
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": false
+            },
+            "StatusCode": 200
+          }
+        ],
+        "ResourceId": {
+          "Ref": "ModuleRestApiItemsResource"
+        },
+        "RestApiId": {
+          "Ref": "ModuleRestApi"
+        }
+      }
+    },
+    "ModuleRestApiItemsResourceOPTIONS": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "Integration": {
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Methods": "'GET,OPTIONS,POST'",
+                "method.response.header.Access-Control-Allow-Origin": "*",
+                "method.response.header.Access-Control-Max-Age": "'600"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              },
+              "StatusCode": 204
+            }
+          ],
+          "PassthroughBehavior": "WHEN_NO_MATCH",
+          "RequestTemplates": {
+            "application/json": "{\"statusCode\": 200}"
+          },
+          "Type": "MOCK"
+        },
+        "MethodResponses": [
+          {
+            "ResponseModels": {
+              "application/json": "Empty"
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Headers": false,
+              "method.response.header.Access-Control-Allow-Methods": false,
+              "method.response.header.Access-Control-Allow-Origin": false,
+              "method.response.header.Access-Control-Max-Age": false
+            },
+            "StatusCode": 204
+          }
+        ],
         "ResourceId": {
           "Ref": "ModuleRestApiItemsResource"
         },
@@ -649,12 +735,31 @@
         "HttpMethod": "GET",
         "Integration": {
           "IntegrationHttpMethod": "POST",
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "*"
+              },
+              "StatusCode": 200
+            }
+          ],
           "PassthroughBehavior": "WHEN_NO_TEMPLATES",
           "Type": "AWS_PROXY",
           "Uri": {
             "Fn::Sub": "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Function.Arn}/invocations"
           }
         },
+        "MethodResponses": [
+          {
+            "ResponseModels": {
+              "application/json": "Empty"
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": false
+            },
+            "StatusCode": 200
+          }
+        ],
         "ResourceId": {
           "Ref": "ModuleRestApiItemsResourceIdResource"
         },
@@ -670,12 +775,31 @@
         "HttpMethod": "PUT",
         "Integration": {
           "IntegrationHttpMethod": "POST",
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "*"
+              },
+              "StatusCode": 200
+            }
+          ],
           "PassthroughBehavior": "WHEN_NO_TEMPLATES",
           "Type": "AWS_PROXY",
           "Uri": {
             "Fn::Sub": "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Function.Arn}/invocations"
           }
         },
+        "MethodResponses": [
+          {
+            "ResponseModels": {
+              "application/json": "Empty"
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": false
+            },
+            "StatusCode": 200
+          }
+        ],
         "OperationName": "UpdateItem",
         "ResourceId": {
           "Ref": "ModuleRestApiItemsResourceIdResource"
@@ -693,12 +817,79 @@
         "HttpMethod": "DELETE",
         "Integration": {
           "IntegrationHttpMethod": "POST",
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "*"
+              },
+              "StatusCode": 200
+            }
+          ],
           "PassthroughBehavior": "WHEN_NO_TEMPLATES",
           "Type": "AWS_PROXY",
           "Uri": {
             "Fn::Sub": "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Function.Arn}/invocations"
           }
         },
+        "MethodResponses": [
+          {
+            "ResponseModels": {
+              "application/json": "Empty"
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": false
+            },
+            "StatusCode": 200
+          }
+        ],
+        "ResourceId": {
+          "Ref": "ModuleRestApiItemsResourceIdResource"
+        },
+        "RestApiId": {
+          "Ref": "ModuleRestApi"
+        }
+      }
+    },
+    "ModuleRestApiItemsResourceIdResourceOPTIONS": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "Integration": {
+          "IntegrationResponses": [
+            {
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                "method.response.header.Access-Control-Allow-Methods": "'DELETE,GET,OPTIONS,PUT'",
+                "method.response.header.Access-Control-Allow-Origin": "*",
+                "method.response.header.Access-Control-Max-Age": "'600"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              },
+              "StatusCode": 204
+            }
+          ],
+          "PassthroughBehavior": "WHEN_NO_MATCH",
+          "RequestTemplates": {
+            "application/json": "{\"statusCode\": 200}"
+          },
+          "Type": "MOCK"
+        },
+        "MethodResponses": [
+          {
+            "ResponseModels": {
+              "application/json": "Empty"
+            },
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Headers": false,
+              "method.response.header.Access-Control-Allow-Methods": false,
+              "method.response.header.Access-Control-Allow-Origin": false,
+              "method.response.header.Access-Control-Max-Age": false
+            },
+            "StatusCode": 204
+          }
+        ],
         "ResourceId": {
           "Ref": "ModuleRestApiItemsResourceIdResource"
         },
@@ -716,11 +907,11 @@
         "RetentionInDays": 30
       }
     },
-    "ModuleRestApiDeploymentBC8CA9BE45D2145D51F8073D021D042C": {
+    "ModuleRestApiDeploymentEB979F6A534D3D326A1690444AF94D6D": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "Description": {
-          "Fn::Sub": "${AWS::StackName} API [BC8CA9BE45D2145D51F8073D021D042C]"
+          "Fn::Sub": "${AWS::StackName} API [EB979F6A534D3D326A1690444AF94D6D]"
         },
         "RestApiId": {
           "Ref": "ModuleRestApi"
@@ -732,7 +923,9 @@
         "ModuleRestApiItemsResourceIdResource",
         "ModuleRestApiItemsResourceIdResourceDELETE",
         "ModuleRestApiItemsResourceIdResourceGET",
+        "ModuleRestApiItemsResourceIdResourceOPTIONS",
         "ModuleRestApiItemsResourceIdResourcePUT",
+        "ModuleRestApiItemsResourceOPTIONS",
         "ModuleRestApiItemsResourcePOST"
       ]
     },
@@ -740,7 +933,7 @@
       "Type": "AWS::ApiGateway::Stage",
       "Properties": {
         "DeploymentId": {
-          "Ref": "ModuleRestApiDeploymentBC8CA9BE45D2145D51F8073D021D042C"
+          "Ref": "ModuleRestApiDeploymentEB979F6A534D3D326A1690444AF94D6D"
         },
         "Description": "Module REST API LATEST Stage",
         "MethodSettings": [
@@ -1009,7 +1202,7 @@
       "Version": "2019-07-04",
       "Module": "Test.TestModule:1.0-DEV",
       "Description": "LambdaSharp CloudFormation Test",
-      "TemplateChecksum": "FF45DE5B3F12B4D14E91D79BB0F5256F",
+      "TemplateChecksum": "2AA8C48D53B62D39F6076968A2188D0B",
       "Date": "2019-08-09T15:00:00Z",
       "CoreServicesVersion": "1",
       "ParameterSections": [
@@ -1102,12 +1295,14 @@
         "ModuleRestApiItemsResourceGET": "Module::RestApi::ItemsResource::GET",
         "FunctionRestApiPermission": "Function::RestApiPermission",
         "ModuleRestApiItemsResourcePOST": "Module::RestApi::ItemsResource::POST",
+        "ModuleRestApiItemsResourceOPTIONS": "Module::RestApi::ItemsResource::OPTIONS",
         "ModuleRestApiItemsResourceIdResource": "Module::RestApi::ItemsResource::IdResource",
         "ModuleRestApiItemsResourceIdResourceGET": "Module::RestApi::ItemsResource::IdResource::GET",
         "ModuleRestApiItemsResourceIdResourcePUT": "Module::RestApi::ItemsResource::IdResource::PUT",
         "ModuleRestApiItemsResourceIdResourceDELETE": "Module::RestApi::ItemsResource::IdResource::DELETE",
+        "ModuleRestApiItemsResourceIdResourceOPTIONS": "Module::RestApi::ItemsResource::IdResource::OPTIONS",
         "ModuleRestApiLogGroup": "Module::RestApi::LogGroup",
-        "ModuleRestApiDeploymentBC8CA9BE45D2145D51F8073D021D042C": "Module::RestApi::DeploymentBC8CA9BE45D2145D51F8073D021D042C",
+        "ModuleRestApiDeploymentEB979F6A534D3D326A1690444AF94D6D": "Module::RestApi::DeploymentEB979F6A534D3D326A1690444AF94D6D",
         "ModuleRestApiStage": "Module::RestApi::Stage"
       },
       "TypeNameMappings": {

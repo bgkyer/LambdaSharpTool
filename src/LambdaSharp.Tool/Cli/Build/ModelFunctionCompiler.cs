@@ -115,16 +115,6 @@ namespace LambdaSharp.Tool.Cli.Build {
                 encryptionContext: null
             );
 
-            // recursively create resources as needed
-            var apiDeclarations = new Dictionary<string, object>();
-            AddRestApiResource(restApi, FnRef(restApi.FullName), FnGetAtt(restApi.FullName, "RootResourceId"), 0, _restApiRoutes, apiDeclarations);
-
-            // RestApi deployment depends on all methods and their hash (to force redeployment in case of change)
-            string apiDeclarationsChecksum = string.Join("\n", apiDeclarations
-                .OrderBy(kv => kv.Key)
-                .Select(kv => $"{kv.Key}={StringEx.GetJsonChecksum(JsonConvert.SerializeObject(kv.Value))}")
-            ).ToMD5Hash();
-
             // add RestApi url
             var restDomainName = _builder.AddVariable(
                 parent: restApi,
@@ -146,6 +136,17 @@ namespace LambdaSharp.Tool.Cli.Build {
                 allow: null,
                 encryptionContext: null
             );
+
+            // recursively create resources as needed
+            var apiDeclarations = new Dictionary<string, object>();
+            _builder.TryGetOverride("Module::RestApi::CorsOrigin", out var moduleRestApiCorsOrigin);
+            AddRestApiResource(restApi, FnRef(restApi.FullName), FnGetAtt(restApi.FullName, "RootResourceId"), 0, _restApiRoutes, apiDeclarations, moduleRestApiCorsOrigin);
+
+            // RestApi deployment depends on all methods and their hash (to force redeployment in case of change)
+            string apiDeclarationsChecksum = string.Join("\n", apiDeclarations
+                .OrderBy(kv => kv.Key)
+                .Select(kv => $"{kv.Key}={StringEx.GetJsonChecksum(JsonConvert.SerializeObject(kv.Value))}")
+            ).ToMD5Hash();
 
             // optionally, add request validation resource if there is a request schema
             var allSources = functions.SelectMany(f => f.Sources).ToList();
@@ -636,10 +637,11 @@ namespace LambdaSharp.Tool.Cli.Build {
             );
         }
 
-        private void AddRestApiResource(AModuleItem parent, object restApiId, object parentId, int level, IEnumerable<(FunctionItem Function, RestApiSource Source)> routes, Dictionary<string, object> apiDeclarations) {
+        private void AddRestApiResource(AModuleItem parent, object restApiId, object parentId, int level, IEnumerable<(FunctionItem Function, RestApiSource Source)> routes, Dictionary<string, object> apiDeclarations, object moduleRestApiCorsOrigin) {
 
             // create methods at this route level to parent id
-            foreach(var route in routes.Where(route => route.Source.Path.Length == level)) {
+            var localRoutes = routes.Where(route => route.Source.Path.Length == level).ToList();
+            foreach(var route in localRoutes) {
                 Humidifier.ApiGateway.Method apiMethodResource;
                 switch(route.Source.Integration) {
                 case ApiGatewaySourceIntegration.RequestResponse:
@@ -740,10 +742,12 @@ namespace LambdaSharp.Tool.Cli.Build {
                             }
                         }
                     }.ToList();
+
+                    // set integration to AWS to enable payload manipulation
+                    integration.Type = "AWS";
                     integration.RequestTemplates = new Dictionary<string, dynamic> {
                         ["application/json"] = LambdaRestApiRequestTemplate
                     };
-                    integration.Type = "AWS";
                     integration.IntegrationResponses = new[] {
                         new Humidifier.ApiGateway.MethodTypes.IntegrationResponse {
                             StatusCode = 200,
@@ -778,6 +782,7 @@ namespace LambdaSharp.Tool.Cli.Build {
                 case "Proxy":
 
                     // nothing to do
+
                     break;
                 case "Void":
 
@@ -842,6 +847,8 @@ namespace LambdaSharp.Tool.Cli.Build {
 
                     // update the API method with the response schema
                     if(route.Source.ResponseContentType != null) {
+
+                        // set method response
                         apiMethodResource.MethodResponses = new[] {
                             new Humidifier.ApiGateway.MethodTypes.MethodResponse {
                                 StatusCode = 200,
@@ -854,6 +861,51 @@ namespace LambdaSharp.Tool.Cli.Build {
                     break;
                 default:
                     throw new ApplicationException($"unrecognized request response type: {route.Source.ResponseSchema} [{route.Source.ResponseSchema.GetType()}]");
+                }
+
+                // check if CORS origin header needs to be added
+                if(moduleRestApiCorsOrigin != null) {
+
+                    // ensure there is an integration response definition
+                    if(integration.IntegrationResponses == null) {
+                        integration.IntegrationResponses = new[] {
+                            new Humidifier.ApiGateway.MethodTypes.IntegrationResponse {
+                                StatusCode = 200
+                            }
+                        }.ToList();
+                    }
+
+                    // add CORS header to each integration response definition
+                    foreach(var integrationResponse in integration.IntegrationResponses) {
+                        if(integrationResponse.ResponseParameters == null) {
+                            integrationResponse.ResponseParameters = new Dictionary<string, dynamic>();
+                        }
+
+                        // only add CORS origin header if none is provided
+                        integrationResponse.ResponseParameters.TryAdd("method.response.header.Access-Control-Allow-Origin", moduleRestApiCorsOrigin);
+                    }
+
+                    // ensure there is an method response definition
+                    if(apiMethodResource.MethodResponses == null) {
+                        apiMethodResource.MethodResponses = new[] {
+                            new Humidifier.ApiGateway.MethodTypes.MethodResponse {
+                                StatusCode = 200,
+                                ResponseModels = new Dictionary<string, object> {
+                                    ["application/json"] = "Empty"
+                                }
+                            }
+                        }.ToList();
+                    }
+
+                    // add CORS header method settings
+                    foreach(var methodResponse in apiMethodResource.MethodResponses) {
+                        if(methodResponse.ResponseParameters == null) {
+                            methodResponse.ResponseParameters = new Dictionary<string, bool>();
+                        }
+
+                        // only add CORS origin header settings if none are provided
+                        methodResponse.ResponseParameters.TryAdd("method.response.header.Access-Control-Allow-Origin", false);
+                    }
                 }
 
                 // check if a lambda permission for the REST API already exists for this function
@@ -879,6 +931,31 @@ namespace LambdaSharp.Tool.Cli.Build {
                     );
                 }
             }
+
+            // determine if an OPTIONS method needs to be created
+            if(
+                (moduleRestApiCorsOrigin != null)
+                && localRoutes.Any()
+                && !localRoutes.Any(route => route.Source.HttpMethod == "OPTIONS")
+            ) {
+                Humidifier.ApiGateway.Method optionsMethodResource = CreateCorsOptionsMethod(localRoutes.Select(route => route.Source.HttpMethod), moduleRestApiCorsOrigin);
+
+                // add API method item
+                var method = _builder.AddResource(
+                    parent: parent,
+                    name: "OPTIONS",
+                    description: null,
+                    scope: null,
+                    resource: optionsMethodResource,
+                    resourceExportAttribute: null,
+                    dependsOn: null,
+                    condition: localRoutes.First().Function.Condition,
+                    pragmas: null,
+                    deletionPolicy: null
+                );
+                apiDeclarations.Add(method.FullName, optionsMethodResource);
+            }
+
 
             // find sub-routes and group common sub-route prefix
             var subRoutes = routes.Where(route => route.Source.Path.Length > level).ToLookup(route => route.Source.Path[level]);
@@ -908,7 +985,7 @@ namespace LambdaSharp.Tool.Cli.Build {
                     deletionPolicy: null
                 );
                 apiDeclarations.Add(resource.FullName, apiResourceResource);
-                AddRestApiResource(resource, restApiId, FnRef(resource.FullName), level + 1, subRoute, apiDeclarations);
+                AddRestApiResource(resource, restApiId, FnRef(resource.FullName), level + 1, subRoute, apiDeclarations, moduleRestApiCorsOrigin);
             }
 
             // local functions
@@ -918,7 +995,7 @@ namespace LambdaSharp.Tool.Cli.Build {
                     OperationName = source.OperationName,
                     ApiKeyRequired = source.ApiKeyRequired,
                     AuthorizationType = source.AuthorizationType ?? "NONE",
-                    AuthorizationScopes =  source.AuthorizationScopes,
+                    AuthorizationScopes = source.AuthorizationScopes,
                     AuthorizerId = source.AuthorizerId,
                     ResourceId = parentId,
                     RestApiId = restApiId,
@@ -981,6 +1058,50 @@ namespace LambdaSharp.Tool.Cli.Build {
                             StatusCode = 200,
                             ResponseModels = new Dictionary<string, object> {
                                 ["application/json"] = "Empty"
+                            }
+                        }
+                    }.ToList()
+                };
+            }
+
+            Humidifier.ApiGateway.Method CreateCorsOptionsMethod(IEnumerable<string> httpMethods, object corsOrigin) {
+                return new Humidifier.ApiGateway.Method {
+                    HttpMethod = "OPTIONS",
+                    AuthorizationType = "NONE",
+                    ResourceId = parentId,
+                    RestApiId = restApiId,
+                    Integration = new Humidifier.ApiGateway.MethodTypes.Integration {
+                        Type = "MOCK",
+                        PassthroughBehavior = "WHEN_NO_MATCH",
+                        IntegrationResponses = new[] {
+                            new Humidifier.ApiGateway.MethodTypes.IntegrationResponse {
+                                StatusCode = 204,
+                                ResponseParameters = new Dictionary<string, dynamic> {
+                                    ["method.response.header.Access-Control-Allow-Headers"] = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+                                    ["method.response.header.Access-Control-Allow-Methods"] = $"'{string.Join(",", httpMethods.Append("OPTIONS").OrderBy(httpMethod => httpMethod))}'",
+                                    ["method.response.header.Access-Control-Allow-Origin"] = corsOrigin,
+                                    ["method.response.header.Access-Control-Max-Age"] = "'600"
+                                },
+                                ResponseTemplates = new Dictionary<string, dynamic> {
+                                    ["application/json"] = ""
+                                }
+                            }
+                        }.ToList(),
+                        RequestTemplates = new Dictionary<string, dynamic> {
+                            ["application/json"] = "{\"statusCode\": 200}"
+                        }
+                    },
+                    MethodResponses = new[] {
+                        new Humidifier.ApiGateway.MethodTypes.MethodResponse {
+                            StatusCode = 204,
+                            ResponseModels = new Dictionary<string, dynamic> {
+                                ["application/json"] = "Empty"
+                            },
+                            ResponseParameters = new Dictionary<string, bool> {
+                                ["method.response.header.Access-Control-Allow-Headers"] = false,
+                                ["method.response.header.Access-Control-Allow-Methods"] = false,
+                                ["method.response.header.Access-Control-Allow-Origin"] = false,
+                                ["method.response.header.Access-Control-Max-Age"] = false
                             }
                         }
                     }.ToList()

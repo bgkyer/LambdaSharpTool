@@ -58,6 +58,7 @@
   * Added `TerminateLambdaInstance()` method, which forces the Lambda instance to terminate and perform a cold start on next invocation. This method should only be used when the processing environment has become corrupted beyond repair.
 
 * Syntax
+  * Added `Module::RestApi::CorsOrigin` override to specify an expression as the _CORS Origin_ header value. The _CORS Origin_ header value is automatically added to all REST API responses.
   * Added `Stack` as the declaration keyword for nested stacks. Previously the keyword was `Nested`, which remains supported for backwards compatibility.
 
 * Samples
