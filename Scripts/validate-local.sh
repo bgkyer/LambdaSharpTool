@@ -135,6 +135,8 @@ lash deploy  \
     --verbose:exceptions \
     Samples/AlexaSample/bin/cloudformation.json \
     Samples/ApiSample/bin/cloudformation.json \
+    Samples/ApiInvokeSample/bin/cloudformation.json \
+    Samples/ApiInvokeAssemblySample/bin/cloudformation.json \
     Samples/BlazorEventsSample/bin/cloudformation.json \
     Samples/BlazorSample/bin/cloudformation.json \
     Samples/CustomResourceTypeSample/bin/cloudformation.json \
@@ -142,9 +144,10 @@ lash deploy  \
     Samples/EventSample/bin/cloudformation.json \
     Samples/FinalizerSample/bin/cloudformation.json \
     Samples/JsonSerializerSample/bin/cloudformation.json \
-    Samples/KinesisSample/bin/cloudformation.json \
     Samples/KinesisFirehoseSample/bin/cloudformation.json \
+    Samples/KinesisSample/bin/cloudformation.json \
     Samples/LambdaLayerSample/bin/cloudformation.json \
+    Samples/LambdaSelfContained/bin/cloudformation.json \
     Samples/MacroSample/bin/cloudformation.json \
     Samples/MetricSample/bin/cloudformation.json \
     Samples/S3IOSample/bin/cloudformation.json \
