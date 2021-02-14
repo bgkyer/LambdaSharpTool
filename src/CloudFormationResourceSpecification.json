@@ -3671,6 +3671,23 @@
         }
       }
     },
+    "AWS::AppMesh::VirtualGateway.SubjectAlternativeNameMatchers": {
+      "Properties": {
+        "Exact": {
+          "PrimitiveItemType": "String",
+          "Required": false,
+          "Type": "List"
+        }
+      }
+    },
+    "AWS::AppMesh::VirtualGateway.SubjectAlternativeNames": {
+      "Properties": {
+        "Match": {
+          "Required": true,
+          "Type": "SubjectAlternativeNameMatchers"
+        }
+      }
+    },
     "AWS::AppMesh::VirtualGateway.VirtualGatewayAccessLog": {
       "Properties": {
         "File": {
@@ -3697,6 +3714,10 @@
     },
     "AWS::AppMesh::VirtualGateway.VirtualGatewayClientPolicyTls": {
       "Properties": {
+        "Certificate": {
+          "Required": false,
+          "Type": "VirtualGatewayClientTlsCertificate"
+        },
         "Enforce": {
           "PrimitiveType": "Boolean",
           "Required": false
@@ -3709,6 +3730,18 @@
         "Validation": {
           "Required": true,
           "Type": "VirtualGatewayTlsValidationContext"
+        }
+      }
+    },
+    "AWS::AppMesh::VirtualGateway.VirtualGatewayClientTlsCertificate": {
+      "Properties": {
+        "File": {
+          "Required": false,
+          "Type": "VirtualGatewayListenerTlsFileCertificate"
+        },
+        "SDS": {
+          "Required": false,
+          "Type": "VirtualGatewayListenerTlsSdsCertificate"
         }
       }
     },
@@ -3825,6 +3858,10 @@
         "Mode": {
           "PrimitiveType": "String",
           "Required": true
+        },
+        "Validation": {
+          "Required": false,
+          "Type": "VirtualGatewayListenerTlsValidationContext"
         }
       }
     },
@@ -3845,6 +3882,10 @@
         "File": {
           "Required": false,
           "Type": "VirtualGatewayListenerTlsFileCertificate"
+        },
+        "SDS": {
+          "Required": false,
+          "Type": "VirtualGatewayListenerTlsSdsCertificate"
         }
       }
     },
@@ -3857,6 +3898,38 @@
         "PrivateKey": {
           "PrimitiveType": "String",
           "Required": true
+        }
+      }
+    },
+    "AWS::AppMesh::VirtualGateway.VirtualGatewayListenerTlsSdsCertificate": {
+      "Properties": {
+        "SecretName": {
+          "PrimitiveType": "String",
+          "Required": true
+        }
+      }
+    },
+    "AWS::AppMesh::VirtualGateway.VirtualGatewayListenerTlsValidationContext": {
+      "Properties": {
+        "SubjectAlternativeNames": {
+          "Required": false,
+          "Type": "SubjectAlternativeNames"
+        },
+        "Trust": {
+          "Required": true,
+          "Type": "VirtualGatewayListenerTlsValidationContextTrust"
+        }
+      }
+    },
+    "AWS::AppMesh::VirtualGateway.VirtualGatewayListenerTlsValidationContextTrust": {
+      "Properties": {
+        "File": {
+          "Required": false,
+          "Type": "VirtualGatewayTlsValidationContextFileTrust"
+        },
+        "SDS": {
+          "Required": false,
+          "Type": "VirtualGatewayTlsValidationContextSdsTrust"
         }
       }
     },
@@ -3899,6 +3972,10 @@
     },
     "AWS::AppMesh::VirtualGateway.VirtualGatewayTlsValidationContext": {
       "Properties": {
+        "SubjectAlternativeNames": {
+          "Required": false,
+          "Type": "SubjectAlternativeNames"
+        },
         "Trust": {
           "Required": true,
           "Type": "VirtualGatewayTlsValidationContextTrust"
@@ -3922,6 +3999,14 @@
         }
       }
     },
+    "AWS::AppMesh::VirtualGateway.VirtualGatewayTlsValidationContextSdsTrust": {
+      "Properties": {
+        "SecretName": {
+          "PrimitiveType": "String",
+          "Required": true
+        }
+      }
+    },
     "AWS::AppMesh::VirtualGateway.VirtualGatewayTlsValidationContextTrust": {
       "Properties": {
         "ACM": {
@@ -3931,6 +4016,10 @@
         "File": {
           "Required": false,
           "Type": "VirtualGatewayTlsValidationContextFileTrust"
+        },
+        "SDS": {
+          "Required": false,
+          "Type": "VirtualGatewayTlsValidationContextSdsTrust"
         }
       }
     },
@@ -3997,6 +4086,10 @@
     },
     "AWS::AppMesh::VirtualNode.ClientPolicyTls": {
       "Properties": {
+        "Certificate": {
+          "Required": false,
+          "Type": "ClientTlsCertificate"
+        },
         "Enforce": {
           "PrimitiveType": "Boolean",
           "Required": false
@@ -4009,6 +4102,18 @@
         "Validation": {
           "Required": true,
           "Type": "TlsValidationContext"
+        }
+      }
+    },
+    "AWS::AppMesh::VirtualNode.ClientTlsCertificate": {
+      "Properties": {
+        "File": {
+          "Required": false,
+          "Type": "ListenerTlsFileCertificate"
+        },
+        "SDS": {
+          "Required": false,
+          "Type": "ListenerTlsSdsCertificate"
         }
       }
     },
@@ -4153,6 +4258,10 @@
         "Mode": {
           "PrimitiveType": "String",
           "Required": true
+        },
+        "Validation": {
+          "Required": false,
+          "Type": "ListenerTlsValidationContext"
         }
       }
     },
@@ -4173,6 +4282,10 @@
         "File": {
           "Required": false,
           "Type": "ListenerTlsFileCertificate"
+        },
+        "SDS": {
+          "Required": false,
+          "Type": "ListenerTlsSdsCertificate"
         }
       }
     },
@@ -4185,6 +4298,38 @@
         "PrivateKey": {
           "PrimitiveType": "String",
           "Required": true
+        }
+      }
+    },
+    "AWS::AppMesh::VirtualNode.ListenerTlsSdsCertificate": {
+      "Properties": {
+        "SecretName": {
+          "PrimitiveType": "String",
+          "Required": true
+        }
+      }
+    },
+    "AWS::AppMesh::VirtualNode.ListenerTlsValidationContext": {
+      "Properties": {
+        "SubjectAlternativeNames": {
+          "Required": false,
+          "Type": "SubjectAlternativeNames"
+        },
+        "Trust": {
+          "Required": true,
+          "Type": "ListenerTlsValidationContextTrust"
+        }
+      }
+    },
+    "AWS::AppMesh::VirtualNode.ListenerTlsValidationContextTrust": {
+      "Properties": {
+        "File": {
+          "Required": false,
+          "Type": "TlsValidationContextFileTrust"
+        },
+        "SDS": {
+          "Required": false,
+          "Type": "TlsValidationContextSdsTrust"
         }
       }
     },
@@ -4240,6 +4385,23 @@
         }
       }
     },
+    "AWS::AppMesh::VirtualNode.SubjectAlternativeNameMatchers": {
+      "Properties": {
+        "Exact": {
+          "PrimitiveItemType": "String",
+          "Required": false,
+          "Type": "List"
+        }
+      }
+    },
+    "AWS::AppMesh::VirtualNode.SubjectAlternativeNames": {
+      "Properties": {
+        "Match": {
+          "Required": true,
+          "Type": "SubjectAlternativeNameMatchers"
+        }
+      }
+    },
     "AWS::AppMesh::VirtualNode.TcpTimeout": {
       "Properties": {
         "Idle": {
@@ -4250,6 +4412,10 @@
     },
     "AWS::AppMesh::VirtualNode.TlsValidationContext": {
       "Properties": {
+        "SubjectAlternativeNames": {
+          "Required": false,
+          "Type": "SubjectAlternativeNames"
+        },
         "Trust": {
           "Required": true,
           "Type": "TlsValidationContextTrust"
@@ -4273,6 +4439,14 @@
         }
       }
     },
+    "AWS::AppMesh::VirtualNode.TlsValidationContextSdsTrust": {
+      "Properties": {
+        "SecretName": {
+          "PrimitiveType": "String",
+          "Required": true
+        }
+      }
+    },
     "AWS::AppMesh::VirtualNode.TlsValidationContextTrust": {
       "Properties": {
         "ACM": {
@@ -4282,6 +4456,10 @@
         "File": {
           "Required": false,
           "Type": "TlsValidationContextFileTrust"
+        },
+        "SDS": {
+          "Required": false,
+          "Type": "TlsValidationContextSdsTrust"
         }
       }
     },
@@ -6434,6 +6612,18 @@
         "RepositoryUrl": {
           "PrimitiveType": "String",
           "Required": true
+        }
+      }
+    },
+    "AWS::CloudFormation::ResourceVersion.LoggingConfig": {
+      "Properties": {
+        "LogGroupName": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "LogRoleArn": {
+          "PrimitiveType": "String",
+          "Required": false
         }
       }
     },
@@ -10520,6 +10710,18 @@
         }
       }
     },
+    "AWS::DMS::Endpoint.DocDbSettings": {
+      "Properties": {
+        "SecretsManagerAccessRoleArn": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "SecretsManagerSecretId": {
+          "PrimitiveType": "String",
+          "Required": false
+        }
+      }
+    },
     "AWS::DMS::Endpoint.DynamoDbSettings": {
       "Properties": {
         "ServiceAccessRoleArn": {
@@ -10548,6 +10750,18 @@
         }
       }
     },
+    "AWS::DMS::Endpoint.IbmDb2Settings": {
+      "Properties": {
+        "SecretsManagerAccessRoleArn": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "SecretsManagerSecretId": {
+          "PrimitiveType": "String",
+          "Required": false
+        }
+      }
+    },
     "AWS::DMS::Endpoint.KafkaSettings": {
       "Properties": {
         "Broker": {
@@ -10571,6 +10785,18 @@
           "Required": false
         },
         "StreamArn": {
+          "PrimitiveType": "String",
+          "Required": false
+        }
+      }
+    },
+    "AWS::DMS::Endpoint.MicrosoftSqlServerSettings": {
+      "Properties": {
+        "SecretsManagerAccessRoleArn": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "SecretsManagerSecretId": {
           "PrimitiveType": "String",
           "Required": false
         }
@@ -10614,11 +10840,31 @@
           "PrimitiveType": "Integer",
           "Required": false
         },
+        "SecretsManagerAccessRoleArn": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "SecretsManagerSecretId": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
         "ServerName": {
           "PrimitiveType": "String",
           "Required": false
         },
         "Username": {
+          "PrimitiveType": "String",
+          "Required": false
+        }
+      }
+    },
+    "AWS::DMS::Endpoint.MySqlSettings": {
+      "Properties": {
+        "SecretsManagerAccessRoleArn": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "SecretsManagerSecretId": {
           "PrimitiveType": "String",
           "Required": false
         }
@@ -10656,6 +10902,50 @@
         }
       }
     },
+    "AWS::DMS::Endpoint.OracleSettings": {
+      "Properties": {
+        "SecretsManagerAccessRoleArn": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "SecretsManagerOracleAsmAccessRoleArn": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "SecretsManagerOracleAsmSecretId": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "SecretsManagerSecretId": {
+          "PrimitiveType": "String",
+          "Required": false
+        }
+      }
+    },
+    "AWS::DMS::Endpoint.PostgreSqlSettings": {
+      "Properties": {
+        "SecretsManagerAccessRoleArn": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "SecretsManagerSecretId": {
+          "PrimitiveType": "String",
+          "Required": false
+        }
+      }
+    },
+    "AWS::DMS::Endpoint.RedshiftSettings": {
+      "Properties": {
+        "SecretsManagerAccessRoleArn": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "SecretsManagerSecretId": {
+          "PrimitiveType": "String",
+          "Required": false
+        }
+      }
+    },
     "AWS::DMS::Endpoint.S3Settings": {
       "Properties": {
         "BucketFolder": {
@@ -10683,6 +10973,18 @@
           "Required": false
         },
         "ServiceAccessRoleArn": {
+          "PrimitiveType": "String",
+          "Required": false
+        }
+      }
+    },
+    "AWS::DMS::Endpoint.SybaseSettings": {
+      "Properties": {
+        "SecretsManagerAccessRoleArn": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "SecretsManagerSecretId": {
           "PrimitiveType": "String",
           "Required": false
         }
@@ -13002,14 +13304,6 @@
         }
       }
     },
-    "AWS::ECS::Cluster.ClusterConfiguration": {
-      "Properties": {
-        "ExecuteCommandConfiguration": {
-          "Required": false,
-          "Type": "ExecuteCommandConfiguration"
-        }
-      }
-    },
     "AWS::ECS::Cluster.ClusterSettings": {
       "Properties": {
         "Name": {
@@ -13017,46 +13311,6 @@
           "Required": false
         },
         "Value": {
-          "PrimitiveType": "String",
-          "Required": false
-        }
-      }
-    },
-    "AWS::ECS::Cluster.ExecuteCommandConfiguration": {
-      "Properties": {
-        "KmsKeyId": {
-          "PrimitiveType": "String",
-          "Required": false
-        },
-        "LogConfiguration": {
-          "Required": false,
-          "Type": "ExecuteCommandLogConfiguration"
-        },
-        "Logging": {
-          "PrimitiveType": "String",
-          "Required": false
-        }
-      }
-    },
-    "AWS::ECS::Cluster.ExecuteCommandLogConfiguration": {
-      "Properties": {
-        "CloudWatchEncryptionEnabled": {
-          "PrimitiveType": "Boolean",
-          "Required": false
-        },
-        "CloudWatchLogGroupName": {
-          "PrimitiveType": "String",
-          "Required": false
-        },
-        "S3BucketName": {
-          "PrimitiveType": "String",
-          "Required": false
-        },
-        "S3EncryptionEnabled": {
-          "PrimitiveType": "Boolean",
-          "Required": false
-        },
-        "S3KeyPrefix": {
           "PrimitiveType": "String",
           "Required": false
         }
@@ -27797,6 +28051,25 @@
         }
       }
     },
+    "AWS::MediaLive::Channel.VpcOutputSettings": {
+      "Properties": {
+        "PublicAddressAllocationIds": {
+          "PrimitiveItemType": "String",
+          "Required": false,
+          "Type": "List"
+        },
+        "SecurityGroupIds": {
+          "PrimitiveItemType": "String",
+          "Required": false,
+          "Type": "List"
+        },
+        "SubnetIds": {
+          "PrimitiveItemType": "String",
+          "Required": false,
+          "Type": "List"
+        }
+      }
+    },
     "AWS::MediaLive::Channel.WavSettings": {
       "Properties": {
         "BitDepth": {
@@ -32911,6 +33184,63 @@
         }
       }
     },
+    "AWS::SageMaker::App.ResourceSpec": {
+      "Properties": {
+        "InstanceType": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "SageMakerImageArn": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "SageMakerImageVersionArn": {
+          "PrimitiveType": "String",
+          "Required": false
+        }
+      }
+    },
+    "AWS::SageMaker::AppImageConfig.FileSystemConfig": {
+      "Properties": {
+        "DefaultGid": {
+          "PrimitiveType": "Integer",
+          "Required": false
+        },
+        "DefaultUid": {
+          "PrimitiveType": "Integer",
+          "Required": false
+        },
+        "MountPath": {
+          "PrimitiveType": "String",
+          "Required": false
+        }
+      }
+    },
+    "AWS::SageMaker::AppImageConfig.KernelGatewayImageConfig": {
+      "Properties": {
+        "FileSystemConfig": {
+          "Required": false,
+          "Type": "FileSystemConfig"
+        },
+        "KernelSpecs": {
+          "ItemType": "KernelSpec",
+          "Required": true,
+          "Type": "List"
+        }
+      }
+    },
+    "AWS::SageMaker::AppImageConfig.KernelSpec": {
+      "Properties": {
+        "DisplayName": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "Name": {
+          "PrimitiveType": "String",
+          "Required": true
+        }
+      }
+    },
     "AWS::SageMaker::CodeRepository.GitConfig": {
       "Properties": {
         "Branch": {
@@ -33146,6 +33476,102 @@
         "S3OutputLocation": {
           "PrimitiveType": "String",
           "Required": true
+        }
+      }
+    },
+    "AWS::SageMaker::Domain.CustomImage": {
+      "Properties": {
+        "AppImageConfigName": {
+          "PrimitiveType": "String",
+          "Required": true
+        },
+        "ImageName": {
+          "PrimitiveType": "String",
+          "Required": true
+        },
+        "ImageVersionNumber": {
+          "PrimitiveType": "Integer",
+          "Required": false
+        }
+      }
+    },
+    "AWS::SageMaker::Domain.JupyterServerAppSettings": {
+      "Properties": {
+        "DefaultResourceSpec": {
+          "Required": false,
+          "Type": "ResourceSpec"
+        }
+      }
+    },
+    "AWS::SageMaker::Domain.KernelGatewayAppSettings": {
+      "Properties": {
+        "CustomImages": {
+          "DuplicatesAllowed": true,
+          "ItemType": "CustomImage",
+          "Required": false,
+          "Type": "List"
+        },
+        "DefaultResourceSpec": {
+          "Required": false,
+          "Type": "ResourceSpec"
+        }
+      }
+    },
+    "AWS::SageMaker::Domain.ResourceSpec": {
+      "Properties": {
+        "InstanceType": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "SageMakerImageArn": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "SageMakerImageVersionArn": {
+          "PrimitiveType": "String",
+          "Required": false
+        }
+      }
+    },
+    "AWS::SageMaker::Domain.SharingSettings": {
+      "Properties": {
+        "NotebookOutputOption": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "S3KmsKeyId": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "S3OutputPath": {
+          "PrimitiveType": "String",
+          "Required": false
+        }
+      }
+    },
+    "AWS::SageMaker::Domain.UserSettings": {
+      "Properties": {
+        "ExecutionRole": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "JupyterServerAppSettings": {
+          "Required": false,
+          "Type": "JupyterServerAppSettings"
+        },
+        "KernelGatewayAppSettings": {
+          "Required": false,
+          "Type": "KernelGatewayAppSettings"
+        },
+        "SecurityGroups": {
+          "DuplicatesAllowed": true,
+          "PrimitiveItemType": "String",
+          "Required": false,
+          "Type": "List"
+        },
+        "SharingSettings": {
+          "Required": false,
+          "Type": "SharingSettings"
         }
       }
     },
@@ -34296,6 +34722,102 @@
         }
       }
     },
+    "AWS::SageMaker::UserProfile.CustomImage": {
+      "Properties": {
+        "AppImageConfigName": {
+          "PrimitiveType": "String",
+          "Required": true
+        },
+        "ImageName": {
+          "PrimitiveType": "String",
+          "Required": true
+        },
+        "ImageVersionNumber": {
+          "PrimitiveType": "Integer",
+          "Required": false
+        }
+      }
+    },
+    "AWS::SageMaker::UserProfile.JupyterServerAppSettings": {
+      "Properties": {
+        "DefaultResourceSpec": {
+          "Required": false,
+          "Type": "ResourceSpec"
+        }
+      }
+    },
+    "AWS::SageMaker::UserProfile.KernelGatewayAppSettings": {
+      "Properties": {
+        "CustomImages": {
+          "DuplicatesAllowed": true,
+          "ItemType": "CustomImage",
+          "Required": false,
+          "Type": "List"
+        },
+        "DefaultResourceSpec": {
+          "Required": false,
+          "Type": "ResourceSpec"
+        }
+      }
+    },
+    "AWS::SageMaker::UserProfile.ResourceSpec": {
+      "Properties": {
+        "InstanceType": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "SageMakerImageArn": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "SageMakerImageVersionArn": {
+          "PrimitiveType": "String",
+          "Required": false
+        }
+      }
+    },
+    "AWS::SageMaker::UserProfile.SharingSettings": {
+      "Properties": {
+        "NotebookOutputOption": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "S3KmsKeyId": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "S3OutputPath": {
+          "PrimitiveType": "String",
+          "Required": false
+        }
+      }
+    },
+    "AWS::SageMaker::UserProfile.UserSettings": {
+      "Properties": {
+        "ExecutionRole": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "JupyterServerAppSettings": {
+          "Required": false,
+          "Type": "JupyterServerAppSettings"
+        },
+        "KernelGatewayAppSettings": {
+          "Required": false,
+          "Type": "KernelGatewayAppSettings"
+        },
+        "SecurityGroups": {
+          "DuplicatesAllowed": true,
+          "PrimitiveItemType": "String",
+          "Required": false,
+          "Type": "List"
+        },
+        "SharingSettings": {
+          "Required": false,
+          "Type": "SharingSettings"
+        }
+      }
+    },
     "AWS::SageMaker::Workteam.CognitoMemberDefinition": {
       "Properties": {
         "CognitoClientId": {
@@ -34477,6 +34999,18 @@
           "PrimitiveItemType": "String",
           "Required": false,
           "Type": "List"
+        }
+      }
+    },
+    "AWS::ServiceCatalog::ServiceAction.DefinitionParameter": {
+      "Properties": {
+        "Key": {
+          "PrimitiveType": "String",
+          "Required": true
+        },
+        "Value": {
+          "PrimitiveType": "String",
+          "Required": true
         }
       }
     },
@@ -36867,7 +37401,7 @@
       }
     }
   },
-  "ResourceSpecificationVersion": "27.0.0",
+  "ResourceSpecificationVersion": "28.0.0",
   "ResourceTypes": {
     "Alexa::ASK::Skill": {
       "Documentation": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ask-skill.html",
@@ -37407,6 +37941,11 @@
       }
     },
     "AWS::ApiGateway::ApiKey": {
+      "Attributes": {
+        "APIKeyId": {
+          "PrimitiveType": "String"
+        }
+      },
       "Documentation": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-apikey.html",
       "Properties": {
         "CustomerId": {
@@ -40826,6 +41365,69 @@
         }
       }
     },
+    "AWS::CloudFormation::ResourceDefaultVersion": {
+      "Attributes": {
+        "Arn": {
+          "PrimitiveType": "String"
+        }
+      },
+      "Documentation": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-resourcedefaultversion.html",
+      "Properties": {
+        "TypeName": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "TypeVersionArn": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "VersionId": {
+          "PrimitiveType": "String",
+          "Required": false
+        }
+      }
+    },
+    "AWS::CloudFormation::ResourceVersion": {
+      "Attributes": {
+        "Arn": {
+          "PrimitiveType": "String"
+        },
+        "IsDefaultVersion": {
+          "PrimitiveType": "Boolean"
+        },
+        "ProvisioningType": {
+          "PrimitiveType": "String"
+        },
+        "TypeArn": {
+          "PrimitiveType": "String"
+        },
+        "VersionId": {
+          "PrimitiveType": "String"
+        },
+        "Visibility": {
+          "PrimitiveType": "String"
+        }
+      },
+      "Documentation": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-resourceversion.html",
+      "Properties": {
+        "ExecutionRoleArn": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "LoggingConfig": {
+          "Required": false,
+          "Type": "LoggingConfig"
+        },
+        "SchemaHandlerPackage": {
+          "PrimitiveType": "String",
+          "Required": true
+        },
+        "TypeName": {
+          "PrimitiveType": "String",
+          "Required": true
+        }
+      }
+    },
     "AWS::CloudFormation::Stack": {
       "Documentation": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-stack.html",
       "Properties": {
@@ -43754,6 +44356,10 @@
           "PrimitiveType": "String",
           "Required": false
         },
+        "DocDbSettings": {
+          "Required": false,
+          "Type": "DocDbSettings"
+        },
         "DynamoDbSettings": {
           "Required": false,
           "Type": "DynamoDbSettings"
@@ -43778,6 +44384,10 @@
           "PrimitiveType": "String",
           "Required": false
         },
+        "IbmDb2Settings": {
+          "Required": false,
+          "Type": "IbmDb2Settings"
+        },
         "KafkaSettings": {
           "Required": false,
           "Type": "KafkaSettings"
@@ -43790,13 +44400,25 @@
           "PrimitiveType": "String",
           "Required": false
         },
+        "MicrosoftSqlServerSettings": {
+          "Required": false,
+          "Type": "MicrosoftSqlServerSettings"
+        },
         "MongoDbSettings": {
           "Required": false,
           "Type": "MongoDbSettings"
         },
+        "MySqlSettings": {
+          "Required": false,
+          "Type": "MySqlSettings"
+        },
         "NeptuneSettings": {
           "Required": false,
           "Type": "NeptuneSettings"
+        },
+        "OracleSettings": {
+          "Required": false,
+          "Type": "OracleSettings"
         },
         "Password": {
           "PrimitiveType": "String",
@@ -43805,6 +44427,14 @@
         "Port": {
           "PrimitiveType": "Integer",
           "Required": false
+        },
+        "PostgreSqlSettings": {
+          "Required": false,
+          "Type": "PostgreSqlSettings"
+        },
+        "RedshiftSettings": {
+          "Required": false,
+          "Type": "RedshiftSettings"
         },
         "S3Settings": {
           "Required": false,
@@ -43817,6 +44447,10 @@
         "SslMode": {
           "PrimitiveType": "String",
           "Required": false
+        },
+        "SybaseSettings": {
+          "Required": false,
+          "Type": "SybaseSettings"
         },
         "Tags": {
           "ItemType": "Tag",
@@ -45873,6 +46507,155 @@
         }
       }
     },
+    "AWS::EC2::TransitGatewayMulticastDomain": {
+      "Attributes": {
+        "CreationTime": {
+          "PrimitiveType": "String"
+        },
+        "State": {
+          "PrimitiveType": "String"
+        },
+        "TransitGatewayMulticastDomainArn": {
+          "PrimitiveType": "String"
+        },
+        "TransitGatewayMulticastDomainId": {
+          "PrimitiveType": "String"
+        }
+      },
+      "Documentation": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-transitgatewaymulticastdomain.html",
+      "Properties": {
+        "Options": {
+          "PrimitiveType": "Json",
+          "Required": false
+        },
+        "Tags": {
+          "ItemType": "Tag",
+          "Required": false,
+          "Type": "List"
+        },
+        "TransitGatewayId": {
+          "PrimitiveType": "String",
+          "Required": false
+        }
+      }
+    },
+    "AWS::EC2::TransitGatewayMulticastDomainAssociation": {
+      "Attributes": {
+        "ResourceId": {
+          "PrimitiveType": "String"
+        },
+        "ResourceType": {
+          "PrimitiveType": "String"
+        }
+      },
+      "Documentation": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-transitgatewaymulticastdomainassociation.html",
+      "Properties": {
+        "State": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "SubnetId": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "TransitGatewayAttachmentId": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "TransitGatewayMulticastDomainId": {
+          "PrimitiveType": "String",
+          "Required": false
+        }
+      }
+    },
+    "AWS::EC2::TransitGatewayMulticastGroupMember": {
+      "Attributes": {
+        "GroupMember": {
+          "PrimitiveType": "Boolean"
+        },
+        "GroupSource": {
+          "PrimitiveType": "Boolean"
+        },
+        "MemberType": {
+          "PrimitiveType": "String"
+        },
+        "ResourceId": {
+          "PrimitiveType": "String"
+        },
+        "ResourceType": {
+          "PrimitiveType": "String"
+        },
+        "SourceType": {
+          "PrimitiveType": "String"
+        },
+        "SubnetId": {
+          "PrimitiveType": "String"
+        }
+      },
+      "Documentation": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-transitgatewaymulticastgroupmember.html",
+      "Properties": {
+        "GroupIpAddress": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "NetworkInterfaceId": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "TransitGatewayAttachmentId": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "TransitGatewayMulticastDomainId": {
+          "PrimitiveType": "String",
+          "Required": false
+        }
+      }
+    },
+    "AWS::EC2::TransitGatewayMulticastGroupSource": {
+      "Attributes": {
+        "GroupMember": {
+          "PrimitiveType": "Boolean"
+        },
+        "GroupSource": {
+          "PrimitiveType": "Boolean"
+        },
+        "MemberType": {
+          "PrimitiveType": "String"
+        },
+        "ResourceId": {
+          "PrimitiveType": "String"
+        },
+        "ResourceType": {
+          "PrimitiveType": "String"
+        },
+        "SourceType": {
+          "PrimitiveType": "String"
+        },
+        "SubnetId": {
+          "PrimitiveType": "String"
+        }
+      },
+      "Documentation": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-transitgatewaymulticastgroupsource.html",
+      "Properties": {
+        "GroupIpAddress": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "NetworkInterfaceId": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "TransitGatewayAttachmentId": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "TransitGatewayMulticastDomainId": {
+          "PrimitiveType": "String",
+          "Required": false
+        }
+      }
+    },
     "AWS::EC2::TransitGatewayRoute": {
       "Documentation": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-transitgatewayroute.html",
       "Properties": {
@@ -46451,10 +47234,6 @@
           "Required": false,
           "Type": "List"
         },
-        "Configuration": {
-          "Required": false,
-          "Type": "ClusterConfiguration"
-        },
         "DefaultCapacityProviderStrategy": {
           "ItemType": "CapacityProviderStrategyItem",
           "Required": false,
@@ -46514,10 +47293,6 @@
           "Required": false
         },
         "EnableECSManagedTags": {
-          "PrimitiveType": "Boolean",
-          "Required": false
-        },
-        "EnableExecuteCommand": {
           "PrimitiveType": "Boolean",
           "Required": false
         },
@@ -53185,7 +53960,7 @@
       "Properties": {
         "MemberId": {
           "PrimitiveType": "String",
-          "Required": true
+          "Required": false
         },
         "NetworkId": {
           "PrimitiveType": "String",
@@ -53600,6 +54375,10 @@
         "Tags": {
           "PrimitiveType": "Json",
           "Required": false
+        },
+        "Vpc": {
+          "Required": false,
+          "Type": "VpcOutputSettings"
         }
       }
     },
@@ -57862,6 +58641,66 @@
         }
       }
     },
+    "AWS::SageMaker::App": {
+      "Attributes": {
+        "AppArn": {
+          "PrimitiveType": "String"
+        }
+      },
+      "Documentation": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-app.html",
+      "Properties": {
+        "AppName": {
+          "PrimitiveType": "String",
+          "Required": true
+        },
+        "AppType": {
+          "PrimitiveType": "String",
+          "Required": true
+        },
+        "DomainId": {
+          "PrimitiveType": "String",
+          "Required": true
+        },
+        "ResourceSpec": {
+          "Required": false,
+          "Type": "ResourceSpec"
+        },
+        "Tags": {
+          "DuplicatesAllowed": true,
+          "ItemType": "Tag",
+          "Required": false,
+          "Type": "List"
+        },
+        "UserProfileName": {
+          "PrimitiveType": "String",
+          "Required": true
+        }
+      }
+    },
+    "AWS::SageMaker::AppImageConfig": {
+      "Attributes": {
+        "AppImageConfigArn": {
+          "PrimitiveType": "String"
+        }
+      },
+      "Documentation": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-appimageconfig.html",
+      "Properties": {
+        "AppImageConfigName": {
+          "PrimitiveType": "String",
+          "Required": true
+        },
+        "KernelGatewayImageConfig": {
+          "Required": false,
+          "Type": "KernelGatewayImageConfig"
+        },
+        "Tags": {
+          "DuplicatesAllowed": true,
+          "ItemType": "Tag",
+          "Required": false,
+          "Type": "List"
+        }
+      }
+    },
     "AWS::SageMaker::CodeRepository": {
       "Attributes": {
         "CodeRepositoryName": {
@@ -57976,6 +58815,64 @@
           "ItemType": "Tag",
           "Required": false,
           "Type": "List"
+        }
+      }
+    },
+    "AWS::SageMaker::Domain": {
+      "Attributes": {
+        "DomainArn": {
+          "PrimitiveType": "String"
+        },
+        "DomainId": {
+          "PrimitiveType": "String"
+        },
+        "HomeEfsFileSystemId": {
+          "PrimitiveType": "String"
+        },
+        "SingleSignOnManagedApplicationInstanceId": {
+          "PrimitiveType": "String"
+        },
+        "Url": {
+          "PrimitiveType": "String"
+        }
+      },
+      "Documentation": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-domain.html",
+      "Properties": {
+        "AppNetworkAccessType": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "AuthMode": {
+          "PrimitiveType": "String",
+          "Required": true
+        },
+        "DefaultUserSettings": {
+          "Required": true,
+          "Type": "UserSettings"
+        },
+        "DomainName": {
+          "PrimitiveType": "String",
+          "Required": true
+        },
+        "KmsKeyId": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "SubnetIds": {
+          "DuplicatesAllowed": true,
+          "PrimitiveItemType": "String",
+          "Required": true,
+          "Type": "List"
+        },
+        "Tags": {
+          "DuplicatesAllowed": true,
+          "ItemType": "Tag",
+          "Required": false,
+          "Type": "List"
+        },
+        "VpcId": {
+          "PrimitiveType": "String",
+          "Required": true
         }
       }
     },
@@ -58536,6 +59433,42 @@
         }
       }
     },
+    "AWS::SageMaker::UserProfile": {
+      "Attributes": {
+        "UserProfileArn": {
+          "PrimitiveType": "String"
+        }
+      },
+      "Documentation": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-userprofile.html",
+      "Properties": {
+        "DomainId": {
+          "PrimitiveType": "String",
+          "Required": true
+        },
+        "SingleSignOnUserIdentifier": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "SingleSignOnUserValue": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "Tags": {
+          "DuplicatesAllowed": true,
+          "ItemType": "Tag",
+          "Required": false,
+          "Type": "List"
+        },
+        "UserProfileName": {
+          "PrimitiveType": "String",
+          "Required": true
+        },
+        "UserSettings": {
+          "Required": false,
+          "Type": "UserSettings"
+        }
+      }
+    },
     "AWS::SageMaker::Workteam": {
       "Attributes": {
         "WorkteamName": {
@@ -59012,6 +59945,54 @@
           "Required": true
         },
         "TagUpdateOnProvisionedProduct": {
+          "PrimitiveType": "String",
+          "Required": true
+        }
+      }
+    },
+    "AWS::ServiceCatalog::ServiceAction": {
+      "Attributes": {
+        "Id": {
+          "PrimitiveType": "String"
+        }
+      },
+      "Documentation": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-serviceaction.html",
+      "Properties": {
+        "AcceptLanguage": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "Definition": {
+          "ItemType": "DefinitionParameter",
+          "Required": true,
+          "Type": "List"
+        },
+        "DefinitionType": {
+          "PrimitiveType": "String",
+          "Required": true
+        },
+        "Description": {
+          "PrimitiveType": "String",
+          "Required": false
+        },
+        "Name": {
+          "PrimitiveType": "String",
+          "Required": true
+        }
+      }
+    },
+    "AWS::ServiceCatalog::ServiceActionAssociation": {
+      "Documentation": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-serviceactionassociation.html",
+      "Properties": {
+        "ProductId": {
+          "PrimitiveType": "String",
+          "Required": true
+        },
+        "ProvisioningArtifactId": {
+          "PrimitiveType": "String",
+          "Required": true
+        },
+        "ServiceActionId": {
           "PrimitiveType": "String",
           "Required": true
         }
