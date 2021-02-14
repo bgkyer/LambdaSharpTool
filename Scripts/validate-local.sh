@@ -84,7 +84,7 @@ export LAMBDASHARP_TIER=TestContrib$SUFFIX
 
 echo "Creating test tier: $LAMBDASHARP_TIER"
 lash init \
-    --quick-init \
+    --quick-start \
     --core-services enabled \
     --verbose:exceptions
 if [ $? -ne 0 ]; then
