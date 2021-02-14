@@ -147,7 +147,7 @@ lash deploy  \
     Samples/KinesisFirehoseSample/bin/cloudformation.json \
     Samples/KinesisSample/bin/cloudformation.json \
     Samples/LambdaLayerSample/bin/cloudformation.json \
-    Samples/LambdaSelfContained/bin/cloudformation.json \
+    Samples/LambdaSelfContainedSample/bin/cloudformation.json \
     Samples/MacroSample/bin/cloudformation.json \
     Samples/MetricSample/bin/cloudformation.json \
     Samples/S3IOSample/bin/cloudformation.json \
